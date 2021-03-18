@@ -159,11 +159,11 @@ internal open class MinimalWebTemplateCompactor : WebTemplateCompactor {
     }
 
     protected fun copyCardinalities(cardinalities: MutableList<WebTemplateCardinality>?, node: WebTemplateNode) {
-        if (node.cardinalities == null) {
+        val nodeCardinalities = node.cardinalities
+        if (nodeCardinalities == null)
             node.cardinalities = cardinalities
-        } else {
-            node.cardinalities!!.addAll(cardinalities!!)
-        }
+        else
+            cardinalities?.also { nodeCardinalities.addAll(it) }
     }
 
     private fun compactCodedTextWithOther(children: MutableList<WebTemplateNode>) {

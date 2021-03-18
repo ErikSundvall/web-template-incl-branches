@@ -22,7 +22,7 @@ package care.better.platform.web.template.builder.id
  */
 internal class NumericSuffixIdDeduplicator : AbstractSuffixIdDeduplicator() {
     companion object {
-        private val MAX_SUFFIX = 100
+        private const val MAX_SUFFIX = 100
     }
 
     override fun getUniqueSuffix(ids: Set<String>, baseId: String): String {
