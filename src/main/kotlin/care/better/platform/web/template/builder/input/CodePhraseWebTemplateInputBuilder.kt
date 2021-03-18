@@ -45,6 +45,7 @@ import java.util.regex.Pattern
  * @author Primoz Delopst
  * @since 3.1.0
  */
+@Suppress("SpellCheckingInspection")
 internal object CodePhraseWebTemplateInputBuilder : WebTemplateInputBuilder<CCodePhrase> {
     private val OPENEHR_CONCEPT_GROUPS = Collections.singletonMap(RmProperty(IntervalEvent::class.java, "math_function"), "14")
     private val WILDCARD_VALUE = Pattern.compile("[^:]+:\\*")

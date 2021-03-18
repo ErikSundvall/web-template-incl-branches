@@ -20,7 +20,6 @@ import care.better.platform.utils.RmUtils
 import care.better.platform.utils.exception.RmClassCastException
 import care.better.platform.web.template.WebTemplate
 import care.better.platform.web.template.builder.model.WebTemplateNode
-import care.better.platform.web.template.converter.utils.WebTemplateConversionUtils
 import com.google.common.base.Splitter
 import org.openehr.rm.datatypes.DataValue
 import java.util.regex.Pattern

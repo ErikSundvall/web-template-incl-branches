@@ -20,6 +20,7 @@ package care.better.platform.web.template.builder.id
  * @author Primoz Delopst
  * @since 3.1.0
  */
+@Suppress("SpellCheckingInspection")
 abstract class AbstractSuffixIdDeduplicator : IdDeduplicator {
     private val allIds: MutableMap<String, MutableSet<String>> = mutableMapOf()
 

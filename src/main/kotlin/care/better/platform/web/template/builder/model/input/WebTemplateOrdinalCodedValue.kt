@@ -17,7 +17,6 @@ package care.better.platform.web.template.builder.model.input
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
-
 /**
  * @author Bostjan Lah
  * @author Primoz Delopst

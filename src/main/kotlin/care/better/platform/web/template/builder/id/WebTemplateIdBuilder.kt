@@ -30,6 +30,7 @@ import java.util.regex.Pattern
  * @author Primoz Delopst
  * @since 3.1.0
  */
+@Suppress("SpellCheckingInspection")
 internal class WebTemplateIdBuilder {
     companion object {
         private val INTERVAL_PATTERN = Pattern.compile("DV_INTERVAL<DV_([^>]+)>")

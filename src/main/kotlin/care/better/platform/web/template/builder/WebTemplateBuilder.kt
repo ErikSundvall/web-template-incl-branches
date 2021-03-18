@@ -98,6 +98,7 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
 
         private val OVERRIDE_OPTIONAL: Set<RmProperty> =
             setOf(RmProperty(Activity::class.java, "timing")) // no longer mandatory in RM 1.0.4 (added for backward compatibility)
+
         private val SKIP_PATHS: Set<String> = setOf("name")
 
         private val ANY_DATA_TYPES =
@@ -297,7 +298,7 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
         val nodeId = amNode.nodeId
 
         if (nodeId.isNotNullOrEmpty()) {
-            findTermBindings(amNode, nodeId).forEach { key, value -> CodePhraseUtils.getBindingCodedValue(value)?.also { node.termBindings[key] = it } }
+            findTermBindings(amNode, nodeId).forEach { (key, value) -> CodePhraseUtils.getBindingCodedValue(value)?.also { node.termBindings[key] = it } }
         }
     }
 
@@ -333,7 +334,7 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
 
     private fun createCustomNode(amNode: AmNode, attributeName: String?, existence: WebTemplateIntegerRange): WebTemplateNode =
         buildNode(attributeName, amNode).apply {
-            this.name = attributeName!!.substring(0, 1).toUpperCase() + attributeName.substring(1)
+            this.name = "${attributeName?.substring(0, 1)?.toUpperCase()}${attributeName?.substring(1)}"
             this.inContext = true
             this.occurences = existence
             setTermBindings(this)
@@ -500,7 +501,11 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
         if (attributeName == null)
             ""
         else
-            "${if (segments.isEmpty()) "" else segments.peek()?.path}/${attributeName}${getArchetypePredicate(amNode, if (isNameConstrained(amNode)) amNode.name else null)}"
+            "${if (segments.isEmpty()) "" else segments.peek()?.path}/${attributeName}${
+                getArchetypePredicate(
+                    amNode,
+                    if (isNameConstrained(amNode)) amNode.name else null)
+            }"
 
     private fun getPath(attributeName: String, amNode: AmNode, customName: String?): String =
         "${if (segments.isEmpty()) "" else segments.peek()?.path}/${attributeName}${getArchetypePredicate(amNode, customName)}"
