@@ -83,6 +83,7 @@ class WebTemplate internal constructor(
          * @param pathSegments AQL path represented as [List] of [PathSegment]
          * @return [AmNode] find for AQL path
          */
+        @JvmStatic
         fun resolvePath(amNode: AmNode, pathSegments: List<PathSegment>): AmNode? {
             var node = amNode
             for (pathSegment in pathSegments) {
@@ -100,6 +101,7 @@ class WebTemplate internal constructor(
          * @param rmType RM type
          * @return Matching [AmNode] child if exist, otherwise, return null
          */
+        @JvmStatic
         fun findChildNode(amNode: AmNode, pathSegment: PathSegment, rmType: String?): AmNode? =
             with(amNode.attributes[pathSegment.element]) {
                 if (this == null) {
@@ -142,7 +144,8 @@ class WebTemplate internal constructor(
      * @param fromRawConversion [FromRawConversion]
      * @return RM object in FLAT format ([Map] of web template path and value pairs)
      */
-    fun <T : RmObject> convertFromRawToFlat(rmObject: T, fromRawConversion: FromRawConversion): Map<String, Any> =
+    @JvmOverloads
+    fun <T : RmObject> convertFromRawToFlat(rmObject: T, fromRawConversion: FromRawConversion = FromRawConversion.create()): Map<String, Any> =
         RawToFlatConverter().convert(this, fromRawConversion, rmObject)
 
     /**
@@ -152,7 +155,8 @@ class WebTemplate internal constructor(
      * @param fromRawConversion [FromRawConversion]
      * @return RM object in FLAT format ([Map] of web template path and formatted value pairs)
      */
-    fun <T : RmObject> convertFormattedFromRawToFlat(rmObject: T, fromRawConversion: FromRawConversion): Map<String, String> =
+    @JvmOverloads
+    fun <T : RmObject> convertFormattedFromRawToFlat(rmObject: T, fromRawConversion: FromRawConversion = FromRawConversion.create()): Map<String, String> =
         FormattedRawToFlatConverter(fromRawConversion.valueConverter).convert(this, fromRawConversion, rmObject)
 
     /**
@@ -162,7 +166,8 @@ class WebTemplate internal constructor(
      * @param fromRawConversion [FromRawConversion]
      * @return RM object in STRUCTURED format
      */
-    fun <T : RmObject> convertFromRawToStructured(rmObject: T, fromRawConversion: FromRawConversion): JsonNode? =
+    @JvmOverloads
+    fun <T : RmObject> convertFromRawToStructured(rmObject: T, fromRawConversion: FromRawConversion = FromRawConversion.create()): JsonNode? =
         RawToStructuredConverter.convert(this, fromRawConversion, rmObject)
 
     /**
@@ -172,7 +177,8 @@ class WebTemplate internal constructor(
      * @param fromRawConversion [FromRawConversion]
      * @return RM object in STRUCTURED format with formatted values
      */
-    fun <T : RmObject> convertFormattedFromRawToStructured(rmObject: T, fromRawConversion: FromRawConversion): JsonNode? =
+    @JvmOverloads
+    fun <T : RmObject> convertFormattedFromRawToStructured(rmObject: T, fromRawConversion: FromRawConversion = FromRawConversion.create()): JsonNode? =
         FormattedRawToStructuredConverter(fromRawConversion.valueConverter).convert(this, fromRawConversion, rmObject)
 
     /**

@@ -428,6 +428,7 @@ class ConversionContext private constructor(
         fun withValueConvert(valueConverter: ValueConverter) = apply { this.valueConverter = valueConverter }
         fun forAqlPath(aqlPath: String) = apply { this.aqlPath = aqlPath }
         fun forWebTemplatePath(webTemplatePath: String) = apply { this.webTemplatePath = webTemplatePath }
+        fun withNoLocale() = apply { this.locale = null }
 
         /**
          * Creates and returns a new instance of [ConversionContext].

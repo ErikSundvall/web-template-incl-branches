@@ -19,6 +19,7 @@ import care.better.openehr.rm.RmObject
 import care.better.platform.template.AmAttribute
 import care.better.platform.template.AmNode
 import care.better.platform.utils.RmUtils
+import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.mapper.ConversionObjectMapper
@@ -30,7 +31,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.databind.node.ValueNode
-import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import org.openehr.rm.datatypes.DataValue
 
 /**
@@ -72,6 +72,16 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
             PostProcessDelegator.delegate(conversionContext, amNode, it, webTemplatePath)
             if ((it as RmObject).isEmpty()) null else it
         }
+
+    /**
+     * Creates a new instance of RM object in RAW format.
+     *
+     * @param conversionContext [ConversionContext]
+     * @param amNode [AmNode]
+     * @param webTemplatePath Web template path from root to current node [WebTemplatePath]
+     * @return RM object in RAW format
+     */
+    fun create(conversionContext: ConversionContext, amNode: AmNode, webTemplatePath: WebTemplatePath) = createInstance()
 
     /**
      * Creates a RM object in RAW format from RM object in STRUCTURED format ([ObjectNode]).
@@ -293,7 +303,7 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
                 jsonNode,
                 webTemplatePath.copy(amNode))
             RmUtils.isRmClass(amNode.getTypeOnParent().type) -> {
-                RmObjectLeafNodeFactoryProvider.getFactory(amNode.rmType).create(conversionContext, amNode, jsonNode, webTemplatePath.copy(amNode))
+                RmObjectLeafNodeFactoryDelegator.delegateOrThrow(amNode.rmType, conversionContext, amNode, jsonNode, webTemplatePath.copy(amNode))
             }
             else -> ConversionObjectMapper.convertValue(jsonNode, amNode.getTypeOnParent().type)
         }

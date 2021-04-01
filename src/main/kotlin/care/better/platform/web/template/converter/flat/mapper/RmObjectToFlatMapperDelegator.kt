@@ -36,7 +36,7 @@ import org.openehr.rm.datatypes.*
  *
  * Singleton used to delegate the RM object to the [RmObjectToFlatMapper] based on the RM object class.
  */
-internal object RmObjectToFlatMapperDelegator {
+object RmObjectToFlatMapperDelegator {
 
     private val rmObjectToFlatMappers: Map<Class<out RmObject>, RmObjectToFlatMapper<out RmObject>> = mapOf(
         Pair(Action::class.java, ActionToFlatMapper),

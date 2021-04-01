@@ -35,7 +35,7 @@ import java.util.regex.Pattern
  *
  * Set of utility functions used during the RM object conversion.
  */
-internal object WebTemplateConversionUtils {
+object WebTemplateConversionUtils {
 
     private val ID_INVALID_CHARACTERS = Pattern.compile("[^\\p{IsAlphabetic}0-9_.-]")
     private val MULTIPLE_UNDERSCORE = Pattern.compile("_{2,}")
@@ -107,6 +107,7 @@ internal object WebTemplateConversionUtils {
     @JvmStatic
     fun convert(dateTime: DateTime): OffsetDateTime = OffsetDateTime.ofInstant(dateTime.toDate().toInstant(), ZoneId.of(dateTime.zone.id))
 
+    //TODO not internal
     @JvmStatic
     fun getTermText(amNode: AmNode, terminologyId: String?, codeString: String?, language: String?): String? =
         if ("openehr" == terminologyId) {

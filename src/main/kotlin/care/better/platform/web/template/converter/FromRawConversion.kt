@@ -37,6 +37,7 @@ class FromRawConversion private constructor(
          *
          * @return [FromRawConversion]
          */
+        @JvmStatic
         fun create(): FromRawConversion =
             FromRawConversion(valueConverter = SimpleValueConverter)
 
@@ -46,6 +47,7 @@ class FromRawConversion private constructor(
          * @param valueConverter [ValueConverter]
          * @return [FromRawConversion]
          */
+        @JvmStatic
         fun create(valueConverter: ValueConverter): FromRawConversion =
             FromRawConversion(valueConverter = valueConverter)
 
@@ -55,6 +57,7 @@ class FromRawConversion private constructor(
          * @param locale [Locale]
          * @return [FromRawConversion]
          */
+        @JvmStatic
         fun create(locale: Locale) =
             FromRawConversion(valueConverter = LocaleBasedValueConverter(locale))
 
@@ -63,6 +66,7 @@ class FromRawConversion private constructor(
          *
          * @return [FromRawConversion]
          */
+        @JvmStatic
         fun createForAqlPath(aqlPath: String) =
             FromRawConversion(aqlPath = aqlPath, valueConverter = SimpleValueConverter)
 
@@ -72,6 +76,7 @@ class FromRawConversion private constructor(
          * @param valueConverter [ValueConverter]
          * @return [FromRawConversion]
          */
+        @JvmStatic
         fun createForAqlPath(aqlPath: String, valueConverter: ValueConverter) =
             FromRawConversion(aqlPath = aqlPath, valueConverter = valueConverter)
 
@@ -81,6 +86,7 @@ class FromRawConversion private constructor(
          * @param locale [Locale]
          * @return [FromRawConversion]
          */
+        @JvmStatic
         fun crateForAqlPath(aqlPath: String, locale: Locale) =
             FromRawConversion(aqlPath = aqlPath, valueConverter = LocaleBasedValueConverter(locale))
 
@@ -89,6 +95,7 @@ class FromRawConversion private constructor(
          *
          * @return [FromRawConversion]
          */
+        @JvmStatic
         fun createForWebTemplatePath(webTemplatePath: String) =
             FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = SimpleValueConverter)
 
@@ -98,6 +105,7 @@ class FromRawConversion private constructor(
          * @param valueConverter [ValueConverter]
          * @return [FromRawConversion]
          */
+        @JvmStatic
         fun createForWebTemplatePath(webTemplatePath: String, valueConverter: ValueConverter) =
             FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = valueConverter)
 
@@ -107,6 +115,7 @@ class FromRawConversion private constructor(
          * @param locale [Locale]
          * @return [FromRawConversion]
          */
+        @JvmStatic
         fun crateForWebTemplatePath(webTemplatePath: String, locale: Locale) =
             FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = LocaleBasedValueConverter(locale))
     }

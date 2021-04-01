@@ -25,6 +25,7 @@ import care.better.platform.web.template.converter.exceptions.ConversionExceptio
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.fasterxml.jackson.databind.JsonNode
 import care.better.platform.web.template.builder.model.input.WebTemplateInput
+import care.better.platform.web.template.builder.utils.DurationUtils
 import org.joda.time.Period
 import org.joda.time.format.ISOPeriodFormat
 import org.joda.time.format.PeriodFormatter
@@ -44,8 +45,8 @@ internal object DvDurationFactory : DvQuantifiedFactory<DvDuration>() {
 
     override fun handleWebTemplateInput(conversionContext: ConversionContext, amNode: AmNode, rmObject: DvDuration, webTemplateInput: WebTemplateInput) {
         val item = AmUtils.getPrimitiveItem(amNode, CDuration::class.java, "value")
-        val max = DurationWebTemplateInputBuilder.getMax(item!!)
-        val min = DurationWebTemplateInputBuilder.getMin(item)
+        val max = DurationUtils.getMax(item!!)
+        val min = DurationUtils.getMin(item)
 
         if (min != Period.ZERO && max == min) {
             rmObject.value = PERIOD_FORMATTER.print(min)

@@ -18,17 +18,17 @@ package care.better.platform.web.template.converter.raw.factory.leaf
 import care.better.platform.template.AmNode
 import care.better.platform.template.AmUtils
 import care.better.platform.utils.RmUtils
+import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.extensions.isForElement
 import care.better.platform.web.template.converter.raw.extensions.isNotEmpty
-import care.better.platform.web.template.converter.raw.factory.node.RmObjectNodeFactoryProvider
+import care.better.platform.web.template.converter.raw.factory.node.RmObjectNodeFactoryDelegator
 import care.better.platform.web.template.converter.raw.postprocessor.PostProcessDelegator
 import care.better.platform.web.template.converter.utils.WebTemplateConversionUtils
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import org.openehr.am.aom.CCodePhrase
 import org.openehr.am.aom.CCodeReference
 import org.openehr.base.basetypes.TerminologyId
@@ -412,8 +412,11 @@ internal open class DvCodedTextFactory : RmObjectLeafNodeFactory<DvCodedText>() 
                             elementAmNode,
                             lastParentWithCollection.items as MutableCollection<Any>,
                             {
-                                RmObjectNodeFactoryProvider.provide(RmUtils.getRmTypeName(Element::class.java))
-                                    .create(conversionContext, elementAmNode, webTemplatePath) as Element
+                                RmObjectNodeFactoryDelegator.delegateOrThrow(
+                                    RmUtils.getRmTypeName(Element::class.java),
+                                    conversionContext,
+                                    elementAmNode,
+                                    webTemplatePath) as Element
                             },
                             dvText,
                             webTemplatePath)
@@ -427,8 +430,11 @@ internal open class DvCodedTextFactory : RmObjectLeafNodeFactory<DvCodedText>() 
                             elementAmNode,
                             lastParentWithCollection.items as MutableCollection<Any>,
                             {
-                                RmObjectNodeFactoryProvider.provide(RmUtils.getRmTypeName(Element::class.java))
-                                    .create(conversionContext, elementAmNode, webTemplatePath) as Element
+                                RmObjectNodeFactoryDelegator.delegateOrThrow(
+                                    RmUtils.getRmTypeName(Element::class.java),
+                                    conversionContext,
+                                    elementAmNode,
+                                    webTemplatePath) as Element
                             },
                             dvText,
                             webTemplatePath)
@@ -442,8 +448,11 @@ internal open class DvCodedTextFactory : RmObjectLeafNodeFactory<DvCodedText>() 
                             elementAmNode,
                             lastParentWithCollection as MutableCollection<Any>,
                             {
-                                RmObjectNodeFactoryProvider.provide(RmUtils.getRmTypeName(Element::class.java))
-                                    .create(conversionContext, elementAmNode, webTemplatePath) as Element
+                                RmObjectNodeFactoryDelegator.delegateOrThrow(
+                                    RmUtils.getRmTypeName(Element::class.java),
+                                    conversionContext,
+                                    elementAmNode,
+                                    webTemplatePath) as Element
                             },
                             dvText,
                             webTemplatePath)

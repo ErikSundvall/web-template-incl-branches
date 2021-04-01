@@ -27,6 +27,11 @@ import java.util.regex.Pattern
  */
 data class WebTemplatePath(val key: String, val parent: WebTemplatePath? = null, val index: Int? = null) {
 
+    companion object {
+        @JvmStatic
+        fun forBlankPath(): WebTemplatePath = WebTemplatePath("", null, null)
+    }
+
     /**
      * Returns [String] representation of this [WebTemplatePath] recursively.
      *

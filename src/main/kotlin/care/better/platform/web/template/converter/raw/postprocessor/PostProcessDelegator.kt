@@ -96,4 +96,6 @@ internal object PostProcessDelegator {
             (processor as PostProcessor<Any>).postProcess(conversionContext, amNode, instance, webTemplatePath)
         }
     }
+
+    fun getPostProcessors(): Map<Class<*>, PostProcessor<*>> = postProcessorMap
 }

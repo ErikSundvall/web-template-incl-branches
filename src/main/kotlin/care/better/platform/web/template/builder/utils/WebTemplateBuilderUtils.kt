@@ -31,9 +31,10 @@ import java.util.regex.Pattern
  *
  * Set of utility functions used during the [WebTemplate] building.
  */
-internal object WebTemplateBuilderUtils {
+object WebTemplateBuilderUtils {
     private val LOCALIZATION_PATTERN = Pattern.compile("L10n=\\{(.+?)(?<!\\\\)}")
 
+    //TODO not internal
     @JvmStatic
     fun <T> getDefaultValue(amNode: AmNode, clazz: Class<T>): T? {
         val node = if (amNode.constraints == null && amNode.parent != null) amNode.parent as AmNode else amNode
@@ -80,6 +81,7 @@ internal object WebTemplateBuilderUtils {
         }
     }
 
+    //TODO not internal
     @JvmStatic
     fun getTranslationsFromAnnotations(amNode: AmNode): Map<String, String?> {
         val localizedNamesFromAnnotations: MutableMap<String, String?> = mutableMapOf()

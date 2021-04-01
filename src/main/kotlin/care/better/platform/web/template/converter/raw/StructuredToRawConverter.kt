@@ -29,8 +29,8 @@ import care.better.platform.web.template.converter.mapper.isEmptyInDepth
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.context.ConversionContextExtractor
 import care.better.platform.web.template.converter.raw.extensions.*
-import care.better.platform.web.template.converter.raw.factory.leaf.RmObjectLeafNodeFactoryProvider
-import care.better.platform.web.template.converter.raw.factory.node.RmObjectNodeFactoryProvider
+import care.better.platform.web.template.converter.raw.factory.leaf.RmObjectLeafNodeFactoryDelegator
+import care.better.platform.web.template.converter.raw.factory.node.RmObjectNodeFactoryDelegator
 import care.better.platform.web.template.converter.raw.generics.GenericFieldExtractor
 import care.better.platform.web.template.converter.raw.postprocessor.PostProcessDelegator
 import care.better.platform.web.template.converter.raw.special.SpecialCaseRmObjectHandlerProvider
@@ -199,7 +199,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
         //Post-process all collections that were populated in the chain (firstly created collections are excluded).
         chainConversionResult.forEach { it.postProcessors.map { postProcessor -> postProcessor.invoke() } }
 
-        val createdRmObject = RmObjectNodeFactoryProvider.provide(webTemplateNode.rmType).create(conversionContext, webTemplateNode.amNode, webTemplatePath)
+        val createdRmObject = RmObjectNodeFactoryDelegator.delegateOrThrow<RmObject>(webTemplateNode.rmType, conversionContext, webTemplateNode.amNode, webTemplatePath)
 
         val identityMap = IdentityHashMap<Any, () -> Unit>()
         chainConversionResult.mapNotNull { it.setterFunction }.forEach {
@@ -320,7 +320,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
                     val chainPostProcessors = mutableListOf<() -> Unit>()
 
                     arrayNode.forEachIndexed { index, jsonNode ->
-                        val createdValue: Element = RmObjectNodeFactoryProvider.provide(firstAmNode.rmType).create(conversionContext, firstAmNode, webTemplatePath) as Element
+                        val createdValue: Element = RmObjectNodeFactoryDelegator.delegateOrThrow(firstAmNode.rmType, conversionContext, firstAmNode, webTemplatePath) as Element
                         collection.add(createdValue) //We want to add the created ELEMENT to the collection to ensure the order of the elements. Maybe we will need to add some more DV_TEXT or DV_CODED_TEXT (for "|other" attribute).
                         val postProcessors = mutableListOf<() -> Unit>()
                         convertInChain(
@@ -364,7 +364,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
                     If the object was already created beforehand, we just add ITEMS or EVENTS to the collection in the chain.
                 */
                 val existingValue = firstChainSingletonHolder[Pair(firstAmNode, webTemplatePath.parent?.toString() ?: "")]
-                val value = existingValue ?: RmObjectNodeFactoryProvider.provide(firstAmNode.rmType).create(conversionContext, firstAmNode, webTemplatePath)
+                val value = existingValue ?: RmObjectNodeFactoryDelegator.delegateOrThrow(firstAmNode.rmType, conversionContext, firstAmNode, webTemplatePath)
 
                 val chainPostProcessors = mutableListOf<() -> Unit>()
                 convertInChain(mutableListOf(value), arrayNode, chain.drop(1), webTemplatePath, chainPostProcessors, factoryFunction)
@@ -447,7 +447,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
             val isEmpty = collection.isEmpty()
             if (amNode.rmType == "ELEMENT") { //Objects are added to the collection in the chain only if AmNode is for ELEMENT RM type.
                 jsonNode.forEachIndexed { index, node ->
-                    val createdValue = RmObjectNodeFactoryProvider.provide(amNode.rmType).create(conversionContext, amNode, webTemplatePath)
+                    val createdValue = RmObjectNodeFactoryDelegator.delegateOrThrow<RmObject>(amNode.rmType, conversionContext, amNode, webTemplatePath)
                     collection.add(createdValue) //We want to add the created ELEMENT to the collection to ensure the order of the elements. Maybe we will need to add some more DV_TEXT or DV_CODED_TEXT (for "|other" attribute).
                     convertInChain(
                         mutableListOf<Any>().also { it.addAll(parents); it.add(createdValue) },
@@ -465,7 +465,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
             } else { //Otherwise, we will retrieve the first RM object in the collection and recursively set objects or add them in the chain.
                 val firstCollectionRmObject =
                     if (isEmpty)
-                        RmObjectNodeFactoryProvider.provide(amNode.rmType).create(conversionContext, amNode, webTemplatePath)
+                        RmObjectNodeFactoryDelegator.delegateOrThrow(amNode.rmType, conversionContext, amNode, webTemplatePath)
                     else
                         collection.iterator().next() as RmObject
 
@@ -494,7 +494,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
             }
         } else {
             val retrievedValue = amNode.getOnParent(directParent) as RmObject?
-            val value: RmObject = retrievedValue ?: RmObjectNodeFactoryProvider.provide(amNode.rmType).create(conversionContext, amNode, webTemplatePath)
+            val value: RmObject = retrievedValue ?: RmObjectNodeFactoryDelegator.delegateOrThrow(amNode.rmType, conversionContext, amNode, webTemplatePath)
 
             convertInChain(parents.also { it.add(value) }, jsonNode, chain.drop(1), webTemplatePath, chainPostProcessors, factoryFunction)
             if (retrievedValue == null) { //We want to post-process this element only when it was created.
@@ -542,9 +542,9 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
                 }
                 webTemplateNode.children.isEmpty() -> {
                     if (RmUtils.isRmClass(webTemplateNode.amNode.getTypeOnParent().type)) {
-                        RmObjectLeafNodeFactoryProvider
-                            .getFactory(webTemplateNode.rmType)
-                            .create(
+                        RmObjectLeafNodeFactoryDelegator
+                            .delegateOrThrow(
+                                webTemplateNode.rmType,
                                 conversionContext,
                                 webTemplateNode.amNode,
                                 value,
@@ -586,7 +586,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
                     ConversionObjectMapper.convertRawJsonNode(conversionContext, amNode, value, webTemplatePath.copy(amNode))
                 }
                 RmUtils.isRmClass(amNode.getTypeOnParent().type) -> {
-                    RmObjectLeafNodeFactoryProvider.getFactory(amNode.rmType).create(conversionContext, amNode, value, webTemplatePath.copy(amNode), parents)
+                    RmObjectLeafNodeFactoryDelegator.delegateOrThrow(amNode.rmType, conversionContext, amNode, value, webTemplatePath.copy(amNode), parents)
                 }
                 else -> ConversionObjectMapper.convertValue(value, amNode.getTypeOnParent().type)
             }

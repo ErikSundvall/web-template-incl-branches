@@ -35,7 +35,7 @@ import org.openehr.rm.datatypes.*
  *
  * Singleton used to delegate the RM object to the [RmObjectToStructuredMapper] based on the RM object class.
  */
-internal object RmObjectToStructuredMapperDelegator {
+object RmObjectToStructuredMapperDelegator {
     private val rmObjectToStructuredMappers: Map<Class<out RmObject>, RmObjectToStructuredMapper<out RmObject>> =
         mapOf(
             Pair(Action::class.java, ActionToStructuredMapper),
