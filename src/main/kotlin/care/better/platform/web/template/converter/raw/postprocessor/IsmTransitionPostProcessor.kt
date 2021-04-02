@@ -36,12 +36,12 @@ internal object IsmTransitionPostProcessor : PostProcessor<IsmTransition> {
 
     override fun postProcess(
             conversionContext: ConversionContext,
-            amNode: AmNode,
+            amNode: AmNode?,
             instance: IsmTransition,
-            webTemplatePath: WebTemplatePath) {
+            webTemplatePath: WebTemplatePath?) {
 
         if (instance.careflowStep != null && instance.currentState == null && instance.transition == null) {
-            amNode.parent!!.attributes["ism_transition"]?.also { attribute ->
+            amNode?.parent?.attributes?.get("ism_transition")?.also { attribute ->
                 attribute.children.firstOrNull { it.nodeId == instance.careflowStep?.definingCode?.codeString }?.also {
                     val currentStateCCodePhrase = AmUtils.getCObjectItem(it, CCodePhrase::class.java, "current_state", "defining_code")
                     if (currentStateCCodePhrase != null && currentStateCCodePhrase.codeList.isNotEmpty()) {

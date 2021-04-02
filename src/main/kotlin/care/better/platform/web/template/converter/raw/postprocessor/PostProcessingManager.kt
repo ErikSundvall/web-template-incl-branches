@@ -43,8 +43,8 @@ class PostProcessingManager @JvmOverloads constructor(
 
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> add(amNode: AmNode, rm: T, webTemplatePath: WebTemplatePath) {
-        if (rm is RmObject) {
+    fun <T> add(amNode: AmNode?, rm: T, webTemplatePath: WebTemplatePath?) {
+        if (webTemplatePath != null && rm is RmObject && additionalPostProcessors.containsKey(rm.javaClass)) {
             if (!elementVisitors.containsKey(rm)) {
                 conversionContext.rmVisitors[rm.javaClass]?.also {
                     elementVisitors[rm] = ElementVisitor(rm, webTemplatePath.toString(), it as RmVisitor<RmObject>)
@@ -60,9 +60,9 @@ class PostProcessingManager @JvmOverloads constructor(
 
     @Suppress("UNCHECKED_CAST")
     private fun <T> addPostProcessor(
-            amNode: AmNode,
+            amNode: AmNode?,
             rm: T,
-            webTemplatePath: WebTemplatePath,
+            webTemplatePath: WebTemplatePath?,
             postProcessors: Map<Class<*>, PostProcessor<*>>,
             addMultiple: Boolean): Boolean {
         var added = false
@@ -93,9 +93,9 @@ class PostProcessingManager @JvmOverloads constructor(
     }
 
     private inner class ElementPostProcessor<T> constructor(
-            private val amNode: AmNode,
+            private val amNode: AmNode?,
             private val element: T,
-            private val webTemplatePath: WebTemplatePath,
+            private val webTemplatePath: WebTemplatePath?,
             private val postProcessor: PostProcessor<T>) {
 
         fun postProcess() {

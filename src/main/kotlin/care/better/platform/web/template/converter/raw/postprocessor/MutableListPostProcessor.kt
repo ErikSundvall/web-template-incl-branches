@@ -30,7 +30,7 @@ import org.openehr.rm.common.Locatable
 internal object MutableListPostProcessor : PostProcessor<MutableList<Any>> {
     private val supportedClass = MutableList::class.java
 
-    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode, instance: MutableList<Any>, webTemplatePath: WebTemplatePath) {
+    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode?, instance: MutableList<Any>, webTemplatePath: WebTemplatePath?) {
 
         val nameSuffixIndexMap: MutableMap<Pair<String, String>, Int> = mutableMapOf()
         val iterator = instance.iterator()
@@ -52,7 +52,9 @@ internal object MutableListPostProcessor : PostProcessor<MutableList<Any>> {
             }
         }
 
-        sortCollection(amNode, instance)
+        if (amNode != null) {
+            sortCollection(amNode, instance)
+        }
     }
 
     /**

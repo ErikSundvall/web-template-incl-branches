@@ -146,8 +146,8 @@ object RmObjectLeafNodeFactoryDelegator {
     fun <T : RmObject> delegateOrThrow(
             rmType: String,
             conversionContext: ConversionContext,
-            amNode: AmNode,
-            webTemplatePath: WebTemplatePath): T {
+            amNode: AmNode?,
+            webTemplatePath: WebTemplatePath?): T {
         val factory = rmObjectLeafNodeFactories[RmUtils.getNonGenericRmNamePart(rmType)]
             ?: throw  ConversionException("RM object leaf node factory for $rmType not found.")
 
@@ -168,8 +168,8 @@ object RmObjectLeafNodeFactoryDelegator {
     fun <T : RmObject> delegateOrNull(
             rmType: String,
             conversionContext: ConversionContext,
-            amNode: AmNode,
-            webTemplatePath: WebTemplatePath): T? {
+            amNode: AmNode?,
+            webTemplatePath: WebTemplatePath?): T? {
         val factory = rmObjectLeafNodeFactories[RmUtils.getNonGenericRmNamePart(rmType)] ?: return null
 
         return (factory as RmObjectLeafNodeFactory<T>).create(conversionContext, amNode, webTemplatePath)

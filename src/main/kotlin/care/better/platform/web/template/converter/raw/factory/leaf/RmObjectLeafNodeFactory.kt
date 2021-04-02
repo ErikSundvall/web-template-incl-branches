@@ -81,7 +81,7 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
      * @param webTemplatePath Web template path from root to current node [WebTemplatePath]
      * @return RM object in RAW format
      */
-    fun create(conversionContext: ConversionContext, amNode: AmNode, webTemplatePath: WebTemplatePath) = createInstance()
+    fun create(conversionContext: ConversionContext, amNode: AmNode?, webTemplatePath: WebTemplatePath?) = createInstance()
 
     /**
      * Creates a RM object in RAW format from RM object in STRUCTURED format ([ObjectNode]).

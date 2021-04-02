@@ -42,7 +42,7 @@ internal object CompositionPostProcessor : LocatablePostProcessor<Composition>()
     private val NAME_PATTERN = Pattern.compile("\\s*#[0-9]+$")
 
 
-    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode, instance: Composition, webTemplatePath: WebTemplatePath) {
+    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode?, instance: Composition, webTemplatePath: WebTemplatePath?) {
         super.postProcess(conversionContext, amNode, instance, webTemplatePath)
 
         if (instance.context != null && isPersistent(instance)) {

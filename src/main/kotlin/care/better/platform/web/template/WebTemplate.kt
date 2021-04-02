@@ -359,7 +359,7 @@ class WebTemplate internal constructor(
      * @param amNode [AmNode]
      * @return [Collection] of [WebTemplateNode]
      */
-    fun getWebTemplateNodes(amNode: AmNode?): Collection<WebTemplateNode> = amNode?.let { nodes.get(amNode)?.toList() } ?: emptyList()
+    fun getWebTemplateNodes(amNode: AmNode?): Collection<WebTemplateNode> = amNode?.let { nodes.get(it)?.toList() } ?: emptyList()
 
     /**
      * Returns [List] of [CodedValue] for the web template path.

@@ -33,7 +33,7 @@ import org.openehr.rm.datatypes.DvDateTime
 internal object ActionPostProcessor : EntryPostProcessor<Action>() {
     private val supportedClass = Action::class.java
 
-    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode, instance: Action, webTemplatePath: WebTemplatePath) {
+    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode?, instance: Action, webTemplatePath: WebTemplatePath?) {
         super.postProcess(conversionContext, amNode, instance, webTemplatePath)
 
         if (instance.time == null) {

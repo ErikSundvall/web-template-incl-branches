@@ -38,7 +38,7 @@ internal open class EntryPostProcessor<T : Entry> : LocatablePostProcessor<T>() 
 
     private val supportedClass = Entry::class.java
 
-    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode, instance: T, webTemplatePath: WebTemplatePath) {
+    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode?, instance: T, webTemplatePath: WebTemplatePath?) {
         super.postProcess(conversionContext, amNode, instance, webTemplatePath)
 
         if (instance.workFlowId == null && conversionContext.workflowId != null) {

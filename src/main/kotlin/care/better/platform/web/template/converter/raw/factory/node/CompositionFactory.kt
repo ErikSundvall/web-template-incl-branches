@@ -35,7 +35,7 @@ import org.openehr.rm.datatypes.DvCodedText
  * Singleton instance of [LocatableFactory] that creates a new instance of [Composition].
  */
 internal object CompositionFactory : LocatableFactory<Composition>() {
-    override fun createLocatable(conversionContext: ConversionContext, amNode: AmNode, webTemplatePath: WebTemplatePath): Composition =
+    override fun createLocatable(conversionContext: ConversionContext, amNode: AmNode?, webTemplatePath: WebTemplatePath?): Composition =
         Composition().apply {
             when {
                 conversionContext.composer != null -> this.composer = conversionContext.composer
@@ -55,7 +55,7 @@ internal object CompositionFactory : LocatableFactory<Composition>() {
                 }
             }
 
-            val categoryAmNode = AmUtils.getAmNode(amNode, "category")?.also { this.category = DvCodedText.createFromAmNode(it) }
+            val categoryAmNode = amNode?.let { AmUtils.getAmNode(it, "category")?.also { this.category = DvCodedText.createFromAmNode(it) } }
             val categoryDvCodedText = if (categoryAmNode != null) DvCodedText.createFromAmNode(categoryAmNode) else null
 
             when {

@@ -34,7 +34,7 @@ interface PostProcessor<T> {
      * @param instance RM object or [MutableList] of RM objects in RAW format
      * @param webTemplatePath Web template path to the RM object or to the [List] of RM objects
      */
-    fun postProcess(conversionContext: ConversionContext, amNode: AmNode, instance: T, webTemplatePath: WebTemplatePath)
+    fun postProcess(conversionContext: ConversionContext, amNode: AmNode?, instance: T, webTemplatePath: WebTemplatePath?)
 
     /**
      * Checks if this [PostProcessor] will accept the RM object or [MutableList] of the RM objects in RAW format.

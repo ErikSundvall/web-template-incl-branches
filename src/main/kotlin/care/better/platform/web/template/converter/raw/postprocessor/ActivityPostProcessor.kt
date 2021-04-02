@@ -30,7 +30,7 @@ import org.openehr.rm.datatypes.DvParsable
 internal object ActivityPostProcessor : LocatablePostProcessor<Activity>() {
     private val supportedClass = Activity::class.java
 
-    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode, instance: Activity, webTemplatePath: WebTemplatePath) {
+    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode?, instance: Activity, webTemplatePath: WebTemplatePath?) {
         super.postProcess(conversionContext, amNode, instance, webTemplatePath)
         val timing = instance.timing
         if (timing == null) {

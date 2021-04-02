@@ -32,7 +32,7 @@ import org.openehr.rm.datatypes.DvCodedText
 internal object ElementPostProcessor : LocatablePostProcessor<Element>() {
     private val supportedClass = Element::class.java
 
-    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode, instance: Element, webTemplatePath: WebTemplatePath) {
+    override fun postProcess(conversionContext: ConversionContext, amNode: AmNode?, instance: Element, webTemplatePath: WebTemplatePath?) {
         instance.nullFlavour?.also { nullFlavour ->
             if (nullFlavour.value == null && nullFlavour.definingCode?.codeString != null) {
                 instance.nullFlavour = DvCodedText.createFromOpenEhrTerminology("15", nullFlavour.definingCode?.codeString!!)

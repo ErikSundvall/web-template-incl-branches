@@ -128,7 +128,7 @@ object RmObjectNodeFactoryDelegator {
      */
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
-    fun <T : RmObject> delegateOrThrow(rmType: String, conversionContext: ConversionContext, amNode: AmNode, webTemplatePath: WebTemplatePath): T {
+    fun <T : RmObject> delegateOrThrow(rmType: String, conversionContext: ConversionContext, amNode: AmNode?, webTemplatePath: WebTemplatePath?): T {
         val factory = rmObjectNodeFactories[RmUtils.getNonGenericRmNamePart(rmType)]
             ?: throw ConversionException("RM object node factory for $rmType not found.")
 
@@ -146,7 +146,7 @@ object RmObjectNodeFactoryDelegator {
      */
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
-    fun <T : RmObject> delegateOrNull(rmType: String, conversionContext: ConversionContext, amNode: AmNode, webTemplatePath: WebTemplatePath): T? {
+    fun <T : RmObject> delegateOrNull(rmType: String, conversionContext: ConversionContext, amNode: AmNode?, webTemplatePath: WebTemplatePath?): T? {
         val factory = rmObjectNodeFactories[RmUtils.getNonGenericRmNamePart(rmType)] ?: return null
 
         return (factory as RmObjectNodeFactory<T>).create(conversionContext, amNode, webTemplatePath)
