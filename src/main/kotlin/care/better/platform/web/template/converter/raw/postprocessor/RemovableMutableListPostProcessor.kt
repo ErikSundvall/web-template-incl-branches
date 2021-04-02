@@ -13,15 +13,22 @@
  * limitations under the License.
  */
 
-
 package care.better.platform.web.template.converter.raw.postprocessor
+
+import care.better.openehr.rm.RmObject
+import care.better.platform.web.template.converter.raw.extensions.isEmpty
 
 /**
  * @author Primoz Delopst
  * @since 3.1.0
  *
- *  Singleton instance of [PostProcessor] that post-processes [MutableList]
+ * Singleton instance of [PostProcessor] that post-processes [MutableList] and removed empty elements.
  */
-internal object MutableListPostProcessor : AbstractMutableListPostProcessor() {
-    override fun mustRemove(element: Any): Boolean = false
+internal object RemovableMutableListPostProcessor : AbstractMutableListPostProcessor() {
+    override fun mustRemove(element: Any): Boolean =
+        if (element is RmObject)
+            element.isEmpty()
+        else
+            false
+
 }

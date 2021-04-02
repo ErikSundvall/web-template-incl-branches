@@ -35,8 +35,16 @@ import java.util.*
  */
 class PostProcessingManager @JvmOverloads constructor(
         private val conversionContext: ConversionContext,
-        private val additionalPostProcessors: Map<Class<*>, PostProcessor<*>> = mapOf(),
+        additionalPostProcessors: Map<Class<*>, PostProcessor<*>> = mapOf(),
         private val externalPostProcessors: Map<Class<*>, PostProcessor<*>> = mapOf()) {
+
+
+    private val additionalPostProcessorList = additionalPostProcessors.toMutableMap().apply {
+        if (!this.containsKey(MutableList::class.java)) {
+            this[MutableList::class.java] = RemovableMutableListPostProcessor
+        }
+        this.toMap()
+    }
 
     private val elementPostProcessors: MutableList<ElementPostProcessor<*>> = ArrayList<ElementPostProcessor<*>>()
     private val elementVisitors: IdentityHashMap<RmObject, ElementVisitor<RmObject>> = IdentityHashMap<RmObject, ElementVisitor<RmObject>>()
@@ -44,7 +52,7 @@ class PostProcessingManager @JvmOverloads constructor(
 
     @Suppress("UNCHECKED_CAST")
     fun <T> add(amNode: AmNode?, rm: T, webTemplatePath: WebTemplatePath?) {
-        if (webTemplatePath != null && rm is RmObject && additionalPostProcessors.containsKey(rm.javaClass)) {
+        if (webTemplatePath != null && rm is RmObject && additionalPostProcessorList.containsKey(rm.javaClass)) {
             if (!elementVisitors.containsKey(rm)) {
                 conversionContext.rmVisitors[rm.javaClass]?.also {
                     elementVisitors[rm] = ElementVisitor(rm, webTemplatePath.toString(), it as RmVisitor<RmObject>)
@@ -53,7 +61,7 @@ class PostProcessingManager @JvmOverloads constructor(
         }
 
         addPostProcessor(amNode, rm, webTemplatePath, externalPostProcessors, true)
-        if (!addPostProcessor(amNode, rm, webTemplatePath, additionalPostProcessors, false)) {
+        if (!addPostProcessor(amNode, rm, webTemplatePath, additionalPostProcessorList, false)) {
             addPostProcessor(amNode, rm, webTemplatePath, PostProcessDelegator.getPostProcessors(), false)
         }
     }
