@@ -73,21 +73,33 @@ class PostProcessingManager @JvmOverloads constructor(
             webTemplatePath: WebTemplatePath?,
             postProcessors: Map<Class<*>, PostProcessor<*>>,
             addMultiple: Boolean): Boolean {
+
         var added = false
         if (rm != null) {
-            for ((key, value) in postProcessors) {
-                if (key.isAssignableFrom(rm.javaClass)) {
-                    val elementPostProcessor: ElementPostProcessor<T> = ElementPostProcessor(amNode, rm, webTemplatePath, value as PostProcessor<T>)
-                    if (!elementPostProcessors.contains(elementPostProcessor)) {
-                        elementPostProcessors.add(elementPostProcessor)
-                    }
-                    if (addMultiple)
+            val rmClass = rm.javaClass
+            val processor = postProcessors[rmClass]
+            if (addMultiple || processor == null) {
+                for (postProcessor in postProcessors.values) {
+                    if (postProcessor.accept(rmClass)) {
+                        val elementPostProcessor: ElementPostProcessor<T> = ElementPostProcessor(amNode, rm, webTemplatePath, postProcessor as PostProcessor<T>)
+                        if (!elementPostProcessors.contains(elementPostProcessor)) {
+                            elementPostProcessors.add(elementPostProcessor)
+                        }
                         added = true
-                    else
-                        break
+
+                        if (!addMultiple)
+                            break
+                    }
                 }
+            } else {
+                val elementPostProcessor: ElementPostProcessor<T> = ElementPostProcessor(amNode, rm, webTemplatePath, processor as PostProcessor<T>)
+                if (!elementPostProcessors.contains(elementPostProcessor)) {
+                    elementPostProcessors.add(elementPostProcessor)
+                }
+                added = true
             }
         }
+
         return added
     }
 
