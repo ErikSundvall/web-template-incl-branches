@@ -93,6 +93,7 @@ object RmObjectToFlatMapperDelegator {
      * @param webTemplatePath Web template path
      * @param flatConversionContext [FlatMappingContext]
      */
+    @JvmStatic
     @Suppress("UNCHECKED_CAST")
     fun <T : RmObject> delegate(
             webTemplateNode: WebTemplateNode,
@@ -115,6 +116,7 @@ object RmObjectToFlatMapperDelegator {
      * @param webTemplatePath Web template path
      * @param formattedFlatConversionContext [FormattedFlatMappingContext]
      */
+    @JvmStatic
     @Suppress("UNCHECKED_CAST")
     fun <T : RmObject> delegateFormatted(
             webTemplateNode: WebTemplateNode,

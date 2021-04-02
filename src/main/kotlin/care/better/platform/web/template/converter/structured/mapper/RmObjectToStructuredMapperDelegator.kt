@@ -90,6 +90,7 @@ object RmObjectToStructuredMapperDelegator {
      * @param rmObject RM object in RAW format
      * @return RM object in STRUCTURED format
      */
+    @JvmStatic
     @Suppress("UNCHECKED_CAST")
     fun <T : RmObject> delegate(
             webTemplateNode: WebTemplateNode,
@@ -105,6 +106,7 @@ object RmObjectToStructuredMapperDelegator {
      * @param rmObject RM object in RAW format
      * @return RM object in STRUCTURED format
      */
+    @JvmStatic
     @Suppress("UNCHECKED_CAST")
     fun <T : RmObject> delegateFormatted(
             webTemplateNode: WebTemplateNode,

@@ -30,6 +30,10 @@ abstract class AbstractFlatMappingContext<T> {
         }
     }
 
+    fun remove(key: String) {
+        flatMap.remove(key)
+    }
+
     fun get(): Map<String, T> = flatMap.toMap()
 }
 
