@@ -54,11 +54,4 @@ internal object DvParsableFactory : RmObjectLeafNodeFactory<DvParsable>() {
         } else {
             false
         }
-
-    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, rmObject: DvParsable) {
-        super.afterPropertiesSet(conversionContext, amNode, jsonNode, rmObject)
-        if (amNode.parent!!.rmType == "ACTIVITY" && rmObject.formalism.isNullOrBlank()) {
-            rmObject.formalism = "timing"
-        }
-    }
 }

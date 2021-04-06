@@ -33,10 +33,10 @@ internal object ActivityPostProcessor : LocatablePostProcessor<Activity>() {
     override fun postProcess(conversionContext: ConversionContext, amNode: AmNode?, instance: Activity, webTemplatePath: WebTemplatePath?) {
         super.postProcess(conversionContext, amNode, instance, webTemplatePath)
         val timing = instance.timing
-        if (timing == null) {
-            instance.timing = DvParsable(conversionContext.activityTiming, "timing")
-        } else if (timing.value == null) {
-            timing.value = conversionContext.activityTiming
+        when {
+            timing == null -> instance.timing = DvParsable(conversionContext.activityTiming, "timing")
+            timing.value == null -> timing.value = conversionContext.activityTiming
+            timing.formalism == null -> timing.formalism = "timing"
         }
     }
 

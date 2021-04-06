@@ -83,4 +83,8 @@ internal object CodePhraseFactory : RmObjectLeafNodeFactory<CodePhrase>() {
             amNode.cObject as CCodePhrase
         else
             AmUtils.getCObjectItem(amNode, CCodePhrase::class.java, "defining_code")
+
+    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, rmObject: CodePhrase) {
+        super.afterPropertiesSet(conversionContext, amNode, jsonNode, rmObject)
+    }
 }
