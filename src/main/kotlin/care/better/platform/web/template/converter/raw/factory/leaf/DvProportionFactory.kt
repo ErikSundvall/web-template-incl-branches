@@ -94,6 +94,7 @@ internal object DvProportionFactory : DvQuantifiedFactory<DvProportion>() {
     override fun removeDependentValues(map: MutableMap<AttributeDto, JsonNode>): Boolean {
         if (map[AttributeDto.forAttribute("denominator")] != null && map[AttributeDto.forAttribute("numerator")] == null) {
             map.remove(AttributeDto.forAttribute("denominator"))
+            map.remove(AttributeDto.ofBlank())
             return true
         }
         return false

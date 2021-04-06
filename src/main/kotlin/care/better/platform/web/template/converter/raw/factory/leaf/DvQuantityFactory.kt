@@ -89,6 +89,7 @@ internal object DvQuantityFactory : DvQuantifiedFactory<DvQuantity>() {
     override fun removeDependentValues(map: MutableMap<AttributeDto, JsonNode>): Boolean {
         if (map[AttributeDto.forAttribute("unit")] != null && map[AttributeDto.forAttribute("value")] == null && map[AttributeDto.forAttribute("magnitude")] == null && map[AttributeDto.ofBlank()] == null) {
             map.remove(AttributeDto.forAttribute("unit"))
+            map.remove(AttributeDto.ofBlank())
             return true
         }
         return false
