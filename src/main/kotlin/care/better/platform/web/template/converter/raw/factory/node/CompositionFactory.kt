@@ -55,7 +55,7 @@ internal object CompositionFactory : LocatableFactory<Composition>() {
                 }
             }
 
-            val categoryAmNode = amNode?.let { AmUtils.getAmNode(it, "category")?.also { this.category = DvCodedText.createFromAmNode(it) } }
+            val categoryAmNode = amNode?.let { node -> AmUtils.getAmNode(node, "category")?.also { this.category = DvCodedText.createFromAmNode(it) } }
             val categoryDvCodedText = if (categoryAmNode != null) DvCodedText.createFromAmNode(categoryAmNode) else null
 
             when {
@@ -63,7 +63,7 @@ internal object CompositionFactory : LocatableFactory<Composition>() {
                 conversionContext.category != null && conversionContext.category == "persistent" -> {
                     this.category = DvCodedText.createWithOpenEHRTerminology("431", "persistent")
                 }
-                else -> DvCodedText.createWithOpenEHRTerminology("433", "event")
+                else -> this.category = DvCodedText.createWithOpenEHRTerminology("433", "event")
             }
 
             conversionContext.language?.also { this.language = CodePhrase.createLanguagePhrase(it) }
