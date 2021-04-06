@@ -57,8 +57,9 @@ internal object IsmTransitionDvCodedTextFactory : DvCodedTextFactory() {
                 handleDvCodedTextStringTerminology(amNode, rmObject.definingCode!!, null)
             } catch (ignored: ConversionException) {
             }
+        } else {
+            handleDvCodedTextString(conversionContext, amNode, rmObject, jsonNode.asText())
         }
-        handleDvCodedTextString(conversionContext, amNode, rmObject, jsonNode.asText())
     }
 
 
