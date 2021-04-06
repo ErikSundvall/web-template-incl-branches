@@ -77,4 +77,11 @@ internal object TermMappingFactory : RmObjectLeafNodeFactory<TermMapping>() {
             }
             else -> false
         }
+
+    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, rmObject: TermMapping) {
+        super.afterPropertiesSet(conversionContext, amNode, jsonNode, rmObject)
+        if (rmObject.match.isNullOrBlank()) {
+            rmObject.match = "?"
+        }
+    }
 }
