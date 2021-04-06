@@ -21,7 +21,6 @@ import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
 import org.openehr.am.aom.CDvQuantity
 import org.openehr.am.aom.CQuantityItem
 import org.openehr.rm.datatypes.DvQuantity
@@ -66,7 +65,7 @@ internal object DvQuantityFactory : DvQuantifiedFactory<DvQuantity>() {
                 }
 
 
-    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, objectNode: ObjectNode, rmObject: DvQuantity) {
+    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, rmObject: DvQuantity) {
         if (rmObject.units == null) {
             if (amNode.cObject is CDvQuantity) {
                 val cDvQuantity = amNode.cObject as CDvQuantity

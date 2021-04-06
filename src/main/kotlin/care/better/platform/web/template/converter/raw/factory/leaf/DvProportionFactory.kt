@@ -22,7 +22,6 @@ import care.better.platform.web.template.converter.exceptions.ConversionExceptio
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.utils.WebTemplateConversionUtils
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
 import org.openehr.am.aom.CBoolean
 import org.openehr.am.aom.CInteger
 import org.openehr.am.aom.CReal
@@ -86,7 +85,7 @@ internal object DvProportionFactory : DvQuantifiedFactory<DvProportion>() {
                     else -> false
                 }
 
-    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, objectNode: ObjectNode, rmObject: DvProportion) {
+    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, rmObject: DvProportion) {
         if (rmObject.precision == null) {
             rmObject.precision = getMaxPrecision(amNode)
         }

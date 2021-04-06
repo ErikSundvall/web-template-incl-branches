@@ -28,7 +28,6 @@ import care.better.platform.web.template.converter.raw.factory.node.RmObjectNode
 import care.better.platform.web.template.converter.raw.postprocessor.PostProcessDelegator
 import care.better.platform.web.template.converter.utils.WebTemplateConversionUtils
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
 import org.openehr.am.aom.CCodePhrase
 import org.openehr.am.aom.CCodeReference
 import org.openehr.base.basetypes.TerminologyId
@@ -138,7 +137,7 @@ internal open class DvCodedTextFactory : RmObjectLeafNodeFactory<DvCodedText>() 
             else -> this
         }
 
-    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, objectNode: ObjectNode, rmObject: DvCodedText) {
+    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, rmObject: DvCodedText) {
         getFactory(amNode).afterPropertiesSet(amNode, rmObject)
     }
 

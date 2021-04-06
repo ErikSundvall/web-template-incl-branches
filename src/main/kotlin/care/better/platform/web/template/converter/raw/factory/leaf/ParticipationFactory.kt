@@ -23,7 +23,6 @@ import care.better.platform.web.template.converter.raw.extensions.createFromOpen
 import care.better.platform.web.template.converter.raw.extensions.createGenericId
 import care.better.platform.web.template.converter.raw.extensions.createPartyRef
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.ValueNode
 import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import org.openehr.base.basetypes.GenericId
@@ -105,7 +104,7 @@ internal object ParticipationFactory : RmObjectLeafNodeFactory<Participation>() 
         }
     }
 
-    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, objectNode: ObjectNode, rmObject: Participation) {
+    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, rmObject: Participation) {
         if (rmObject.mode == null) {
             rmObject.mode = DvCodedText.createWithOpenEHRTerminology("193", "not specified")
         }

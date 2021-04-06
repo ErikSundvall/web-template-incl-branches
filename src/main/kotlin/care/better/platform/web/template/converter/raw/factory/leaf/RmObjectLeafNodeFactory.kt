@@ -23,6 +23,7 @@ import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.mapper.ConversionObjectMapper
+import care.better.platform.web.template.converter.mapper.getFieldNames
 import care.better.platform.web.template.converter.mapper.isEmptyInDepth
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.extensions.isEmpty
@@ -162,6 +163,11 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
             emptyMap()
         } else {
             val map = mutableMapOf<AttributeDto, JsonNode>()
+
+            if (objectNode.has("") && objectNode.getFieldNames().size != 1) {
+                map.remove(AttributeDto.ofBlank())
+            }
+
             objectNode.fields().forEach {
                 if (!it.key.startsWith("transient_")) {
                     if (!it.value.isNull && !it.value.isMissingNode && !(it.value.isTextual && it.value.asText().isNullOrBlank())) {
@@ -344,6 +350,7 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
         createInstance().apply {
             try {
                 handleField(conversionContext, amNode, AttributeDto.ofBlank(), this, valueNode, webTemplatePath)
+                afterPropertiesSet(conversionContext, amNode, valueNode, this)
             } catch (ex: Exception) {
                 throw getException(ex, valueNode, webTemplatePath)
             }
@@ -407,10 +414,10 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
      *
      * @param conversionContext [ConversionContext]
      * @param amNode [AmNode]
-     * @param objectNode [ObjectNode] in STRUCTURED format
+     * @param jsonNode [ObjectNode] in STRUCTURED format
      * @param rmObject RM object in RAW format
      */
-    protected open fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, objectNode: ObjectNode, rmObject: T) {
+    protected open fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, rmObject: T) {
 
     }
 

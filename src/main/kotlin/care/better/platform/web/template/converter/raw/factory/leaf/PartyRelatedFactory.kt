@@ -22,7 +22,6 @@ import care.better.platform.web.template.converter.exceptions.ConversionExceptio
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.extensions.createFromAmNode
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.ValueNode
 import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import org.openehr.rm.common.PartyRelated
@@ -54,7 +53,7 @@ internal object PartyRelatedFactory : RmObjectLeafNodeFactory<PartyRelated>() {
             webTemplatePath: WebTemplatePath): Boolean =
         PartyIdentifiedFactory.handleField(conversionContext, amNode, attribute, rmObject, jsonNode, webTemplatePath)
 
-    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, objectNode: ObjectNode, rmObject: PartyRelated) {
+    override fun afterPropertiesSet(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, rmObject: PartyRelated) {
         AmUtils.getAmNode(amNode, "relationship")?.also { rmObject.relationship = DvCodedText.createFromAmNode(it) }
     }
 }
