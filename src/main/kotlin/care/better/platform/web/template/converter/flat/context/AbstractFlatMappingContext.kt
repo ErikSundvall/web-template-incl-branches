@@ -30,6 +30,8 @@ abstract class AbstractFlatMappingContext<T> {
         }
     }
 
+    fun getIterator() = flatMap.entries.iterator()
+
     fun remove(key: String) {
         flatMap.remove(key)
     }

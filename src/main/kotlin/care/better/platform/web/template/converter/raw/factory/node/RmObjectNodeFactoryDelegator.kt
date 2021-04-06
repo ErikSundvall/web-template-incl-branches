@@ -103,6 +103,7 @@ object RmObjectNodeFactoryDelegator {
         Pair(RmUtils.getRmTypeName(SubjectPrecondition::class.java), RmObjectInstanceFactory { SubjectPrecondition() }),
         Pair(RmUtils.getRmTypeName(SubPlan::class.java), LocatableInstanceFallbackNameFactory({ SubPlan() }, SubPlan::class.java)),
         Pair(RmUtils.getRmTypeName(SystemNotification::class.java), LocatableInstanceFactory { SystemNotification() }),
+        Pair(RmUtils.getRmTypeName(SystemRequest::class.java), LocatableInstanceFactory { SystemRequest() }),
         Pair(RmUtils.getRmTypeName(Task::class.java), LocatableInstanceClassFactory(PerformableTask::class.java)),
         Pair(RmUtils.getRmTypeName(TaskGroup::class.java), LocatableInstanceFallbackNameClassFactory(TaskGroup::class.java)),
         Pair(RmUtils.getRmTypeName(TaskParticipation::class.java), LocatableInstanceFactory { TaskParticipation() }),
