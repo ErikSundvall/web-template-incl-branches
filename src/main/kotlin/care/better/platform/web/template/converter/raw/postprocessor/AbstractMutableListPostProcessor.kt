@@ -72,7 +72,9 @@ abstract class AbstractMutableListPostProcessor : PostProcessor<MutableList<Any>
     private fun sortCollection(amNode: AmNode, list: MutableList<Any>) {
         AmUtils.attributeOf(amNode.parent!!, amNode)?.also { attribute ->
             val sortedList = mutableListOf<Any>()
-            attribute.children.forEach { child -> moveMatching(child, list, sortedList) }
+            for (child in attribute.children) {
+                moveMatching(child, list, sortedList)
+            }
             sortedList.addAll(list)
             list.clear()
             list.addAll(sortedList)

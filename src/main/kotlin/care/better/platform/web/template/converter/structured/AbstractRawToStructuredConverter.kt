@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import care.better.platform.web.template.builder.model.WebTemplateNode
+import com.google.common.collect.Sets
 import org.openehr.rm.common.Locatable
 import org.openehr.rm.composition.Composition
 import org.openehr.rm.datatypes.*
@@ -40,6 +41,8 @@ import java.io.IOException
  * Base class that converts the RM object in RAW format to the RM object in STRUCTURED format.
  */
 internal abstract class AbstractRawToStructuredConverter {
+
+    private val exported = Sets.newIdentityHashSet<Any>()
 
     /**
      * Converts the RM object in RAW format to the RM object in STRUCTURED format.
@@ -104,6 +107,19 @@ internal abstract class AbstractRawToStructuredConverter {
     abstract fun <R : RmObject> mapRmObject(webTemplateNode: WebTemplateNode, rmObject: R): JsonNode?
 
     /**
+     * Maps the RM object in RAW format to the STRUCTURED format.
+     *
+     * @param webTemplateNode [WebTemplateNode]
+     * @param rmObject RM object in RAW format
+     */
+    fun <R : RmObject> mapRmObjectInternally(webTemplateNode: WebTemplateNode, rmObject: R): JsonNode? {
+        if (!exported.contains(rmObject)){
+            return mapRmObject(webTemplateNode, rmObject)
+        }
+        return null
+    }
+
+    /**
      * Maps the RM object in RAW format to the RM object in STRUCTURED format.
      *
      * @param webTemplateNode [WebTemplateNode]
@@ -111,7 +127,7 @@ internal abstract class AbstractRawToStructuredConverter {
      */
     protected open fun map(webTemplateNode: WebTemplateNode, rmObject: RmObject): ObjectNode? {
         val objectNode = ConversionObjectMapper.createObjectNode()
-        val jsonNode = mapRmObject(webTemplateNode, rmObject) ?: return null
+        val jsonNode = mapRmObjectInternally(webTemplateNode, rmObject) ?: return null
 
         objectNode.set<ObjectNode>(webTemplateNode.jsonId, jsonNode)
 
@@ -138,7 +154,7 @@ internal abstract class AbstractRawToStructuredConverter {
      * @param rmObject RM object in RAW format
      */
     private fun mapRecursive(webTemplateNode: WebTemplateNode, rmObject: RmObject): JsonNode? {
-        val jsonNode = mapRmObject(webTemplateNode, rmObject) ?: ConversionObjectMapper.createObjectNode()
+        val jsonNode = mapRmObjectInternally(webTemplateNode, rmObject) ?: ConversionObjectMapper.createObjectNode()
 
         if (rmObject is DvInterval) {
             return jsonNode
@@ -180,7 +196,7 @@ internal abstract class AbstractRawToStructuredConverter {
             rmObject,
             currentAmNode).asSequence().flatMap {
 
-            val omittedNode: JsonNode? = mapRmObject(webTemplateNode, it)
+            val omittedNode: JsonNode? = mapRmObjectInternally(webTemplateNode, it)
             val convertedJsonNodes = mapInChain(webTemplateNode, newChain, it)
 
             if (convertedJsonNodes.isEmpty()) {

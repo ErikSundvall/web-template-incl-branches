@@ -27,7 +27,7 @@ import care.better.platform.web.template.builder.model.WebTemplateNode
  *
  * Singleton instance of [AbstractRawToStructuredConverter] that converts the RM object in RAW format to the RM object in STRUCTURED format.
  */
-internal object RawToStructuredConverter : AbstractRawToStructuredConverter() {
+internal class RawToStructuredConverter : AbstractRawToStructuredConverter() {
     override fun <R : RmObject> mapRmObject(webTemplateNode: WebTemplateNode, rmObject: R): JsonNode? =
         RmObjectToStructuredMapperDelegator.delegate(webTemplateNode, SimpleValueConverter, rmObject)
 }

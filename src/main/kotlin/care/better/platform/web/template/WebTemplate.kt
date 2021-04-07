@@ -168,7 +168,7 @@ class WebTemplate internal constructor(
      */
     @JvmOverloads
     fun <T : RmObject> convertFromRawToStructured(rmObject: T, fromRawConversion: FromRawConversion = FromRawConversion.create()): JsonNode? =
-        RawToStructuredConverter.convert(this, fromRawConversion, rmObject)
+        RawToStructuredConverter().convert(this, fromRawConversion, rmObject)
 
     /**
      * Converts the RM object in RAW format to the RM object in STRUCTURED format with formatted values.
