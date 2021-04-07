@@ -71,26 +71,35 @@ abstract class AbstractMutableListPostProcessor : PostProcessor<MutableList<Any>
      */
     private fun sortCollection(amNode: AmNode, list: MutableList<Any>) {
         AmUtils.attributeOf(amNode.parent!!, amNode)?.also { attribute ->
+            val constrainedMap = attribute.children.asSequence()
+                .filter { AmUtils.isNameConstrained(it) }
+                .associateBy({ it }, { getMatching(it, list) })
+
+            val unconstrainedMap = attribute.children.asSequence()
+                .filter { !AmUtils.isNameConstrained(it) }
+                .associateBy({ it }, { getMatching(it, list) })
+
             val sortedList = mutableListOf<Any>()
-            for (child in attribute.children) {
-                moveMatching(child, list, sortedList)
-            }
+
+            attribute.children.forEach { sortedList.addAll(constrainedMap[it] ?: requireNotNull(unconstrainedMap[it])) }
+
             sortedList.addAll(list)
             list.clear()
             list.addAll(sortedList)
-
         }
     }
 
-    private fun moveMatching(child: AmNode, list: MutableList<Any>, sorted: MutableList<Any>) {
-        val iterator = list.iterator()
+    private fun getMatching(amNode: AmNode, originalList: MutableList<Any>): MutableList<Any> {
+        val list: MutableList<Any> = mutableListOf()
+        val iterator = originalList.iterator()
         while (iterator.hasNext()) {
             val next = iterator.next()
-            if (next is Locatable && AmUtils.matches(child, next)) {
-                sorted.add(next)
+            if (next is Locatable && AmUtils.matches(amNode, next)) {
+                list.add(next)
                 iterator.remove()
             }
         }
+        return list
     }
 
     override fun getType(): Class<*> = supportedClass
