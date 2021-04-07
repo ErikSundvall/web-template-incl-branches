@@ -42,7 +42,8 @@ import org.openehr.rm.datatypes.DvIdentifier
  *
  * @return [Boolean] indicating if [RmObject] is empty
  */
-fun RmObject?.isEmpty(): Boolean = isRmObjectEmpty(this)
+@JvmSynthetic
+internal fun RmObject?.isEmpty(): Boolean = isRmObjectEmpty(this)
 
 /**
  * Checks if the RM object in RAW format is empty.
@@ -77,7 +78,8 @@ private fun isRmObjectEmpty(rmObject: RmObject?): Boolean =
  *
  * @return [Boolean] indicating if [RmObject] is not empty
  */
-fun RmObject?.isNotEmpty(): Boolean = !this.isEmpty()
+@JvmSynthetic
+internal fun RmObject?.isNotEmpty(): Boolean = !this.isEmpty()
 
 /**
  * Creates and returns [DvCodedText] for the openEHR terminology.
@@ -87,6 +89,7 @@ fun RmObject?.isNotEmpty(): Boolean = !this.isEmpty()
  * @param name Name
  * @return [DvCodedText] for the openEHR terminology.
  */
+@JvmSynthetic
 internal fun DvCodedText.Companion.createFromOpenEhrTerminology(groupId: String, name: String): DvCodedText =
     with(OpenEhrTerminology.getInstance().getId(groupId, name)) {
         if (this == null) {
@@ -109,6 +112,7 @@ internal fun DvCodedText.Companion.createFromOpenEhrTerminology(groupId: String,
  * @param idNamespace Party ID namespace
  * @return [PartyIdentified]
  */
+@JvmSynthetic
 internal fun PartyIdentified.Companion.createPartyIdentified(name: String, id: String?, idScheme: String?, idNamespace: String?): PartyIdentified =
     PartyIdentified().apply {
         this.name = name
@@ -125,6 +129,7 @@ internal fun PartyIdentified.Companion.createPartyIdentified(name: String, id: S
  * @param idNamespace ID namespace
  * @return [PartyRef]
  */
+@JvmSynthetic
 internal fun PartyRef.Companion.createPartyRef(id: String?, idScheme: String?, idNamespace: String?): PartyRef =
     PartyRef().apply {
         this.id = GenericId.createGenericId(id, idScheme)
@@ -139,6 +144,7 @@ internal fun PartyRef.Companion.createPartyRef(id: String?, idScheme: String?, i
  * @param idScheme ID scheme
  * @return [GenericId]
  */
+@JvmSynthetic
 internal fun GenericId.Companion.createGenericId(id: String?, idScheme: String?): GenericId =
     GenericId().apply {
         this.value = id
@@ -151,7 +157,8 @@ internal fun GenericId.Companion.createGenericId(id: String?, idScheme: String?)
  * @param amNode [AmNode]
  * @return [DvCodedText]
  */
-fun DvCodedText.Companion.createFromAmNode(amNode: AmNode): DvCodedText? =
+@JvmSynthetic
+internal fun DvCodedText.Companion.createFromAmNode(amNode: AmNode): DvCodedText? =
     AmUtils.getAmNode(amNode, "defining_code")?.let {
         DvCodedText().apply {
             val cCodePhrase = it.cObject as CCodePhrase
@@ -171,12 +178,32 @@ private val elementRmType = RmUtils.getRmTypeName(Element::class.java)
  * Checks if [AmNode] is for ELEMENT RM type.
  * @return [Boolean] indicating if [AmNode] is for ELEMENT RM type
  */
+@JvmSynthetic
 internal fun AmNode.isForElement() = elementRmType == this.rmType
 
-internal fun CharSequence?.isNotNullOrBlank(): Boolean {
-    return this != null && this.isNotBlank()
-}
+@JvmSynthetic
+internal fun CharSequence?.isNotNullOrBlank(): Boolean = this != null && this.isNotBlank()
 
+
+@JvmSynthetic
 internal fun CharSequence?.isNotNullOrEmpty(): Boolean {
     return !this.isNullOrEmpty()
+}
+
+object WebTemplateHelperUtils {
+    /**
+     * Creates a new instance of [PartyIdentified] with at least a name.
+     * If parameter ID is non-blank, then it also creates external ref with ID, idScheme and idNamespace (in which case
+     * idScheme and idNamespace must also be non-blank).
+     *
+     * @param name        Party name
+     * @param id          Party ID
+     * @param idScheme    Party ID scheme
+     * @param idNamespace Party ID namespace
+     * @return [PartyIdentified]
+     */
+    @JvmStatic
+    fun createPartyIdentified(name: String, id: String?, idScheme: String?, idNamespace: String?): PartyIdentified =
+        PartyIdentified.createPartyIdentified(name, id, idScheme, idNamespace)
+
 }

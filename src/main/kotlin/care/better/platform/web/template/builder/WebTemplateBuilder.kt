@@ -172,7 +172,7 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
                         idBuilder.buildIds(this, nodes)
                     },
                     templateId,
-                    defaultLanguage,
+                    context.contextLanguage ?: defaultLanguage,
                     context.languages,
                     CURRENT_VERSION,
                     nodes)

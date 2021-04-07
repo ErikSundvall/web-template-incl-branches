@@ -35,5 +35,6 @@ import care.better.platform.web.template.builder.path.PathFilter
 data class WebTemplateBuilderContext @JvmOverloads constructor(
         val defaultLanguage: String? = null,
         val languages: Collection<String> = emptyList(),
+        val contextLanguage: String? = null,
         val isAddDescriptions: Boolean = true,
         val filter: PathFilter = NoopPathFilter)

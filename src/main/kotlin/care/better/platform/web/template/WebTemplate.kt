@@ -73,7 +73,7 @@ class WebTemplate internal constructor(
         val defaultLanguage: String,
         val languages: Collection<String>,
         val version: String,
-        @JsonIgnore val nodes: Multimap<AmNode, WebTemplateNode>) {
+        @JsonIgnore private val nodes: Multimap<AmNode, WebTemplateNode>) {
 
     companion object {
         /**

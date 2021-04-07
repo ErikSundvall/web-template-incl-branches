@@ -16,9 +16,11 @@
 package care.better.platform.web.template.builder.input
 
 import care.better.openehr.rm.RmObject
+import care.better.platform.template.AmNode
 import care.better.platform.utils.RmUtils
 import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
 import care.better.platform.web.template.builder.model.WebTemplateNode
+import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import org.openehr.am.aom.*
 import org.openehr.rm.common.PartyIdentified
 import org.openehr.rm.common.PartyProxy
@@ -29,7 +31,7 @@ import org.openehr.rm.datatypes.*
  * @since 3.1.0
  */
 @Suppress("unused")
-internal object WebTemplateInputBuilderDelegator {
+object WebTemplateInputBuilderDelegator {
 
     private val domainTypeBuilders: Map<Class<out CDomainType>, WebTemplateInputBuilder<out CDomainType>> =
         mapOf(
@@ -91,15 +93,21 @@ internal object WebTemplateInputBuilderDelegator {
             Pair(RmUtils.getRmTypeName(PartyIdentified::class.java), PartyIdentifiedWebTemplateInputBuilder),
             Pair("STRING", StringWebTemplateInputBuilder))
 
+    @Suppress("UNCHECKED_CAST")
+    @JvmStatic
+    fun <T> delegate(amNode: AmNode, validator: T, context: WebTemplateBuilderContext): WebTemplateInput? =
+        with(requireNotNull(typeBuilders[amNode.rmType]) { "Unsupported type: ${amNode.rmType}" }) {
+            (this as WebTemplateInputBuilder<T>).build(amNode, validator, context)
+        }
 
     @JvmStatic
-    fun delegate(webTemplateNode: WebTemplateNode, context: WebTemplateBuilderContext) {
+    internal fun delegate(webTemplateNode: WebTemplateNode, context: WebTemplateBuilderContext) {
         with(requireNotNull(typeBuilders[webTemplateNode.rmType]) { "Unsupported type: ${webTemplateNode.rmType}" }) {
             this.build(webTemplateNode, context)
         }
     }
 
     @JvmStatic
-    fun isRmTypeWithInputs(rmClass: Class<out RmObject?>): Boolean =
+    internal fun isRmTypeWithInputs(rmClass: Class<out RmObject?>): Boolean =
         DataValue::class.java.isAssignableFrom(rmClass) || PartyProxy::class.java == rmClass || PartyIdentified::class.java == rmClass
 }
