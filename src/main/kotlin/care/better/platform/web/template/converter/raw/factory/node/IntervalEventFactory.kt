@@ -54,7 +54,7 @@ internal object IntervalEventFactory : EventFactory<IntervalEvent>() {
             node?.also {
                 val cObject = node.cObject
                 if (cObject is CCodePhrase && cObject.codeList.isNotEmpty()) {
-                    this.mathFunction =  DvCodedText().apply {
+                    this.mathFunction = DvCodedText().apply {
                         this.definingCode = CodePhrase.create(cObject.terminologyId?.value!!, cObject.codeList[0])
                         this.value = MATH_FUNCTIONS[cObject.codeList[0]]
                     }

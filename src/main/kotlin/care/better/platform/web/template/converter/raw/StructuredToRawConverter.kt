@@ -20,6 +20,8 @@ import care.better.platform.template.AmAttribute
 import care.better.platform.template.AmNode
 import care.better.platform.utils.RmUtils
 import care.better.platform.web.template.builder.model.WebTemplateInputType
+import care.better.platform.web.template.builder.model.WebTemplateNode
+import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.mapper.ConversionObjectMapper
@@ -37,8 +39,6 @@ import care.better.platform.web.template.converter.raw.special.SpecialCaseRmObje
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import care.better.platform.web.template.builder.model.WebTemplateNode
-import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import org.openehr.base.basetypes.TemplateId
 import org.openehr.rm.common.Archetyped
 import org.openehr.rm.common.Locatable

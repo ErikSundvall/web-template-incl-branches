@@ -39,9 +39,9 @@ internal object ContextExpressionFactory : RmObjectInstanceClassFactory<ContextE
         }
 
     private fun isBoolean(amNode: AmNode?): Boolean =
-        if (amNode == null){
+        if (amNode == null) {
             false
-        }else {
+        } else {
             with(AmUtils.resolvePath(amNode, "type")) {
                 amNode.rmType == "BOOLEAN_CONTEXT_EXPRESSION"
                         || amNode.rmType == "CONTEXT_EXPRESSION<TYPE_DEF_BOOLEAN>"

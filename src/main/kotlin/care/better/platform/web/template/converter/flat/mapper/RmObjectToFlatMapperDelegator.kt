@@ -16,10 +16,10 @@
 package care.better.platform.web.template.converter.flat.mapper
 
 import care.better.openehr.rm.RmObject
+import care.better.platform.web.template.builder.model.WebTemplateNode
 import care.better.platform.web.template.converter.flat.context.FlatMappingContext
 import care.better.platform.web.template.converter.flat.context.FormattedFlatMappingContext
 import care.better.platform.web.template.converter.value.ValueConverter
-import care.better.platform.web.template.builder.model.WebTemplateNode
 import org.openehr.base.basetypes.*
 import org.openehr.rm.common.Link
 import org.openehr.rm.common.Participation

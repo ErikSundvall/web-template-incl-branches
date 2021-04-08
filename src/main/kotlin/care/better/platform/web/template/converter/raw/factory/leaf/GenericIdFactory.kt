@@ -20,7 +20,6 @@ import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.fasterxml.jackson.databind.JsonNode
 import org.openehr.base.basetypes.GenericId
-import org.openehr.base.basetypes.HierObjectId
 
 /**
  * @author Primoz Delopst

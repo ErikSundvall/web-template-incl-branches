@@ -34,7 +34,6 @@ import java.util.regex.Pattern
 object WebTemplateBuilderUtils {
     private val LOCALIZATION_PATTERN = Pattern.compile("L10n=\\{(.+?)(?<!\\\\)}")
 
-    //TODO not internal
     @JvmStatic
     fun <T> getDefaultValue(amNode: AmNode, clazz: Class<T>): T? {
         val node = if (amNode.constraints == null && amNode.parent != null) amNode.parent as AmNode else amNode
@@ -52,7 +51,7 @@ object WebTemplateBuilderUtils {
     }
 
     @JvmStatic
-    fun getDataValueClass(amNode: AmNode): Class<*>? =
+    internal fun getDataValueClass(amNode: AmNode): Class<*>? =
         sequenceOf(amNode, amNode.parent)
             .filter { it != null }
             .mapNotNull {
@@ -70,7 +69,7 @@ object WebTemplateBuilderUtils {
 
 
     @JvmStatic
-    fun buildChain(node: WebTemplateNode, parent: WebTemplateNode) {
+    internal fun buildChain(node: WebTemplateNode, parent: WebTemplateNode) {
         var amNode: AmNode? = node.amNode
         while (amNode != null) {
             node.chain.add(0, amNode)
@@ -81,7 +80,6 @@ object WebTemplateBuilderUtils {
         }
     }
 
-    //TODO not internal
     @JvmStatic
     fun getTranslationsFromAnnotations(amNode: AmNode): Map<String, String?> {
         val localizedNamesFromAnnotations: MutableMap<String, String?> = mutableMapOf()
@@ -99,7 +97,7 @@ object WebTemplateBuilderUtils {
     }
 
     @JvmStatic
-    fun parseTranslations(value: String, localizedNamesFromAnnotations: MutableMap<String, String?>) {
+    internal fun parseTranslations(value: String, localizedNamesFromAnnotations: MutableMap<String, String?>) {
         val matcher = LOCALIZATION_PATTERN.matcher(value)
         if (matcher.find()) {
             val translations = matcher.group(1)
@@ -115,6 +113,6 @@ object WebTemplateBuilderUtils {
     }
 
     @JvmStatic
-    fun getChoiceWebTemplateId(typeName: String): String = "${typeName.substring(3).toLowerCase()}_value"
+    internal fun getChoiceWebTemplateId(typeName: String): String = "${typeName.substring(3).toLowerCase()}_value"
 
 }
