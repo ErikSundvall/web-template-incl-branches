@@ -50,6 +50,7 @@ import org.openehr.rm.datatypes.DvEhrUri
 import java.io.IOException
 import java.io.OutputStream
 
+
 /**
  * @author Primoz Delopst
  * @author Bostjan Lah
@@ -168,7 +169,7 @@ class WebTemplate internal constructor(
      */
     @JvmOverloads
     fun <T : RmObject> convertFromRawToStructured(rmObject: T, fromRawConversion: FromRawConversion = FromRawConversion.create()): JsonNode? =
-        RawToStructuredConverter().convert(this, fromRawConversion, rmObject)
+        RawToStructuredConverter(fromRawConversion.objectMapper).convert(this, fromRawConversion, rmObject)
 
     /**
      * Converts the RM object in RAW format to the RM object in STRUCTURED format with formatted values.
@@ -179,7 +180,7 @@ class WebTemplate internal constructor(
      */
     @JvmOverloads
     fun <T : RmObject> convertFormattedFromRawToStructured(rmObject: T, fromRawConversion: FromRawConversion = FromRawConversion.create()): JsonNode? =
-        FormattedRawToStructuredConverter(fromRawConversion.valueConverter).convert(this, fromRawConversion, rmObject)
+        FormattedRawToStructuredConverter(fromRawConversion.valueConverter, fromRawConversion.objectMapper).convert(this, fromRawConversion, rmObject)
 
     /**
      * Converts [WebTemplate] to JSON formatted [String].
@@ -244,10 +245,22 @@ class WebTemplate internal constructor(
      * Finds [WebTemplateNode] for the AQL path.
      *
      * @param aqlPath AQL path
-     * @return [WebTemplateNode] if found, otherwise, return null
+     * @return [WebTemplateNode]
      * @throws [UnknownPathBuilderException] if no node was found for the AQL path
      */
     fun findWebTemplateNodeByAqlPath(aqlPath: String): WebTemplateNode = findWebTemplateNodeByAqlPath(PathUtils.getPathSegments(aqlPath))
+
+    /**
+     * Finds [WebTemplateNode] for the AQL path.
+     *
+     * @param aqlPath AQL path
+     * @return [WebTemplateNode] if found, otherwise, return null
+     */
+    fun findWebTemplateNodeByAqlPathOrNull(aqlPath: String): WebTemplateNode? =
+        with(PathUtils.getPathSegments(aqlPath)) {
+            val amNode = resolvePath(tree.amNode, this)
+            getMatchingWebTemplateNode(this, amNode)
+        }
 
     /**
      * Finds [WebTemplateNode] for the AQL path and archetype ID.
@@ -435,6 +448,19 @@ class WebTemplate internal constructor(
             else -> getLinkPathRecursive(path.child, path.getId(), "", tree)
         }
     }
+
+    /**
+     * Returns [List] of [WebTemplateNode] for [AmNode]
+     *
+     * @param amNode [AmNode]
+     * @return [List] of [WebTemplateNode]
+     */
+    fun getNodes(amNode: AmNode?): List<WebTemplateNode> =
+        if (amNode == null)
+            emptyList()
+        else
+            nodes[amNode]?.toList() ?: emptyList()
+
 
     /**
      * Recursively gets a RM path suitable to be used for [DvEhrUri] or [Link] for the given web template path.

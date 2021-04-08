@@ -115,6 +115,7 @@ internal object CompositionPostProcessor : LocatablePostProcessor<Composition>()
                 val path = when {
                     instructionDetails.instructionId?.path != null -> instructionDetails.instructionId?.path
                     conversionContext.actionToInstructionHandler != null -> conversionContext.actionToInstructionHandler.resolvePath(
+                        composition,
                         instructionDetails,
                         instructionDetailsData,
                         conversionContext)

@@ -31,7 +31,6 @@ import org.openehr.rm.datatypes.DataValue
 import org.openehr.rm.datatypes.DvCodedText
 import org.openehr.rm.datatypes.DvInterval
 import org.openehr.rm.datatypes.DvText
-import kotlin.math.exp
 
 /**
  * @author Primoz Delopst

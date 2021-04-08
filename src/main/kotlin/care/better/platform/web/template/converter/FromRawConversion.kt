@@ -15,9 +15,11 @@
 
 package care.better.platform.web.template.converter
 
+import care.better.platform.web.template.converter.mapper.ConversionObjectMapper
 import care.better.platform.web.template.converter.value.LocaleBasedValueConverter
 import care.better.platform.web.template.converter.value.SimpleValueConverter
 import care.better.platform.web.template.converter.value.ValueConverter
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.*
 
 /**
@@ -29,27 +31,21 @@ import java.util.*
 class FromRawConversion private constructor(
         val aqlPath: String? = null,
         val webTemplatePath: String? = null,
-        val valueConverter: ValueConverter) {
+        val valueConverter: ValueConverter,
+        val objectMapper: ObjectMapper) {
 
     companion object {
         /**
-         * Creates a new instance of [FromRawConversion].
-         *
-         * @return [FromRawConversion]
-         */
-        @JvmStatic
-        fun create(): FromRawConversion =
-            FromRawConversion(valueConverter = SimpleValueConverter)
-
-        /**
-         * Creates a new instance of [FromRawConversion] for [ValueConverter].
+         * Creates a new instance of [FromRawConversion] for [ValueConverter] and [ObjectMapper].
          *
          * @param valueConverter [ValueConverter]
+         * @param objectMapper [ObjectMapper]
          * @return [FromRawConversion]
          */
+        @JvmOverloads
         @JvmStatic
-        fun create(valueConverter: ValueConverter): FromRawConversion =
-            FromRawConversion(valueConverter = valueConverter)
+        fun create(valueConverter: ValueConverter = SimpleValueConverter, objectMapper: ObjectMapper = ConversionObjectMapper): FromRawConversion =
+            FromRawConversion(valueConverter = valueConverter, objectMapper = objectMapper)
 
         /**
          * Creates a new instance of [FromRawConversion] for [Locale].
@@ -58,27 +54,18 @@ class FromRawConversion private constructor(
          * @return [FromRawConversion]
          */
         @JvmStatic
-        fun create(locale: Locale) =
-            FromRawConversion(valueConverter = LocaleBasedValueConverter(locale))
+        fun create(locale: Locale, objectMapper: ObjectMapper = ConversionObjectMapper) =
+            FromRawConversion(valueConverter = LocaleBasedValueConverter(locale), objectMapper = objectMapper)
 
         /**
          * Creates a new instance of [FromRawConversion] for the AQL path.
          *
          * @return [FromRawConversion]
          */
+        @JvmOverloads
         @JvmStatic
-        fun createForAqlPath(aqlPath: String) =
-            FromRawConversion(aqlPath = aqlPath, valueConverter = SimpleValueConverter)
-
-        /**
-         * Creates a new instance of [FromRawConversion] for the AQL path and [ValueConverter].
-         *
-         * @param valueConverter [ValueConverter]
-         * @return [FromRawConversion]
-         */
-        @JvmStatic
-        fun createForAqlPath(aqlPath: String, valueConverter: ValueConverter) =
-            FromRawConversion(aqlPath = aqlPath, valueConverter = valueConverter)
+        fun createForAqlPath(aqlPath: String, valueConverter: ValueConverter = SimpleValueConverter, objectMapper: ObjectMapper = ConversionObjectMapper) =
+            FromRawConversion(aqlPath = aqlPath, valueConverter = SimpleValueConverter, objectMapper = objectMapper)
 
         /**
          * Creates a new instance of [FromRawConversion] for the AQL path and [Locale].
@@ -86,28 +73,23 @@ class FromRawConversion private constructor(
          * @param locale [Locale]
          * @return [FromRawConversion]
          */
+        @JvmOverloads
         @JvmStatic
-        fun crateForAqlPath(aqlPath: String, locale: Locale) =
-            FromRawConversion(aqlPath = aqlPath, valueConverter = LocaleBasedValueConverter(locale))
+        fun crateForAqlPath(aqlPath: String, locale: Locale, objectMapper: ObjectMapper = ConversionObjectMapper) =
+            FromRawConversion(aqlPath = aqlPath, valueConverter = LocaleBasedValueConverter(locale), objectMapper = objectMapper)
 
         /**
          * Creates a new instance of [FromRawConversion] for the web template path.
          *
          * @return [FromRawConversion]
          */
+        @JvmOverloads
         @JvmStatic
-        fun createForWebTemplatePath(webTemplatePath: String) =
-            FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = SimpleValueConverter)
-
-        /**
-         * Creates a new instance of [FromRawConversion] for the web template path and [ValueConverter].
-         *
-         * @param valueConverter [ValueConverter]
-         * @return [FromRawConversion]
-         */
-        @JvmStatic
-        fun createForWebTemplatePath(webTemplatePath: String, valueConverter: ValueConverter) =
-            FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = valueConverter)
+        fun createForWebTemplatePath(
+                webTemplatePath: String,
+                valueConverter: ValueConverter = SimpleValueConverter,
+                objectMapper: ObjectMapper = ConversionObjectMapper) =
+            FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = SimpleValueConverter, objectMapper = objectMapper)
 
         /**
          * Creates a new instance of [FromRawConversion] for the web template path and [Locale].
@@ -115,8 +97,9 @@ class FromRawConversion private constructor(
          * @param locale [Locale]
          * @return [FromRawConversion]
          */
+        @JvmOverloads
         @JvmStatic
-        fun crateForWebTemplatePath(webTemplatePath: String, locale: Locale) =
-            FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = LocaleBasedValueConverter(locale))
+        fun crateForWebTemplatePath(webTemplatePath: String, locale: Locale, objectMapper: ObjectMapper = ConversionObjectMapper) =
+            FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = LocaleBasedValueConverter(locale), objectMapper = objectMapper)
     }
 }

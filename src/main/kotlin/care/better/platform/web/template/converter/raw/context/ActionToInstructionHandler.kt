@@ -49,6 +49,7 @@ interface ActionToInstructionHandler {
      * @return Resolved path
      */
     fun resolvePath(
+            composition: Composition,
             instructionDetails: InstructionDetails,
             instructionDetailsData: InstructionDetailsData,
             conversionContext: ConversionContext): String?
@@ -61,16 +62,17 @@ interface ActionToInstructionHandler {
  *
  * @constructor Creates a new instance of [InCompositionActionToInstructionHandler]
  */
-class InCompositionActionToInstructionHandler : ActionToInstructionHandler {
+open class InCompositionActionToInstructionHandler : ActionToInstructionHandler {
     override fun handle(
             composition: Composition,
             instructionDetails: InstructionDetails,
             instructionDetailsData: InstructionDetailsData,
             conversionContext: ConversionContext) {
+        val resolvedComposition = resolve(composition, instructionDetails, instructionDetailsData, conversionContext)
         instructionDetails.instructionId?.id?.value?.also {
             if (it == "\$selfComposition") {
                 val pathValueExtractor = NameAndNodeMatchingPathValueExtractor(instructionDetails.instructionId?.path!!)
-                val instructions = pathValueExtractor.getValue(composition, true)
+                val instructions = pathValueExtractor.getValue(resolvedComposition, true)
                 if (instructions.isNotEmpty() && instructions[0] is Instruction) {
                     val instruction = instructions[0] as Instruction
                     if (instruction.activities.isNotEmpty()) {
@@ -99,7 +101,19 @@ class InCompositionActionToInstructionHandler : ActionToInstructionHandler {
     }
 
     override fun resolvePath(
+            composition: Composition,
             instructionDetails: InstructionDetails,
             instructionDetailsData: InstructionDetailsData,
             conversionContext: ConversionContext): String? = null
+
+
+    open fun resolve(
+            composition: Composition,
+            instructionDetails: InstructionDetails,
+            instructionDetailsData: InstructionDetailsData,
+            conversionContext: ConversionContext): Composition? =
+        if ("\$selfComposition" == instructionDetails.instructionId?.id?.value)
+            composition
+        else
+            null
 }
