@@ -458,4 +458,14 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
      * @return [List] of sorted [ObjectNode] field names
      */
     protected open fun sortFieldNames(attributes: List<AttributeDto>): List<AttributeDto> = attributes
+
+    open fun canRemoveDependantValues(): Boolean = false
+
+    /**
+     * Checks if [ObjectNode] in STRUCTURED format is empty or not
+     *
+     * @param objectNode [ObjectNode] in STRUCTURED format
+     *  @return Boolean indicating if [ObjectNode] is empty or not.
+     */
+    fun isStructuredRmObjectEmpty(objectNode: ObjectNode) = objectNode.isEmpty || getFilteredObjectNodeMap(objectNode).isEmpty()
 }

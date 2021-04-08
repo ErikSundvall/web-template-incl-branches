@@ -24,6 +24,7 @@ import care.better.platform.web.template.converter.exceptions.ConversionExceptio
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.factory.node.RmObjectNodeFactory
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import org.openehr.base.basetypes.*
 import org.openehr.rm.common.*
 import org.openehr.rm.composition.InstructionDetails
@@ -175,4 +176,16 @@ object RmObjectLeafNodeFactoryDelegator {
 
         return (factory as RmObjectLeafNodeFactory<T>).create(conversionContext, amNode, webTemplatePath)
     }
+
+    /**
+     * Delegates checking if [ObjectNode] is empty to the [RmObjectLeafNodeFactory] based on the RM type..
+     *
+     * @param node RM object in STRUCTURED format
+     * @return Boolean indicating if [ObjectNode] is empty or not.
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun delegateIsEmpty(node: ObjectNode): Boolean =
+        rmObjectLeafNodeFactories.values.asSequence()
+            .filter { it.canRemoveDependantValues() }
+            .any { it.isStructuredRmObjectEmpty(node)  }
 }

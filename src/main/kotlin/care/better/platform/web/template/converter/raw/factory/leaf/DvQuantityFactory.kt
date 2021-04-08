@@ -19,8 +19,10 @@ import care.better.platform.template.AmNode
 import care.better.platform.template.AmUtils
 import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
+import care.better.platform.web.template.converter.mapper.getFieldNames
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import org.openehr.am.aom.CDvQuantity
 import org.openehr.am.aom.CQuantityItem
 import org.openehr.rm.datatypes.DvQuantity
@@ -106,4 +108,6 @@ internal object DvQuantityFactory : DvQuantifiedFactory<DvQuantity>() {
             item.precision?.also { interval -> AmUtils.getMax(interval)?.also { rmObject.precision = it } }
         }
     }
+
+    override fun canRemoveDependantValues(): Boolean = true
 }

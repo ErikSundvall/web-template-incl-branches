@@ -22,6 +22,7 @@ import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.extensions.isEmpty
+import care.better.platform.web.template.converter.raw.factory.leaf.RmObjectLeafNodeFactoryDelegator
 import care.better.platform.web.template.converter.raw.postprocessor.PostProcessDelegator
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.type.TypeReference
@@ -317,8 +318,12 @@ internal fun JsonNode.isEmptyInDepth(): Boolean =
         this.isNull -> true
         this.isTextual && this.asText().isBlank() -> true
         this.isObject -> {
-            val fieldNames = (this as ObjectNode).getFieldNames()
-            fieldNames.all { this[it].isEmptyInDepth() }
+            if (RmObjectLeafNodeFactoryDelegator.delegateIsEmpty(this as ObjectNode)) {
+                true
+            } else {
+                val fieldNames = this.getFieldNames()
+                fieldNames.all { this[it].isEmptyInDepth() }
+            }
         }
         this.isArray -> this.all { it.isEmptyInDepth() }
         else -> false

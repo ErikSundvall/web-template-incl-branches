@@ -238,4 +238,6 @@ internal object DvProportionFactory : DvQuantifiedFactory<DvProportion>() {
             value.toFloat()
         else
             value.toBigDecimal().setScale(precisionMax, RoundingMode.HALF_UP).toFloat()
+
+    override fun canRemoveDependantValues(): Boolean = true
 }
