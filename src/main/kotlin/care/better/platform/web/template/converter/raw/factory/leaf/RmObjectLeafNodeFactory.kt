@@ -63,7 +63,11 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
         when {
             node.isArray -> throw ConversionException("RM object leaf node factory can not handle ArrayNode", webTemplatePath.toString())
             (node.isNull || node.isMissingNode) && webTemplateInput != null -> {
-                createInstance().apply { handleWebTemplateInput(conversionContext, amNode, this, webTemplateInput) }
+                createInstance().apply {
+                    if (!conversionContext.incompleteVersionLifecycle) {
+                        handleWebTemplateInput(conversionContext, amNode, this, webTemplateInput)
+                    }
+                }
             }
             node.isTextual && (node as TextNode).asText().isNullOrBlank() -> null
             node.isNull || node.isMissingNode -> null
@@ -111,7 +115,7 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
                   In rare cases, data value leaf node contains only properties for the parent.
                   In that case it is faster to create node and then return null than to always calculate if object node contains only properties for the parent.
                  */
-                var handledOnInstance = webTemplateInput != null
+                var handledOnInstance = webTemplateInput != null && !conversionContext.incompleteVersionLifecycle
 
                 objectNodeMap.forEach { (attribute, jsonNode) ->
                     val handled = try {
@@ -140,7 +144,11 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
                         }
                     }
                 }
-                webTemplateInput?.also { handleWebTemplateInput(conversionContext, amNode, instance, webTemplateInput) }
+                webTemplateInput?.also {
+                    if (!conversionContext.incompleteVersionLifecycle) {
+                        handleWebTemplateInput(conversionContext, amNode, instance, webTemplateInput)
+                    }
+                }
 
                 if (handledOnInstance) {
                     afterPropertiesSet(conversionContext, amNode, objectNode, instance)
@@ -354,7 +362,11 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
             } catch (ex: Exception) {
                 throw getException(ex, valueNode, webTemplatePath)
             }
-            webTemplateInput?.also { handleWebTemplateInput(conversionContext, amNode, this, it) }
+            webTemplateInput?.also {
+                if (!conversionContext.incompleteVersionLifecycle) {
+                    handleWebTemplateInput(conversionContext, amNode, this, it)
+                }
+            }
         }
 
     /**

@@ -175,17 +175,19 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
         }
 
         //Handle mandatory fixed values that were not present in the RM object but they need to be set!
-        map.entries.forEach { (key, value) ->
-            if (!objectNode.has(key) || objectNode[key].let { (it.isArray && it.isEmpty) || (it.isObject && it.isEmpty) }) {
-                val mandatoryFixedInput = getMandatoryFields(value)
-                if (mandatoryFixedInput != null) {
-                    val chain = getAmNodeChain(webTemplateNode.amNode, value.amNode)
-                    convertArrayNode(
-                        ConversionObjectMapper.createArrayNode().apply { this.add(ConversionObjectMapper.nullNode()) },
-                        chain,
-                        webTemplatePath + key,
-                        { node, wtPath, parents -> createChildNode(key, node, wtPath, parents, value) }).also {
-                        chainConversionResult.add(it)
+        if (!conversionContext.incompleteVersionLifecycle) {
+            map.entries.forEach { (key, value) ->
+                if (!objectNode.has(key) || objectNode[key].let { (it.isArray && it.isEmpty) || (it.isObject && it.isEmpty) }) {
+                    val mandatoryFixedInput = getMandatoryFields(value)
+                    if (mandatoryFixedInput != null) {
+                        val chain = getAmNodeChain(webTemplateNode.amNode, value.amNode)
+                        convertArrayNode(
+                            ConversionObjectMapper.createArrayNode().apply { this.add(ConversionObjectMapper.nullNode()) },
+                            chain,
+                            webTemplatePath + key,
+                            { node, wtPath, parents -> createChildNode(key, node, wtPath, parents, value) }).also {
+                            chainConversionResult.add(it)
+                        }
                     }
                 }
             }
