@@ -53,6 +53,7 @@ class FromRawConversion private constructor(
          * @param locale [Locale]
          * @return [FromRawConversion]
          */
+        @JvmOverloads
         @JvmStatic
         fun create(locale: Locale, objectMapper: ObjectMapper = ConversionObjectMapper) =
             FromRawConversion(valueConverter = LocaleBasedValueConverter(locale), objectMapper = objectMapper)
