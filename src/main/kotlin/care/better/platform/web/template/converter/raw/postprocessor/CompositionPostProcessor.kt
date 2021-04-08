@@ -22,6 +22,7 @@ import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.extensions.createFromOpenEhrTerminology
 import org.openehr.base.basetypes.LocatableRef
+import org.openehr.base.basetypes.TerminologyId
 import org.openehr.rm.common.Link
 import org.openehr.rm.composition.Composition
 import org.openehr.rm.composition.EventContext
@@ -58,6 +59,17 @@ internal object CompositionPostProcessor : LocatablePostProcessor<Composition>()
                 updateEventContext(context, conversionContext)
             }
         }
+
+        val territory = instance.territory
+        if (territory != null && territory.terminologyId == null) {
+            territory.terminologyId = TerminologyId("ISO_3166-1")
+        }
+
+        val language = instance.language
+        if (language != null && language.terminologyId == null) {
+            language.terminologyId = TerminologyId("ISO_639-1")
+        }
+
         postProcessInstructionDetails(instance, conversionContext)
     }
 
