@@ -68,9 +68,10 @@ open class InCompositionActionToInstructionHandler : ActionToInstructionHandler 
             instructionDetails: InstructionDetails,
             instructionDetailsData: InstructionDetailsData,
             conversionContext: ConversionContext) {
-        val resolvedComposition = resolve(composition, instructionDetails, instructionDetailsData, conversionContext)
         instructionDetails.instructionId?.id?.value?.also {
-            if (it == "\$selfComposition") {
+            val resolvedComposition = resolve(composition, instructionDetails, instructionDetailsData, conversionContext)
+
+            if (resolvedComposition != null) {
                 val pathValueExtractor = NameAndNodeMatchingPathValueExtractor(instructionDetails.instructionId?.path!!)
                 val instructions = pathValueExtractor.getValue(resolvedComposition, true)
                 if (instructions.isNotEmpty() && instructions[0] is Instruction) {
