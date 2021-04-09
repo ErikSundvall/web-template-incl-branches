@@ -37,8 +37,7 @@ internal object FeederAuditFactory : RmObjectLeafNodeFactory<FeederAudit>() {
             conversionContext: ConversionContext,
             amNode: AmNode,
             valueNode: ValueNode,
-            webTemplatePath: WebTemplatePath,
-            webTemplateInput: WebTemplateInput?): FeederAudit =
+            webTemplatePath: WebTemplatePath): FeederAudit =
         throw ConversionException("${amNode.rmType} can not be created from simple value", webTemplatePath.toString())
 
     override fun createInstance(attributes: Set<AttributeDto>): FeederAudit = FeederAudit()

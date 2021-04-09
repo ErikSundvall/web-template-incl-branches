@@ -38,8 +38,7 @@ internal object LinkFactory : RmObjectLeafNodeFactory<Link>() {
             conversionContext: ConversionContext,
             amNode: AmNode,
             valueNode: ValueNode,
-            webTemplatePath: WebTemplatePath,
-            webTemplateInput: WebTemplateInput?): Link =
+            webTemplatePath: WebTemplatePath): Link =
         throw ConversionException("${amNode.rmType} can not be created from simple value", webTemplatePath.toString())
 
     override fun createInstance(attributes: Set<AttributeDto>): Link = Link()

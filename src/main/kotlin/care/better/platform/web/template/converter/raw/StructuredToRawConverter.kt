@@ -71,13 +71,13 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
     private val genericFieldFeederAudit = GenericFieldExtractor.invoke(structuredRmObject)
     private val conversionContext: ConversionContext = ConversionContextExtractor.invoke(structuredRmObject, conversionContext)
 
+    private val mandatoryFieldsHandler: MutableMap<WebTemplateNode, () -> Unit> = mutableMapOf()
 
     /**
      * Holder for singleton objects that were created in the chain with multiple nodes (only possibilities are ITEM_STRUCTURE and HISTORY)
      * Note that it is cheaper to retrieve this object from the map then to create new instance of the object and set value with reflection.
      */
     private val firstChainSingletonHolder: MutableMap<Pair<AmNode, String>, RmObject> = mutableMapOf()
-
 
     /**
      * Converts the RM object in STRUCTURED format to the RM object in RAW format.
@@ -174,25 +174,6 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
             }
         }
 
-        //Handle mandatory fixed values that were not present in the RM object but they need to be set!
-        if (!conversionContext.incompleteVersionLifecycle) {
-            map.entries.forEach { (key, value) ->
-                if (!objectNode.has(key) || objectNode[key].let { (it.isArray && it.isEmpty) || (it.isObject && it.isEmpty) }) {
-                    val mandatoryFixedInput = getMandatoryFields(value)
-                    if (mandatoryFixedInput != null) {
-                        val chain = getAmNodeChain(webTemplateNode.amNode, value.amNode)
-                        convertArrayNode(
-                            ConversionObjectMapper.createArrayNode().apply { this.add(ConversionObjectMapper.nullNode()) },
-                            chain,
-                            webTemplatePath + key,
-                            { node, wtPath, parents -> createChildNode(key, node, wtPath, parents, value) }).also {
-                            chainConversionResult.add(it)
-                        }
-                    }
-                }
-            }
-        }
-
         //ChainConversionResult is empty if the created object is null or if the created collection is empty.
         if (chainConversionResult.all { it.isEmpty() } && specialCaseHandlers.isEmpty()) {
             return null
@@ -212,8 +193,58 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
         specialCaseHandlers.forEach { it.invoke(createdRmObject) }
         identityMap.values.forEach { it.invoke() } //Post-process firstly created the collection in the chain.
 
+
+        if (!createdRmObject.isEmpty()) {
+            handleMandatoryWebTemplateInputs(createdRmObject, webTemplateNode, webTemplatePath)
+        }
+
         PostProcessDelegator.delegate(conversionContext, webTemplateNode.amNode, createdRmObject, webTemplatePath)
         return if (createdRmObject.isEmpty()) null else createdRmObject
+    }
+
+    /**
+     * Handle mandatory [WebTemplateInput] on [RmObject].
+     *
+     * @param rmObject RM object in RAW format
+     * @param webTemplateNode [WebTemplateNode]
+     * @param webTemplatePath Web template path from root to the current [WebTemplateNode]
+     */
+    private fun handleMandatoryWebTemplateInputs(rmObject: RmObject, webTemplateNode: WebTemplateNode, webTemplatePath: WebTemplatePath) {
+        if (rmObject.isNotEmpty() && !conversionContext.incompleteVersionLifecycle) {
+            val chainConversionResult: MutableList<ChainConversionResult> = mutableListOf()
+
+            webTemplateNode.children.forEach { child ->
+                val handler = mandatoryFieldsHandler[child]
+                if (handler != null) {
+                    handler.invoke()
+                } else {
+                    val webTemplateInput = getMandatoryFields(child)
+                    if (webTemplateInput != null) {
+                        val chain = getAmNodeChain(webTemplateNode.amNode, child.amNode)
+                        convertArrayNode(
+                            ConversionObjectMapper.createArrayNode().apply { this.add(ConversionObjectMapper.nullNode()) },
+                            chain,
+                            webTemplatePath + child.jsonId,
+                            { _, wtPath, _ -> createChildNodeForWebTemplateInput(wtPath, child, webTemplateInput) }).also {
+                            chainConversionResult.add(it)
+                        }
+                    }
+                }
+            }
+
+            if (chainConversionResult.all { it.isEmpty() }) {
+                return
+            }
+            //Post-process all collections that were populated in the chain (firstly created collections are excluded).
+            chainConversionResult.forEach { it.postProcessors.map { postProcessor -> postProcessor.invoke() } }
+
+            val identityMap = IdentityHashMap<Any, () -> Unit>()
+            chainConversionResult.mapNotNull { it.setterFunction }.forEach {
+                val result = it.invoke(rmObject)
+                identityMap[result.first] = result.second
+            }
+            identityMap.values.forEach { it.invoke() } //Post-process firstly created the collection in the chain.
+        }
     }
 
     /**
@@ -516,7 +547,6 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
      * @param webTemplatePath Web template path from the root to the current [WebTemplateNode]
      * @param parents Parents created in [AmNode] chain before leaf node
      * @param webTemplateNode [WebTemplateNode]
-     *
      * @return RM object or [Collection] of RM objects in RAW format
      */
     private fun createChildNode(
@@ -544,15 +574,29 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
                 }
                 webTemplateNode.children.isEmpty() -> {
                     if (RmUtils.isRmClass(webTemplateNode.amNode.getTypeOnParent().type)) {
-                        RmObjectLeafNodeFactoryDelegator
-                            .delegateOrThrow(
+                        val rmObject = RmObjectLeafNodeFactoryDelegator
+                            .delegateOrThrow<RmObject>(
                                 webTemplateNode.rmType,
                                 conversionContext,
                                 webTemplateNode.amNode,
                                 value,
                                 webTemplatePath.copy(webTemplateNode.amNode),
-                                parents,
-                                getMandatoryFields(webTemplateNode))
+                                parents)
+
+                        if (rmObject != null) {
+                            val webTemplateInput = getMandatoryFields(webTemplateNode)
+                            if (webTemplateInput != null) {
+                                mandatoryFieldsHandler[webTemplateNode] = {
+                                    RmObjectLeafNodeFactoryDelegator.delegateWebTemplateInputHandling(
+                                        webTemplateNode.rmType,
+                                        conversionContext,
+                                        webTemplateNode.amNode,
+                                        rmObject,
+                                        webTemplateInput)
+                                }
+                            }
+                        }
+                        rmObject
                     } else {
                         ConversionObjectMapper.convertValue(value, webTemplateNode.amNode.getTypeOnParent().type)
                     }
@@ -563,6 +607,32 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
         }
 
     /**
+     * Converts the RM object with mandatory [WebTemplateInput] to the RM object in RAW format.
+     *
+     * @param webTemplatePath Web template path from the root to the current [WebTemplateNode]
+     * @param webTemplateNode [WebTemplateNode]
+     * @param webTemplateInput [WebTemplateInput]
+     * @return RM object in RAW format
+     */
+    private fun createChildNodeForWebTemplateInput(
+            webTemplatePath: WebTemplatePath,
+            webTemplateNode: WebTemplateNode,
+            webTemplateInput: WebTemplateInput): Any =
+        RmObjectLeafNodeFactoryDelegator
+            .delegateOrThrow<RmObject>(
+                webTemplateNode.rmType,
+                conversionContext,
+                webTemplateNode.amNode,
+                webTemplatePath.copy(webTemplateNode.amNode)).apply {
+                RmObjectLeafNodeFactoryDelegator.delegateWebTemplateInputHandling(
+                    webTemplateNode.rmType,
+                    conversionContext,
+                    webTemplateNode.amNode,
+                    this,
+                    webTemplateInput)
+            }
+
+    /**
      * Converts the RM object in STRUCTURED format to the RM object or to [Collection] of the RM objects in RAW format for the RM attribute.
      *
      * @param key JSON entry key
@@ -570,7 +640,6 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
      * @param webTemplatePath Web template path from the root to the current [WebTemplateNode]
      * @param amNode [AmNode]
      * @param parents Parents created in [AmNode] chain before leaf node
-     *
      * @return RM object or [Collection] of RM objects in RAW format
      */
     private fun createChildNode(key: String, value: JsonNode, webTemplatePath: WebTemplatePath, amNode: AmNode, parents: List<Any>): Any? =

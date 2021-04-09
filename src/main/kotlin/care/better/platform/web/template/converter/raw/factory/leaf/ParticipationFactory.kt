@@ -46,8 +46,7 @@ internal object ParticipationFactory : RmObjectLeafNodeFactory<Participation>() 
             conversionContext: ConversionContext,
             amNode: AmNode,
             valueNode: ValueNode,
-            webTemplatePath: WebTemplatePath,
-            webTemplateInput: WebTemplateInput?): Participation =
+            webTemplatePath: WebTemplatePath): Participation =
         throw ConversionException("${amNode.rmType} can not be created from simple value", webTemplatePath.toString())
 
     override fun createInstance(attributes: Set<AttributeDto>): Participation = Participation()

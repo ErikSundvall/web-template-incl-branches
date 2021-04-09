@@ -37,8 +37,7 @@ internal object ReferenceRangeFactory : RmObjectLeafNodeFactory<ReferenceRange>(
             conversionContext: ConversionContext,
             amNode: AmNode,
             valueNode: ValueNode,
-            webTemplatePath: WebTemplatePath,
-            webTemplateInput: WebTemplateInput?): ReferenceRange =
+            webTemplatePath: WebTemplatePath): ReferenceRange =
         throw ConversionException("${amNode.rmType} can not be created from simple value", webTemplatePath.toString())
 
     override fun createInstance(attributes: Set<AttributeDto>): ReferenceRange = ReferenceRange()

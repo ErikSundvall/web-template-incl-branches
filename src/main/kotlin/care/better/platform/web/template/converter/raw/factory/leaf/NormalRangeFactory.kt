@@ -38,8 +38,7 @@ internal object NormalRangeFactory : RmObjectLeafNodeFactory<DvInterval>() {
             conversionContext: ConversionContext,
             amNode: AmNode,
             valueNode: ValueNode,
-            webTemplatePath: WebTemplatePath,
-            webTemplateInput: WebTemplateInput?): DvInterval =
+            webTemplatePath: WebTemplatePath): DvInterval =
         throw ConversionException("${amNode.rmType} can not be created from simple value", webTemplatePath.toString())
 
     override fun createInstance(attributes: Set<AttributeDto>): DvInterval = DvInterval()

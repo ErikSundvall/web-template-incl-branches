@@ -40,8 +40,7 @@ internal object PartyIdentifiedFactory : RmObjectLeafNodeFactory<PartyIdentified
             conversionContext: ConversionContext,
             amNode: AmNode,
             valueNode: ValueNode,
-            webTemplatePath: WebTemplatePath,
-            webTemplateInput: WebTemplateInput?): PartyIdentified =
+            webTemplatePath: WebTemplatePath): PartyIdentified =
         throw ConversionException("${amNode.rmType} can not be created from simple value", webTemplatePath.toString())
 
     override fun createInstance(attributes: Set<AttributeDto>): PartyIdentified = PartyIdentified()

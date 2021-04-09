@@ -37,8 +37,7 @@ internal object ObjectRefFactory : RmObjectLeafNodeFactory<ObjectRef>() {
             conversionContext: ConversionContext,
             amNode: AmNode,
             valueNode: ValueNode,
-            webTemplatePath: WebTemplatePath,
-            webTemplateInput: WebTemplateInput?): ObjectRef =
+            webTemplatePath: WebTemplatePath): ObjectRef =
         throw ConversionException("${amNode.rmType} can not be created from simple value", webTemplatePath.toString())
 
     override fun createInstance(attributes: Set<AttributeDto>): ObjectRef = ObjectRef()

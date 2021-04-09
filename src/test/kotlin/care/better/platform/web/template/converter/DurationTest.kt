@@ -40,8 +40,7 @@ class DurationTest : AbstractWebTemplateTest() {
                 AmNode(null, "DV_DURATION"),
                 TextNode.valueOf("P0Y1M1D0WT0H0M0S"),
                 WebTemplatePath("id"),
-                emptyList(),
-                null)
+                emptyList())
         }.isInstanceOf(ConversionException::class.java).hasMessage("Error processing value: \"P0Y1M1D0WT0H0M0S\" (path: id).")
     }
 
@@ -52,8 +51,7 @@ class DurationTest : AbstractWebTemplateTest() {
             AmNode(null, "DV_DURATION"),
             TextNode.valueOf("P0Y1M0W1DT0H0M0S"),
             WebTemplatePath("id"),
-            emptyList(),
-            null) as DvDuration
+            emptyList()) as DvDuration
 
         assertThat(dvDuration.value).isEqualTo("P1M1D")
     }
@@ -65,8 +63,7 @@ class DurationTest : AbstractWebTemplateTest() {
             AmNode(null, "DV_DURATION"),
             TextNode.valueOf("P0Y1M2W1DT0H0M0S"),
             WebTemplatePath("id"),
-            emptyList(),
-            null) as DvDuration
+            emptyList()) as DvDuration
 
         assertThat(dvDuration.value).isEqualTo("P1M2W1D")
     }

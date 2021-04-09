@@ -50,7 +50,6 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
      * @param node RM object in STRUCTURED format
      * @param webTemplatePath Web template path from root to current node [WebTemplatePath]
      * @param parents Parent created in [AmNode] chain before leaf node
-     * @param webTemplateInput [WebTemplateInput]
      * @return RM object in RAW format
      */
     fun create(
@@ -58,21 +57,13 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
             amNode: AmNode,
             node: JsonNode,
             webTemplatePath: WebTemplatePath,
-            parents: List<Any> = listOf(),
-            webTemplateInput: WebTemplateInput? = null): T? =
+            parents: List<Any> = listOf()): T? =
         when {
             node.isArray -> throw ConversionException("RM object leaf node factory can not handle ArrayNode", webTemplatePath.toString())
-            (node.isNull || node.isMissingNode) && webTemplateInput != null -> {
-                createInstance().apply {
-                    if (!conversionContext.incompleteVersionLifecycle) {
-                        handleWebTemplateInput(conversionContext, amNode, this, webTemplateInput)
-                    }
-                }
-            }
             node.isTextual && (node as TextNode).asText().isNullOrBlank() -> null
             node.isNull || node.isMissingNode -> null
-            node.isObject -> createForObjectNode(conversionContext, amNode, node as ObjectNode, webTemplatePath, parents, webTemplateInput)
-            else -> createForValueNode(conversionContext, amNode, node as ValueNode, webTemplatePath, webTemplateInput)
+            node.isObject -> createForObjectNode(conversionContext, amNode, node as ObjectNode, webTemplatePath, parents)
+            else -> createForValueNode(conversionContext, amNode, node as ValueNode, webTemplatePath)
         }?.let {
             PostProcessDelegator.delegate(conversionContext, amNode, it, webTemplatePath)
             if ((it as RmObject).isEmpty()) null else it
@@ -89,6 +80,18 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
     fun create(conversionContext: ConversionContext, amNode: AmNode?, webTemplatePath: WebTemplatePath?) = createInstance()
 
     /**
+     * Handles [WebTemplateInput] on RM object in RAW format.
+     *
+     * @param conversionContext [ConversionContext]
+     * @param amNode [AmNode]
+     * @param rmObject RM object in RAW format
+     * @param webTemplateInput [WebTemplateInput]
+     */
+    open fun handleWebTemplateInput(conversionContext: ConversionContext, amNode: AmNode, rmObject: T, webTemplateInput: WebTemplateInput) {
+
+    }
+
+    /**
      * Creates a RM object in RAW format from RM object in STRUCTURED format ([ObjectNode]).
      *
      * @param conversionContext [ConversionContext]
@@ -96,7 +99,6 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
      * @param objectNode RM object in STRUCTURED format
      * @param webTemplatePath Web template path from root to current node [WebTemplatePath]
      * @param parents Parent created in [AmNode] chain before leaf node
-     * @param webTemplateInput [WebTemplateInput]
      * @return RM object in RAW format
      */
     private fun createForObjectNode(
@@ -104,8 +106,7 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
             amNode: AmNode,
             objectNode: ObjectNode,
             webTemplatePath: WebTemplatePath,
-            parents: List<Any> = listOf(),
-            webTemplateInput: WebTemplateInput? = null): T? {
+            parents: List<Any> = listOf()): T? {
         val objectNodeMap = getFilteredObjectNodeMap(objectNode)
         return when {
             objectNodeMap.isEmpty() -> null
@@ -115,7 +116,7 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
                   In rare cases, data value leaf node contains only properties for the parent.
                   In that case it is faster to create node and then return null than to always calculate if object node contains only properties for the parent.
                  */
-                var handledOnInstance = webTemplateInput != null && !conversionContext.incompleteVersionLifecycle
+                var handledOnInstance = false
 
                 objectNodeMap.forEach { (attribute, jsonNode) ->
                     val handled = try {
@@ -142,11 +143,6 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
                         } else {
                             throw ConversionException("${amNode.rmType} has no attribute ${attribute.originalAttribute}", webTemplatePath.toString())
                         }
-                    }
-                }
-                webTemplateInput?.also {
-                    if (!conversionContext.incompleteVersionLifecycle) {
-                        handleWebTemplateInput(conversionContext, amNode, instance, webTemplateInput)
                     }
                 }
 
@@ -346,26 +342,19 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
      * @param amNode [AmNode]
      * @param valueNode RM object in STRUCTURED format
      * @param webTemplatePath Web template path from root to current node [WebTemplatePath]
-     * @param webTemplateInput [WebTemplateInput]
      * @return RM object in RAW format
      */
     protected open fun createForValueNode(
             conversionContext: ConversionContext,
             amNode: AmNode,
             valueNode: ValueNode,
-            webTemplatePath: WebTemplatePath,
-            webTemplateInput: WebTemplateInput? = null): T =
+            webTemplatePath: WebTemplatePath): T =
         createInstance().apply {
             try {
                 handleField(conversionContext, amNode, AttributeDto.ofBlank(), this, valueNode, webTemplatePath)
                 afterPropertiesSet(conversionContext, amNode, valueNode, this)
             } catch (ex: Exception) {
                 throw getException(ex, valueNode, webTemplatePath)
-            }
-            webTemplateInput?.also {
-                if (!conversionContext.incompleteVersionLifecycle) {
-                    handleWebTemplateInput(conversionContext, amNode, this, it)
-                }
             }
         }
 
@@ -390,19 +379,6 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
                 ex,
                 webTemplatePath.toString())
         }
-
-
-    /**
-     * Handles [WebTemplateInput] on RM object in RAW format.
-     *
-     * @param conversionContext [ConversionContext]
-     * @param amNode [AmNode]
-     * @param rmObject RM object in RAW format
-     * @param webTemplateInput [WebTemplateInput]
-     */
-    protected open fun handleWebTemplateInput(conversionContext: ConversionContext, amNode: AmNode, rmObject: T, webTemplateInput: WebTemplateInput) {
-
-    }
 
     /**
      * Removes dependant values from map and returns true if some fields were removed.

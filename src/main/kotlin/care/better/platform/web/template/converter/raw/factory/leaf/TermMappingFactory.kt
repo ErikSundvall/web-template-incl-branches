@@ -37,8 +37,7 @@ internal object TermMappingFactory : RmObjectLeafNodeFactory<TermMapping>() {
             conversionContext: ConversionContext,
             amNode: AmNode,
             valueNode: ValueNode,
-            webTemplatePath: WebTemplatePath,
-            webTemplateInput: WebTemplateInput?): TermMapping =
+            webTemplatePath: WebTemplatePath): TermMapping =
         throw ConversionException("${amNode.rmType} can not be created from simple value", webTemplatePath.toString())
 
     override fun createInstance(attributes: Set<AttributeDto>): TermMapping = TermMapping()

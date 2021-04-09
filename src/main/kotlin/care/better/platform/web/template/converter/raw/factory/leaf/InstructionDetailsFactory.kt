@@ -39,8 +39,7 @@ internal object InstructionDetailsFactory : RmObjectLeafNodeFactory<InstructionD
             conversionContext: ConversionContext,
             amNode: AmNode,
             valueNode: ValueNode,
-            webTemplatePath: WebTemplatePath,
-            webTemplateInput: WebTemplateInput?): InstructionDetails =
+            webTemplatePath: WebTemplatePath): InstructionDetails =
         throw ConversionException("${amNode.rmType} can not be created from simple value", webTemplatePath.toString())
 
     override fun createInstance(attributes: Set<AttributeDto>): InstructionDetails = InstructionDetails()

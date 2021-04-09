@@ -85,24 +85,22 @@ object RmObjectLeafNodeFactoryDelegator {
      * @param node RM object in STRUCTURED format
      * @param webTemplatePath Web template path from root to current node [WebTemplatePath]
      * @param parents Parent created in [AmNode] chain before leaf node
-     * @param webTemplateInput [WebTemplateInput]
      * @return New instance of the [RmObject]
      * @throws [ConversionException] if [RmObjectLeafNodeFactory] is not found
      */
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
-    fun <T : RmObject> delegateOrThrow(
+    internal fun <T : RmObject> delegateOrThrow(
             rmType: String,
             conversionContext: ConversionContext,
             amNode: AmNode,
             node: JsonNode,
             webTemplatePath: WebTemplatePath,
-            parents: List<Any> = listOf(),
-            webTemplateInput: WebTemplateInput? = null): T? {
+            parents: List<Any> = listOf()): T? {
         val factory = rmObjectLeafNodeFactories[RmUtils.getNonGenericRmNamePart(rmType)]
             ?: throw  ConversionException("RM object leaf node factory for $rmType not found.")
 
-        return (factory as RmObjectLeafNodeFactory<T>).create(conversionContext, amNode, node, webTemplatePath, parents, webTemplateInput)
+        return (factory as RmObjectLeafNodeFactory<T>).create(conversionContext, amNode, node, webTemplatePath, parents)
     }
 
     /**
@@ -114,22 +112,20 @@ object RmObjectLeafNodeFactoryDelegator {
      * @param node RM object in STRUCTURED format
      * @param webTemplatePath Web template path from root to current node [WebTemplatePath]
      * @param parents Parent created in [AmNode] chain before leaf node
-     * @param webTemplateInput [WebTemplateInput]
      * @return New instance of the [RmObject] if [RmObjectNodeFactory] is found, otherwise, null
      */
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
-    fun <T : RmObject> delegateOrNull(
+    internal fun <T : RmObject> delegateOrNull(
             rmType: String,
             conversionContext: ConversionContext,
             amNode: AmNode,
             node: JsonNode,
             webTemplatePath: WebTemplatePath,
-            parents: List<Any> = listOf(),
-            webTemplateInput: WebTemplateInput? = null): T? {
+            parents: List<Any> = listOf()): T? {
         val factory = rmObjectLeafNodeFactories[RmUtils.getNonGenericRmNamePart(rmType)] ?: return null
 
-        return (factory as RmObjectLeafNodeFactory<T>).create(conversionContext, amNode, node, webTemplatePath, parents, webTemplateInput)
+        return (factory as RmObjectLeafNodeFactory<T>).create(conversionContext, amNode, node, webTemplatePath, parents)
     }
 
 
@@ -178,13 +174,37 @@ object RmObjectLeafNodeFactoryDelegator {
     }
 
     /**
+     * Delegates [RmObject] [WebTemplateInput] handling to the [RmObjectLeafNodeFactory] based on the RM type.
+     *
+     * @param rmType [RmObject] RM type
+     * @param conversionContext [ConversionContext]
+     * @param amNode [AmNode]
+     * @param rmObject RM object in RAW format
+     * @param webTemplateInput [WebTemplateInput]
+     * @return New instance of the [RmObject] if [RmObjectNodeFactory] is found, otherwise, null
+     */
+    @JvmStatic
+    @Suppress("UNCHECKED_CAST")
+    internal fun <T : RmObject> delegateWebTemplateInputHandling(
+            rmType: String,
+            conversionContext: ConversionContext,
+            amNode: AmNode,
+            rmObject: T,
+            webTemplateInput: WebTemplateInput) {
+        val factory = rmObjectLeafNodeFactories[RmUtils.getNonGenericRmNamePart(rmType)]
+            ?: throw  ConversionException("RM object leaf node factory for $rmType not found.")
+
+        (factory as RmObjectLeafNodeFactory<T>).handleWebTemplateInput(conversionContext, amNode, rmObject, webTemplateInput)
+    }
+
+    /**
      * Delegates checking if [ObjectNode] is empty to the [RmObjectLeafNodeFactory] based on the RM type..
      *
      * @param node RM object in STRUCTURED format
      * @return Boolean indicating if [ObjectNode] is empty or not.
      */
     @Suppress("UNCHECKED_CAST")
-    fun delegateIsEmpty(node: ObjectNode): Boolean =
+    internal fun delegateIsEmpty(node: ObjectNode): Boolean =
         rmObjectLeafNodeFactories.values.asSequence()
             .filter { it.canRemoveDependantValues() }
             .any { it.isStructuredRmObjectEmpty(node)  }
