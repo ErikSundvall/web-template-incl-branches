@@ -24,13 +24,12 @@ import care.better.platform.web.template.builder.model.WebTemplateNode
 import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
-import care.better.platform.web.template.converter.mapper.ConversionObjectMapper
-import care.better.platform.web.template.converter.mapper.getObjectNodeForWebTemplatePath
-import care.better.platform.web.template.converter.mapper.getObjectNodeForWebTemplateSegment
-import care.better.platform.web.template.converter.mapper.isEmptyInDepth
+import care.better.platform.web.template.converter.mapper.*
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.context.ConversionContextExtractor
-import care.better.platform.web.template.converter.raw.extensions.*
+import care.better.platform.web.template.converter.raw.extensions.isEmpty
+import care.better.platform.web.template.converter.raw.extensions.isForElement
+import care.better.platform.web.template.converter.raw.extensions.isNotEmpty
 import care.better.platform.web.template.converter.raw.factory.leaf.RmObjectLeafNodeFactoryDelegator
 import care.better.platform.web.template.converter.raw.factory.node.RmObjectNodeFactoryDelegator
 import care.better.platform.web.template.converter.raw.generics.GenericFieldExtractor
@@ -210,7 +209,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
      * @param webTemplatePath Web template path from root to the current [WebTemplateNode]
      */
     private fun handleMandatoryWebTemplateInputs(rmObject: RmObject, webTemplateNode: WebTemplateNode, webTemplatePath: WebTemplatePath) {
-        if (rmObject.isNotEmpty() && !conversionContext.incompleteVersionLifecycle) {
+        if (rmObject.isNotEmpty() && !conversionContext.incompleteMode) {
             val chainConversionResult: MutableList<ChainConversionResult> = mutableListOf()
 
             webTemplateNode.children.forEach { child ->
@@ -311,19 +310,16 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
                     })
             }
         } else {
-            if (arrayNode.size() > 1) {
-                throw ConversionException("JSON array with single value is expected", webTemplatePath.toString())
-            } else {
-                factoryFunction.invoke(arrayNode[0], webTemplatePath, emptyList())?.let {
-                    ChainConversionResult( //Created object was already post-processed by the factory function.
-                        value = it,
-                        setterFunction = { parent ->
-                            amNode.setOnParent(parent, it)
-                            Pair(it, { })
-                        })
-                } ?: ChainConversionResult.nothing()
-            }
+            factoryFunction.invoke(arrayNode.toSingletonReversed(conversionContext, webTemplatePath), webTemplatePath, emptyList())?.let {
+                ChainConversionResult( //Created object was already post-processed by the factory function.
+                    value = it,
+                    setterFunction = { parent ->
+                        amNode.setOnParent(parent, it)
+                        Pair(it, { })
+                    })
+            } ?: ChainConversionResult.nothing()
         }
+
 
     /**
      * Recursively converts the RM object or [Collection] or RM objects in STRUCTURED format to RAW format.
@@ -445,8 +441,9 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
         val directParent: Any = parents.last()
 
         if (chain.size == 1) { //All omitted RM objects in the chain were created. Create leaf object or collection of objects and set it or add it to the parent.
-            val createdValue = factoryFunction.invoke(jsonNode, webTemplatePath, parents) ?: return
             if (amNode.isCollectionOnParent()) {
+                val createdValue = factoryFunction.invoke(jsonNode, webTemplatePath, parents) ?: return
+
                 val collection = amNode.getOnParent(directParent) as MutableCollection<Any>
                 val isEmpty = collection.isEmpty()
                 if (createdValue is Collection<*>)
@@ -467,6 +464,11 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
                     Maybe we created the collection with only one object.
                     In that case, get the first object from the collection and set it to the parent.
                  */
+                val createdValue = factoryFunction.invoke(
+                    if (jsonNode.isArray) (jsonNode as ArrayNode).toSingletonReversed(conversionContext, webTemplatePath) else jsonNode,
+                    webTemplatePath,
+                    parents) ?: return
+
                 if (createdValue is Collection<*> && createdValue.size == 1)
                     amNode.setOnParent(directParent, (createdValue as Collection<Any>).iterator().next())
                 else

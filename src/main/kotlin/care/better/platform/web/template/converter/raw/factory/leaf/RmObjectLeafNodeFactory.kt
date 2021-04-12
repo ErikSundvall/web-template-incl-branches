@@ -25,10 +25,12 @@ import care.better.platform.web.template.converter.exceptions.ConversionExceptio
 import care.better.platform.web.template.converter.mapper.ConversionObjectMapper
 import care.better.platform.web.template.converter.mapper.getFieldNames
 import care.better.platform.web.template.converter.mapper.isEmptyInDepth
+import care.better.platform.web.template.converter.mapper.toSingletonReversed
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.extensions.isEmpty
 import care.better.platform.web.template.converter.raw.postprocessor.PostProcessDelegator
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.databind.node.ValueNode
@@ -272,19 +274,11 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
      */
     @Suppress("UNCHECKED_CAST")
     private fun setRmAttribute(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, rmObject: Any, webTemplatePath: WebTemplatePath) {
-        val createdValue = convert(conversionContext, amNode, jsonNode, webTemplatePath)
         if (amNode.isCollectionOnParent()) { //RM are always passed as Array. It is ok to set newly created collection to the parent.
-            amNode.setOnParent(rmObject, createdValue as MutableCollection<Any>)
+            amNode.setOnParent(rmObject, convert(conversionContext, amNode, jsonNode, webTemplatePath) as MutableCollection<Any>)
         } else {
-            if (createdValue is MutableCollection<*>) {
-                if (createdValue.size > 1) {
-                    throw ConversionException("JSON array with single value is expected", webTemplatePath.toString())
-                } else if (createdValue.isNotEmpty()) {
-                    amNode.setOnParent(rmObject, createdValue.iterator().next())
-                }
-            } else {
-                amNode.setOnParent(rmObject, createdValue)
-            }
+            val node = if (jsonNode.isArray) (jsonNode as ArrayNode).toSingletonReversed(conversionContext, webTemplatePath) else jsonNode
+            amNode.setOnParent(rmObject, convert(conversionContext, amNode, node, webTemplatePath))
         }
     }
 

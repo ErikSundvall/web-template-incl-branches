@@ -29,7 +29,9 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.ValueNode
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -329,3 +331,42 @@ internal fun JsonNode.isEmptyInDepth(): Boolean =
         else -> false
 
     }
+
+/**
+ * Extension function that converts [ArrayNode] to the singleton [ValueNode], [ObjectNode] or [NullNode].
+ * NOTE: The fields of the last element in the table will have the greatest priority.
+ *
+ * @return [ValueNode], [ObjectNode] or [NullNode]
+ */
+internal fun ArrayNode.toSingletonReversed(conversionContext: ConversionContext, webTemplatePath: WebTemplatePath): JsonNode {
+    val size = size()
+    if (size > 1 && conversionContext.strictMode) {
+        throw ConversionException("JSON array with single value is expected ", webTemplatePath.toString())
+    }
+
+    return if (size == 1) get(0) else mergeToSingletonReversed()
+}
+
+private fun ArrayNode.mergeToSingletonReversed(): JsonNode {
+    val objectNode = ConversionObjectMapper.createObjectNode()
+
+    this.reversed().forEach { node ->
+        if (!node.isNull && !node.isMissingNode && !node.isTextual && node.asText().isBlank()) {
+            if (node.isValueNode) {
+                objectNode.set<JsonNode>("", node)
+            } else {
+                node.fields().forEach {
+                    if (!objectNode.has(it.key)) {
+                        objectNode.set<JsonNode>(it.key, it.value)
+                    }
+                }
+            }
+        }
+    }
+
+    return when {
+        objectNode.isEmpty -> ConversionObjectMapper.nullNode()
+        objectNode.getFieldNames().size == 1 && objectNode.has("") -> objectNode.get("")
+        else -> objectNode
+    }
+}
