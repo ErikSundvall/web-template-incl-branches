@@ -66,7 +66,7 @@ class FromRawConversion private constructor(
         @JvmOverloads
         @JvmStatic
         fun createForAqlPath(aqlPath: String, valueConverter: ValueConverter = SimpleValueConverter, objectMapper: ObjectMapper = ConversionObjectMapper) =
-            FromRawConversion(aqlPath = aqlPath, valueConverter = SimpleValueConverter, objectMapper = objectMapper)
+            FromRawConversion(aqlPath = aqlPath, valueConverter = valueConverter, objectMapper = objectMapper)
 
         /**
          * Creates a new instance of [FromRawConversion] for the AQL path and [Locale].
@@ -76,7 +76,7 @@ class FromRawConversion private constructor(
          */
         @JvmOverloads
         @JvmStatic
-        fun crateForAqlPath(aqlPath: String, locale: Locale, objectMapper: ObjectMapper = ConversionObjectMapper) =
+        fun createForAqlPath(aqlPath: String, locale: Locale, objectMapper: ObjectMapper = ConversionObjectMapper) =
             FromRawConversion(aqlPath = aqlPath, valueConverter = LocaleBasedValueConverter(locale), objectMapper = objectMapper)
 
         /**
@@ -90,7 +90,7 @@ class FromRawConversion private constructor(
                 webTemplatePath: String,
                 valueConverter: ValueConverter = SimpleValueConverter,
                 objectMapper: ObjectMapper = ConversionObjectMapper) =
-            FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = SimpleValueConverter, objectMapper = objectMapper)
+            FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = valueConverter, objectMapper = objectMapper)
 
         /**
          * Creates a new instance of [FromRawConversion] for the web template path and [Locale].
