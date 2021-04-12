@@ -36,6 +36,8 @@ abstract class AbstractFlatMappingContext<T> {
         flatMap.remove(key)
     }
 
+    fun getMutable(): Map<String, T> = flatMap
+
     fun get(): Map<String, T> = flatMap.toMap()
 }
 
