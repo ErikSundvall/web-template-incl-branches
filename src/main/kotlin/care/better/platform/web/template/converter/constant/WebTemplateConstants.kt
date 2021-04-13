@@ -21,11 +21,14 @@ package care.better.platform.web.template.converter.constant
  */
 object WebTemplateConstants {
 
-    var DEFAULT_LANGUAGE = "en"
+    const val DEFAULT_LANGUAGE = "en"
     const val CONTEXT_PREFIX = "ctx/"
     const val PARTICIPATION_MODE_GROUP_ID = "9"
     const val ISM_TRANSITION_GROUP_ID = "21"
     const val FULL_ARCHETYPE_ROOT_PREFIX = "openEHR-EHR-"
     const val SELF_REFERENCE_COMPOSITION = "\$selfComposition"
     const val SELF_REFERENCE_VERSIONED_COMPOSITION = "\$selfVersionedComposition"
+    const val PERCENTAGE_PROPORTION_TYPE = 2
+    const val TERMINOLOGY_LOCAL = "local"
+    const val TERMINOLOGY_OPENEHR = "openehr"
 }

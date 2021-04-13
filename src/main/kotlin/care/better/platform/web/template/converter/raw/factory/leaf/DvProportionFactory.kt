@@ -18,6 +18,7 @@ package care.better.platform.web.template.converter.raw.factory.leaf
 import care.better.platform.template.AmNode
 import care.better.platform.template.AmUtils
 import care.better.platform.web.template.converter.WebTemplatePath
+import care.better.platform.web.template.converter.constant.WebTemplateConstants.PERCENTAGE_PROPORTION_TYPE
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.utils.WebTemplateConversionUtils
@@ -71,7 +72,7 @@ internal object DvProportionFactory : DvQuantifiedFactory<DvProportion>() {
                         rmObject.numerator = convertValue(conversionContext, jsonNode, getMaxPrecision(amNode))
 
                         rmObject.type?.also {
-                            if (it.toInt() == 2) {
+                            if (it.toInt() == PERCENTAGE_PROPORTION_TYPE) {
                                 rmObject.denominator = 100.0f
                             }
                         }
@@ -204,7 +205,7 @@ internal object DvProportionFactory : DvQuantifiedFactory<DvProportion>() {
             }
         }
 
-        if (numerator == null && denominator == null && rmObject.type == 2) {
+        if (numerator == null && denominator == null && rmObject.type == PERCENTAGE_PROPORTION_TYPE) {
             rmObject.numerator = convertValue(conversionContext, jsonNode, precisionMax)
             rmObject.denominator = 100.0f
         }
