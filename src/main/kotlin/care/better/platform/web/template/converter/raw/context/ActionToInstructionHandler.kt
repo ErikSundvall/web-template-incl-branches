@@ -16,6 +16,7 @@
 package care.better.platform.web.template.converter.raw.context
 
 import care.better.platform.path.NameAndNodeMatchingPathValueExtractor
+import care.better.platform.web.template.converter.constant.WebTemplateConstants.SELF_REFERENCE_COMPOSITION
 import org.openehr.rm.common.Link
 import org.openehr.rm.composition.Composition
 import org.openehr.rm.composition.Instruction
@@ -113,7 +114,7 @@ open class InCompositionActionToInstructionHandler : ActionToInstructionHandler 
             instructionDetails: InstructionDetails,
             instructionDetailsData: InstructionDetailsData,
             conversionContext: ConversionContext): Composition? =
-        if ("\$selfComposition" == instructionDetails.instructionId?.id?.value)
+        if (SELF_REFERENCE_COMPOSITION == instructionDetails.instructionId?.id?.value)
             composition
         else
             null

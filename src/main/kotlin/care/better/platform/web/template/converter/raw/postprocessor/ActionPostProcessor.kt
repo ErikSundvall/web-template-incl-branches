@@ -17,6 +17,7 @@ package care.better.platform.web.template.converter.raw.postprocessor
 
 import care.better.platform.template.AmNode
 import care.better.platform.web.template.converter.WebTemplatePath
+import care.better.platform.web.template.converter.constant.WebTemplateConstants.ISM_TRANSITION_GROUP_ID
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.extensions.createFromOpenEhrTerminology
 import org.openehr.rm.composition.Action
@@ -41,7 +42,7 @@ internal object ActionPostProcessor : EntryPostProcessor<Action>() {
         }
         if (instance.ismTransition == null) {
             instance.ismTransition = IsmTransition().apply {
-                this.currentState = DvCodedText.createFromOpenEhrTerminology("21", conversionContext.ismTransitionCurrentState)
+                this.currentState = DvCodedText.createFromOpenEhrTerminology(ISM_TRANSITION_GROUP_ID, conversionContext.ismTransitionCurrentState)
             }
         }
     }

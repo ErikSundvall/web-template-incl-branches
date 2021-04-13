@@ -22,6 +22,7 @@ import care.better.openehr.terminology.OpenEhrTerminology
 import care.better.platform.template.AmNode
 import care.better.platform.template.AmUtils
 import care.better.platform.utils.RmUtils
+import care.better.platform.web.template.converter.constant.WebTemplateConstants.DEFAULT_LANGUAGE
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import org.openehr.am.aom.CCodePhrase
 import org.openehr.base.basetypes.GenericId
@@ -93,7 +94,7 @@ internal fun RmObject?.isNotEmpty(): Boolean = !this.isEmpty()
 internal fun DvCodedText.Companion.createFromOpenEhrTerminology(groupId: String, name: String): DvCodedText =
     with(OpenEhrTerminology.getInstance().getId(groupId, name)) {
         if (this == null) {
-            val text = OpenEhrTerminology.getInstance().getText("en", name)
+            val text = OpenEhrTerminology.getInstance().getText(DEFAULT_LANGUAGE, name)
                 ?: throw ConversionException("OpenEHR code for groupid/name not found: $groupId/$name")
             return create("openehr", name, text)
         }
@@ -168,7 +169,7 @@ internal fun DvCodedText.Companion.createFromAmNode(amNode: AmNode): DvCodedText
                     this.codeString = cCodePhrase.codeList[0]
                 }
             }
-            this.value = OpenEhrTerminology.getInstance().getText("en", this.definingCode?.codeString!!)
+            this.value = OpenEhrTerminology.getInstance().getText(DEFAULT_LANGUAGE, this.definingCode?.codeString!!)
         }
     }
 

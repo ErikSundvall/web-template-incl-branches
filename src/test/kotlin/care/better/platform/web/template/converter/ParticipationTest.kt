@@ -21,8 +21,9 @@ import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.google.common.collect.ImmutableMap
 import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
 import care.better.platform.web.template.builder.WebTemplateBuilder
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.entry
+import care.better.platform.web.template.converter.exceptions.ConversionException
+import com.fasterxml.jackson.databind.node.ObjectNode
+import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.openehr.rm.composition.Composition
 import org.openehr.rm.composition.Observation
@@ -284,7 +285,7 @@ class ParticipationTest : AbstractWebTemplateTest() {
     @Test
     @Throws(IOException::class, JAXBException::class)
     fun testParticipationsOnContextFromCtx() {
-        val composition: Composition? = webTemplate.convertFromFlatToRaw(
+        assertThatThrownBy { webTemplate.convertFromFlatToRaw<Composition>(
                 ImmutableMap.builder<String, String>()
                         .put("ctx/language", "sl")
                         .put("ctx/territory", "SI")
@@ -296,12 +297,38 @@ class ParticipationTest : AbstractWebTemplateTest() {
                         .put("ctx/participation_id", "998877")
                         .put("ctx/participation_mode", "videoconference")
                         .build(),
-                ConversionContext.create().build())
+                ConversionContext.create().build()) }
+            .isInstanceOf(ConversionException::class.java)
+            .hasMessage("COMPOSITION has no attribute vitals.")
+    }
+
+    @Test
+    @Throws(IOException::class, JAXBException::class)
+    fun testParticipationsOnContextFromCtxAndRoot() {
+        val structuredComposition = """
+            {
+                "ctx/language": "sl",
+                "ctx/territory": "SI",
+                "ctx/id_scheme": "ispek",
+                "ctx/id_namespace": "ispek",
+                "ctx/composer_name": "George Orwell",
+                "ctx/participation_name": "Named Participant",
+                "ctx/participation_function": "District Nurse",
+                "ctx/participation_id": "998877",
+                "ctx/participation_mode": "videoconference",
+                "vitals": {}
+            }
+        """
+
+        val composition = webTemplate.convertFromStructuredToRaw<Composition>(
+            getObjectMapper().readTree(structuredComposition) as ObjectNode,
+            ConversionContext.create().build())
 
         assertThat(composition).isNull()
     }
 
-    @Test
+
+        @Test
     @Throws(IOException::class, JAXBException::class)
     fun testParticipationsOnContextFromCtxOverride() {
         val composition: Composition? = webTemplate.convertFromFlatToRaw(

@@ -17,6 +17,7 @@ package care.better.platform.web.template.converter.raw.context
 
 import care.better.openehr.rm.RmObject
 import care.better.platform.web.template.WebTemplate
+import care.better.platform.web.template.converter.constant.WebTemplateConstants.PARTICIPATION_MODE_GROUP_ID
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.raw.extensions.createFromOpenEhrTerminology
 import care.better.platform.web.template.converter.raw.extensions.createPartyIdentified
@@ -148,7 +149,7 @@ class ConversionContext private constructor(
                     if (mode.isNullOrBlank()) {
                         this.mode = DvCodedText.create("openehr", "193", "not specified")
                     } else {
-                        this.mode = DvCodedText.createFromOpenEhrTerminology("9", mode)
+                        this.mode = DvCodedText.createFromOpenEhrTerminology(PARTICIPATION_MODE_GROUP_ID, mode)
                     }
                     val id = if (participationIds.size > index) participationIds[index] else null
                     if (StringUtils.isNotBlank(id) && (StringUtils.isBlank(idNamespace) || StringUtils.isBlank(idScheme))) {

@@ -85,28 +85,37 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
      */
     @Suppress("UNCHECKED_CAST")
     fun <T : RmObject> convert(): T? {
+        val webTemplate = conversionContext.getWebTemplate()
+
         val rmObject = if (conversionContext.aqlPath.isNullOrBlank() && conversionContext.webTemplatePath.isNullOrBlank()) {
+            val objectNode = getObjectNodeForWebTemplateSegment(structuredRmObject, webTemplate.tree.jsonId)
+                ?: throw ConversionException("${webTemplate.tree.rmType} has no attribute ${webTemplate.tree.jsonId}.")
+
             val composition: Composition? = convertObjectNode(
-                getObjectNodeForWebTemplateSegment(structuredRmObject, conversionContext.getWebTemplate().tree.jsonId) ?: return null,
-                conversionContext.getWebTemplate().tree,
-                WebTemplatePath(conversionContext.getWebTemplate().tree.jsonId)) as Composition?
+                objectNode,
+                webTemplate.tree,
+                WebTemplatePath(webTemplate.tree.jsonId)) as Composition?
 
             composition?.also {
                 val archetype: Archetyped = it.archetypeDetails ?: Archetyped().also { archetype -> it.archetypeDetails = archetype }
                 it.archetypeDetails = archetype.apply {
-                    this.templateId = TemplateId().apply { this.value = conversionContext.getWebTemplate().templateId }
+                    this.templateId = TemplateId().apply { this.value = webTemplate.templateId }
                 }
             }
             composition as T?
         } else {
             val webTemplateNode =
                 if (conversionContext.aqlPath.isNullOrBlank())
-                    conversionContext.getWebTemplate().findWebTemplateNode(conversionContext.webTemplatePath!!)
+                    webTemplate.findWebTemplateNode(conversionContext.webTemplatePath!!)
                 else
-                    conversionContext.getWebTemplate().findWebTemplateNodeByAqlPath(conversionContext.aqlPath)
+                    webTemplate.findWebTemplateNodeByAqlPath(conversionContext.aqlPath)
+
+            val objectNode = getObjectNodeForWebTemplateSegment(structuredRmObject, webTemplateNode.jsonId)
+                ?: (getObjectNodeForWebTemplatePath(structuredRmObject, webTemplateNode.id)
+                    ?:  throw ConversionException("${webTemplateNode.rmType} has no attribute ${webTemplateNode.jsonId}", webTemplateNode.id))
 
             convertObjectNode(
-                getObjectNodeForWebTemplateSegment(structuredRmObject, webTemplateNode.jsonId) ?: (getObjectNodeForWebTemplatePath(structuredRmObject, webTemplateNode.id) ?: return null),
+                objectNode,
                 webTemplateNode,
                 WebTemplatePath(webTemplateNode.jsonId)) as T?
         }
