@@ -66,11 +66,12 @@ import java.io.OutputStream
  * @param version Version of [WebTemplate] model
  * @param nodes [Multimap] of [AmNode] and [WebTemplateNode]
  */
-@JsonPropertyOrder("templateId", "version", "defaultLanguage", "languages", "tree")
+@JsonPropertyOrder("templateId", "semVer", "version", "defaultLanguage", "languages", "tree")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 class WebTemplate internal constructor(
         val tree: WebTemplateNode,
         val templateId: String,
+        val semVer: String?,
         val defaultLanguage: String,
         val languages: Collection<String>,
         val version: String,

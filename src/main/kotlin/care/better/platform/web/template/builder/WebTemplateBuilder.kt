@@ -34,6 +34,7 @@ import care.better.platform.template.type.CollectionInfo
 import care.better.platform.template.type.CollectionType
 import care.better.platform.template.type.TypeInfo
 import care.better.platform.utils.RmUtils
+import care.better.platform.utils.TemplateUtils
 import care.better.platform.utils.exception.RmClassCastException
 import care.better.platform.web.template.WebTemplate
 import care.better.platform.web.template.builder.compactor.MediumWebTemplateCompactor
@@ -137,7 +138,8 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
             WebTemplateBuilder(template, context).build(
                 AmTreeBuilder(template).build(),
                 from,
-                requireNotNull(template.templateId.value) { "Template ID is mandatory." })
+                requireNotNull(template.templateId.value) { "Template ID is mandatory." },
+                TemplateUtils.extractSemVerFromTemplateDescription(template))
 
         /**
          * Builds [WebTemplate] from the [Template].
@@ -163,7 +165,7 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
     private val idBuilder: WebTemplateIdBuilder = WebTemplateIdBuilder()
     private val postProcess: Boolean = true
 
-    private fun build(root: AmNode, from: String?, templateId: String): WebTemplate? =
+    private fun build(root: AmNode, from: String?, templateId: String, semVer: String?): WebTemplate? =
         with(if (from == null) root else resolvePath(root, from)) {
             val nodes: Multimap<AmNode, WebTemplateNode> = ArrayListMultimap.create()
             if (this != null) {
@@ -173,6 +175,7 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
                         idBuilder.buildIds(this, nodes)
                     },
                     templateId,
+                    semVer,
                     context.contextLanguage ?: defaultLanguage,
                     context.languages,
                     CURRENT_VERSION,

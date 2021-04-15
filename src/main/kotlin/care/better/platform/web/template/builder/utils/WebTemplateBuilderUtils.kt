@@ -17,12 +17,17 @@ package care.better.platform.web.template.builder.utils
 
 import care.better.platform.template.AmNode
 import care.better.platform.utils.RmUtils
+import care.better.platform.utils.TemplateUtils
 import care.better.platform.utils.exception.RmClassCastException
 import care.better.platform.web.template.WebTemplate
+import care.better.platform.web.template.builder.WebTemplateBuilder
+import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
 import care.better.platform.web.template.builder.model.WebTemplateNode
 import com.google.common.base.Splitter
+import org.openehr.am.aom.Template
 import org.openehr.rm.datatypes.DataValue
 import java.util.regex.Pattern
+
 
 /**
  * @author Bostjan Lah
@@ -115,4 +120,9 @@ object WebTemplateBuilderUtils {
     @JvmStatic
     internal fun getChoiceWebTemplateId(typeName: String): String = "${typeName.substring(3).toLowerCase()}_value"
 
+    @JvmStatic
+    fun buildWebTemplate(template: Template): WebTemplate {
+        val webTemplateBuilderContext = WebTemplateBuilderContext(template.language?.codeString, TemplateUtils.findTemplateLanguages(template))
+        return requireNotNull(WebTemplateBuilder.build(template, webTemplateBuilderContext))
+    }
 }
