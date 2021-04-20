@@ -55,6 +55,7 @@ object RmObjectToFlatMapperDelegator {
         Pair(DvParsable::class.java, DvParsableToFlatMapper),
         Pair(DvProportion::class.java, DvProportionToFlatMapper),
         Pair(DvQuantity::class.java, DvQuantityToFlatMapper),
+        Pair(DvScale::class.java, DvScaleToFlatMapper),
         Pair(DvText::class.java, DvTextToFlatMapper),
         Pair(DvTime::class.java, DvTimeToFlatMapper),
         Pair(DvUri::class.java, DvUriToFlatMapper),

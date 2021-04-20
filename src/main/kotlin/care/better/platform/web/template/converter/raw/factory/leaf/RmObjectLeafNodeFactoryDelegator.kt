@@ -56,6 +56,7 @@ object RmObjectLeafNodeFactoryDelegator {
             Pair(RmUtils.getRmTypeName(DvParsable::class.java), DvParsableFactory),
             Pair(RmUtils.getRmTypeName(DvProportion::class.java), DvProportionFactory),
             Pair(RmUtils.getRmTypeName(DvQuantity::class.java), DvQuantityFactory),
+            Pair(RmUtils.getRmTypeName(DvScale::class.java), DvScaleFactory),
             Pair(RmUtils.getRmTypeName(DvText::class.java), DvTextFactory),
             Pair(RmUtils.getRmTypeName(DvTime::class.java), DvTimeFactory),
             Pair(RmUtils.getRmTypeName(DvUri::class.java), DvUriFactory),

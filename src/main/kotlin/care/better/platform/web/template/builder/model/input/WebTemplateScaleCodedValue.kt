@@ -18,13 +18,12 @@ package care.better.platform.web.template.builder.model.input
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
 /**
- * @author Bostjan Lah
  * @author Primoz Delopst
  * @since 3.1.0
  */
 @JsonPropertyOrder("value", "label", "localizedLabels", "localizedDescriptions", "termBindings", "validation", "ordinal")
-class WebTemplateOrdinalCodedValue(webTemplateCodedValue: WebTemplateCodedValue) : WebTemplateCodedValue(webTemplateCodedValue.value, webTemplateCodedValue.label) {
-    var ordinal: Int = 0
+class WebTemplateScaleCodedValue(webTemplateCodedValue: WebTemplateCodedValue) : WebTemplateCodedValue(webTemplateCodedValue.value, webTemplateCodedValue.label) {
+    var scale: Double = 0.0
 
     init {
         localizedLabels.putAll(webTemplateCodedValue.localizedLabels)

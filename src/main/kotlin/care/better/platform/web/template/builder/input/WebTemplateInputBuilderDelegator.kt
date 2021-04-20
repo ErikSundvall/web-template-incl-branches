@@ -38,6 +38,7 @@ object WebTemplateInputBuilderDelegator {
             Pair(CCodePhrase::class.java, CodePhraseWebTemplateInputBuilder),
             Pair(CCodeReference::class.java, CodeReferenceWebTemplateInputBuilder),
             Pair(CDvOrdinal::class.java, OrdinalWebTemplateInputBuilder),
+            Pair(CDvScale::class.java, ScaleWebTemplateInputBuilder),
             Pair(CDvQuantity::class.java, QuantityWebTemplateInputBuilder))
 
     private val primitiveBuilders: Map<Class<out CPrimitive>, WebTemplateInputBuilder<out CPrimitive>> =
@@ -87,6 +88,7 @@ object WebTemplateInputBuilderDelegator {
             Pair(RmUtils.getRmTypeName(DvEhrUri::class.java), StringWebTemplateInputBuilder),
             Pair(RmUtils.getRmTypeName(DvQuantity::class.java), QuantityWebTemplateInputBuilder),
             Pair(RmUtils.getRmTypeName(DvOrdinal::class.java), OrdinalWebTemplateInputBuilder),
+            Pair(RmUtils.getRmTypeName(DvScale::class.java), ScaleWebTemplateInputBuilder),
             Pair(RmUtils.getRmTypeName(DvInterval::class.java), IntervalWebTemplateInputBuilder),
             Pair(RmUtils.getRmTypeName(DvState::class.java), CodePhraseWebTemplateInputBuilder),
             Pair(RmUtils.getRmTypeName(PartyProxy::class.java), PartyIdentifiedWebTemplateInputBuilder),

@@ -54,6 +54,7 @@ object RmObjectToStructuredMapperDelegator {
             Pair(DvParsable::class.java, DvParsableToStructuredMapper),
             Pair(DvProportion::class.java, DvProportionToStructuredMapper),
             Pair(DvQuantity::class.java, DvQuantityToStructuredMapper),
+            Pair(DvScale::class.java, DvScaleToStructuredMapper),
             Pair(DvText::class.java, DvTextToStructuredMapper),
             Pair(DvTime::class.java, DvTimeToStructuredMapper),
             Pair(DvUri::class.java, DvUriToStructuredMapper),
