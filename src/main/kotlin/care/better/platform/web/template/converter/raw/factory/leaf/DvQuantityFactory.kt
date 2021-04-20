@@ -19,10 +19,8 @@ import care.better.platform.template.AmNode
 import care.better.platform.template.AmUtils
 import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
-import care.better.platform.web.template.converter.mapper.getFieldNames
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
 import org.openehr.am.aom.CDvQuantity
 import org.openehr.am.aom.CQuantityItem
 import org.openehr.rm.datatypes.DvQuantity
@@ -61,6 +59,12 @@ internal object DvQuantityFactory : DvQuantifiedFactory<DvQuantity>() {
                     }
                 } else if (attribute.attribute == "unit") {
                     rmObject.units = jsonNode.asText()
+                    true
+                } else if (attribute.attribute == "unit_system") {
+                    rmObject.unitsSystem = jsonNode.asText()
+                    true
+                } else if (attribute.attribute == "unit_display_name") {
+                    rmObject.unitsDisplayName = jsonNode.asText()
                     true
                 } else {
                     false
