@@ -67,8 +67,9 @@ internal open class DvCodedTextFactory : RmObjectLeafNodeFactory<DvCodedText>() 
             Pair(AttributeDto.forAttribute("value"), 1),
             Pair(AttributeDto.forAttribute("code"), 2),
             Pair(AttributeDto.forAttribute("terminology"), 3),
-            Pair(AttributeDto.forAttribute("_mapping"), 4),
-            Pair(AttributeDto.forAttribute("other"), 5))
+            Pair(AttributeDto.forAttribute("preferred_term"), 4),
+            Pair(AttributeDto.forAttribute("_mapping"), 5),
+            Pair(AttributeDto.forAttribute("other"), 6))
 
     override fun sortFieldNames(attributes: List<AttributeDto>): List<AttributeDto> =
         attributes.asSequence().map { Pair(it, sortMap[it] ?: Integer.MAX_VALUE) }.sortedBy { it.second }.map { it.first }.toList()
@@ -113,6 +114,10 @@ internal open class DvCodedTextFactory : RmObjectLeafNodeFactory<DvCodedText>() 
             }
             attribute.attribute == "code" -> {
                 handleDvCodedTextString(conversionContext, amNode, rmObject, jsonNode.asText())
+                true
+            }
+            attribute.attribute == "preferred_term" -> {
+                handlePreferredTermAttribute(jsonNode, rmObject)
                 true
             }
             attribute.attribute == "_mapping" -> {
@@ -220,6 +225,28 @@ internal open class DvCodedTextFactory : RmObjectLeafNodeFactory<DvCodedText>() 
      */
     protected open fun handleValueAttribute(amNode: AmNode, jsonNode: JsonNode, rmObject: DvCodedText) {
         rmObject.value = jsonNode.asText()
+    }
+
+    /**
+     * Sets preferred_term to [DvCodedText] from [JsonNode] "|preferred_term" entry value.
+     *
+     * @param jsonNode [JsonNode]
+     * @param rmObject [DvCodedText]
+     */
+    protected open fun handlePreferredTermAttribute(jsonNode: JsonNode, rmObject: DvCodedText) {
+        if (rmObject.definingCode == null) {
+            rmObject.definingCode = CodePhrase()
+        }
+
+        rmObject.definingCode.also {
+            if (it == null) {
+                rmObject.definingCode = CodePhrase().apply {
+                    this.preferredTerm = jsonNode.asText()
+                }
+            } else {
+                it.preferredTerm = jsonNode.asText()
+            }
+        }
     }
 
     /**
