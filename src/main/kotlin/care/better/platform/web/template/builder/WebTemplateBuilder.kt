@@ -121,7 +121,8 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
                 RmUtils.getRmTypeName(DvDateTime::class.java),
                 RmUtils.getRmTypeName(DvDate::class.java),
                 RmUtils.getRmTypeName(DvTime::class.java),
-                RmUtils.getRmTypeName(DvOrdinal::class.java))
+                RmUtils.getRmTypeName(DvOrdinal::class.java),
+                RmUtils.getRmTypeName(DvScale::class.java))
 
         /**
          * Builds [WebTemplate] from the [Template].
