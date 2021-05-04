@@ -117,7 +117,8 @@ class ExecutionTimeReportGenerator(resources: List<ResourceDto>, private val rep
                     reportDto.executionReports[name]?.asSequence()?.map { it.toStructuredExecutionTime }?.forEach { this.addValue(it.toDouble()) }
                 }
 
-                writer.write("""
+                writer.write(
+                    """
                      File name: $name
                      Web template generation execution time: ${reportDto.webTemplateExecutionTimes[name]}
                      Warm up execution time:
@@ -194,7 +195,7 @@ class ExecutionTimeReportGenerator(resources: List<ResourceDto>, private val rep
             val warmUpReports: MutableMap<String, ExecutionDto> = mutableMapOf(),
             val executionReports: MutableMap<String, MutableList<ExecutionDto>> = mutableMapOf())
 
-    private data class ExecutionDto(val toRawExecutionTime: Long , val toFlatExecutionTime: Long, val toStructuredExecutionTime: Long)
+    private data class ExecutionDto(val toRawExecutionTime: Long, val toFlatExecutionTime: Long, val toStructuredExecutionTime: Long)
 
     private object CompatibilityMapper : BetterObjectMapper() {
         init {
