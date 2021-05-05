@@ -61,7 +61,7 @@ class ExecutionTimeReportGenerator(resources: List<ResourceDto>, private val rep
             ResourceDataDto(it.name, getStructuredComposition(it.name), getWebTemplate(it.name, it.language, it.languages))
     }
 
-    fun executeTestsAndGetReport() {
+    fun executeTestsAndGenerateReport() {
         warmUp()
         execute()
         generateReport()
@@ -218,5 +218,5 @@ enum class CompositionFormat { FLAT, STRUCTURED }
 fun main() {
     val resources: List<ResourceDto> = listOf(ResourceDto("LAB - Laboratory Test Report", CompositionFormat.FLAT, "sl", setOf("sl", "en")))
     val repetitions: Int = 50
-    ExecutionTimeReportGenerator(resources, repetitions).executeTestsAndGetReport()
+    ExecutionTimeReportGenerator(resources, repetitions).executeTestsAndGenerateReport()
 }
