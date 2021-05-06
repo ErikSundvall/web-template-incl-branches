@@ -141,8 +141,8 @@ class ExecutionTimeReportGenerator(resources: List<ResourceDto>, private val rep
                             Max: ${structuredExecutionStatistic.max}
                             Median: ${structuredExecutionStatistic.getPercentile(50.0)}
                             95th Percentile: ${structuredExecutionStatistic.getPercentile(95.0)}
-                            
                 """.trimIndent())
+                writer.write("\n\n")
             }
         }
     }
@@ -216,7 +216,9 @@ enum class CompositionFormat { FLAT, STRUCTURED }
 
 @Suppress("RedundantExplicitType")
 fun main() {
-    val resources: List<ResourceDto> = listOf(ResourceDto("LAB - Laboratory Test Report", CompositionFormat.FLAT, "sl", setOf("sl", "en")))
+    val resources: List<ResourceDto> = listOf(
+        ResourceDto("LAB - Laboratory Test Report", CompositionFormat.FLAT, "sl", setOf("sl", "en")),
+        ResourceDto("ISPEK - ZN - Nursing careplan Encounter", CompositionFormat.FLAT, "sl", setOf("sl", "en")))
     val repetitions: Int = 50
     ExecutionTimeReportGenerator(resources, repetitions).executeTestsAndGenerateReport()
 }
