@@ -118,6 +118,7 @@ class LocaleBasedValueConverter(private val locale: Locale) : ValueConverter {
             try {
                 return WebTemplateConversionUtils.convert(format.parseDateTime(value))
             } catch (ignored: IllegalArgumentException) {
+            } catch (ignored: UnsupportedOperationException) {
             }
         }
         return null
