@@ -54,7 +54,7 @@ import care.better.platform.web.template.builder.model.input.range.WebTemplateIn
 import care.better.platform.web.template.builder.postprocess.WebTemplateNodeChildrenPostProcessorDelegator
 import care.better.platform.web.template.builder.utils.CodePhraseUtils
 import care.better.platform.web.template.builder.utils.WebTemplateBuilderUtils
-import care.better.platform.web.template.converter.constant.WebTemplateConstants.ISM_TRANSITION_GROUP_ID
+import care.better.platform.web.template.converter.constant.WebTemplateConstants.ISM_TRANSITION_GROUP_NAME
 import care.better.platform.web.template.converter.raw.extensions.isForElement
 import care.better.platform.web.template.converter.raw.extensions.isNotNullOrBlank
 import care.better.platform.web.template.converter.raw.extensions.isNotNullOrEmpty
@@ -461,7 +461,7 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
         webTemplateNode.children.add(
             createCurrentStateInput(
                 currentState,
-                if (allowedCurrentStates.isEmpty()) OpenEhrTerminology.getInstance().getGroupChildren(ISM_TRANSITION_GROUP_ID) else allowedCurrentStates))
+                if (allowedCurrentStates.isEmpty()) OpenEhrTerminology.getInstance().getGroupChildren(ISM_TRANSITION_GROUP_NAME) else allowedCurrentStates))
 
         webTemplateNode.children.add(createCustomNode(transition, "transition", WebTemplateIntegerRange(0, 1)))
         webTemplateNode.children.add(careflowStepWtNode)

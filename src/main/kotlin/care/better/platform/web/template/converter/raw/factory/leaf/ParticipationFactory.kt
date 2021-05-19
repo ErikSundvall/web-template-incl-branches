@@ -16,9 +16,8 @@
 package care.better.platform.web.template.converter.raw.factory.leaf
 
 import care.better.platform.template.AmNode
-import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import care.better.platform.web.template.converter.WebTemplatePath
-import care.better.platform.web.template.converter.constant.WebTemplateConstants.PARTICIPATION_MODE_GROUP_ID
+import care.better.platform.web.template.converter.constant.WebTemplateConstants.PARTICIPATION_MODE_GROUP_NAME
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.extensions.createFromOpenEhrTerminology
@@ -81,7 +80,7 @@ internal object ParticipationFactory : RmObjectLeafNodeFactory<Participation>() 
                 true
             }
             attribute.attribute == "mode" -> {
-                rmObject.mode = DvCodedText.createFromOpenEhrTerminology(PARTICIPATION_MODE_GROUP_ID, jsonNode.asText())
+                rmObject.mode = DvCodedText.createFromOpenEhrTerminology(PARTICIPATION_MODE_GROUP_NAME, jsonNode.asText())
                 true
             }
             attribute.attribute.startsWith("identifiers_assigner") -> {

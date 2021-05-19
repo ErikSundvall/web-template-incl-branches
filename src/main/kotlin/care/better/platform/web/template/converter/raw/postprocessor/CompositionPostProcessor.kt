@@ -19,6 +19,7 @@ import care.better.platform.path.PathSegment
 import care.better.platform.path.PathUtils
 import care.better.platform.template.AmNode
 import care.better.platform.web.template.converter.WebTemplatePath
+import care.better.platform.web.template.converter.constant.WebTemplateConstants.SETTING_GROUP_NAME
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.extensions.createFromOpenEhrTerminology
 import org.openehr.base.basetypes.LocatableRef
@@ -94,7 +95,7 @@ internal object CompositionPostProcessor : LocatablePostProcessor<Composition>()
 
         if (eventContext.setting == null) {
             if (conversionContext.setting != null) {
-                eventContext.setting = DvCodedText.createFromOpenEhrTerminology("10", conversionContext.setting)
+                eventContext.setting = DvCodedText.createFromOpenEhrTerminology(SETTING_GROUP_NAME, conversionContext.setting)
             } else {
                 eventContext.setting = DvCodedText.createWithOpenEHRTerminology("238", "other care")
             }
