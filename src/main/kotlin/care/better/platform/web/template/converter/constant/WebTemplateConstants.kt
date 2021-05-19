@@ -27,6 +27,7 @@ object WebTemplateConstants {
     const val ISM_TRANSITION_GROUP_NAME = "instruction states"
     const val SETTING_GROUP_NAME = "setting"
     const val NULL_FLAVOURS_GROUP_NAME = "null flavours"
+    const val COMPOSITION_CATEGORY_GROUP_NAME = "composition category"
     const val FULL_ARCHETYPE_ROOT_PREFIX = "openEHR-EHR-"
     const val SELF_REFERENCE_COMPOSITION = "\$selfComposition"
     const val SELF_REFERENCE_VERSIONED_COMPOSITION = "\$selfVersionedComposition"
