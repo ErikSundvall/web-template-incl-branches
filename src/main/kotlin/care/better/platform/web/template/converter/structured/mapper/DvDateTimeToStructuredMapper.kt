@@ -15,6 +15,7 @@
 
 package care.better.platform.web.template.converter.structured.mapper
 
+import care.better.platform.utils.DateTimeConversionUtils
 import care.better.platform.utils.JSR310ConversionUtils
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.mapper.ConversionObjectMapper
@@ -37,13 +38,18 @@ internal object DvDateTimeToStructuredMapper : DvQuantifiedToStructuredMapper<Dv
     override fun map(webTemplateNode: WebTemplateNode, valueConverter: ValueConverter, rmObject: DvDateTime): JsonNode =
         with(ConversionObjectMapper.createObjectNode()) {
             val value = requireNotNull(rmObject.value) { "DV_DATE_TIME value must not be null!" }
-            try {
-                valueConverter.parseDateTime(value, true)
-                this.putIfNotNull("", JSR310ConversionUtils.toOffsetDateTime(rmObject).toString())
-            } catch (ignored: ConversionException) {
-                this.putIfNotNull("", rmObject.value)
-            } catch (ignored: DateTimeException) {
-                this.putIfNotNull("", rmObject.value)
+
+            if (DateTimeConversionUtils.isPartialDateTime(value)){
+                this.putIfNotNull("", value)
+            } else {
+                try {
+                    valueConverter.parseDateTime(value, true)
+                    this.putIfNotNull("", JSR310ConversionUtils.toOffsetDateTime(rmObject).toString())
+                } catch (ignored: ConversionException) {
+                    this.putIfNotNull("", value)
+                } catch (ignored: DateTimeException) {
+                    this.putIfNotNull("", value)
+                }
             }
             map(webTemplateNode, valueConverter, rmObject, this)
             this.resolve()
@@ -52,13 +58,17 @@ internal object DvDateTimeToStructuredMapper : DvQuantifiedToStructuredMapper<Dv
     override fun mapFormatted(webTemplateNode: WebTemplateNode, valueConverter: ValueConverter, rmObject: DvDateTime): JsonNode =
         with(ConversionObjectMapper.createObjectNode()) {
             val value = requireNotNull(rmObject.value) { "DV_DATE_TIME value must not be null!" }
-            try {
-                valueConverter.parseDateTime(value, true)
-                this.putIfNotNull("", valueConverter.formatDateTime(JSR310ConversionUtils.toOffsetDateTime(rmObject)))
-            } catch (ignored: ConversionException) {
+            if (DateTimeConversionUtils.isPartialDateTime(value)) {
                 this.putIfNotNull("", valueConverter.formatPartialDateTime(PartialDateTime.from(value)))
-            } catch (ignored: DateTimeException) {
-                this.putIfNotNull("", valueConverter.formatPartialDateTime(PartialDateTime.from(value)))
+            } else {
+                try {
+                    valueConverter.parseDateTime(value, true)
+                    this.putIfNotNull("", valueConverter.formatDateTime(JSR310ConversionUtils.toOffsetDateTime(rmObject)))
+                } catch (ignored: ConversionException) {
+                    this.putIfNotNull("", valueConverter.formatPartialDateTime(PartialDateTime.from(value)))
+                } catch (ignored: DateTimeException) {
+                    this.putIfNotNull("", valueConverter.formatPartialDateTime(PartialDateTime.from(value)))
+                }
             }
             mapFormatted(webTemplateNode, valueConverter, rmObject, this)
             this.resolve()
