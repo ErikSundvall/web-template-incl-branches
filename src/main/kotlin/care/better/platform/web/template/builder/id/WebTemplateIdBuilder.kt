@@ -16,9 +16,9 @@
 package care.better.platform.web.template.builder.id
 
 import care.better.platform.template.AmNode
+import care.better.platform.web.template.builder.exception.BuilderException
 import care.better.platform.web.template.builder.model.WebTemplateNode
 import care.better.platform.web.template.builder.utils.WebTemplateBuilderUtils
-import care.better.platform.web.template.converter.raw.extensions.isNotNullOrBlank
 import care.better.platform.web.template.converter.utils.WebTemplateConversionUtils
 import com.google.common.collect.Multimap
 import org.apache.commons.lang3.StringUtils
@@ -67,11 +67,17 @@ internal class WebTemplateIdBuilder {
         }
         node.children.forEachIndexed { index, childWebTemplateNode ->
             if (isChoice) {
+                val key = node.amNode.attributes.asSequence()
+                    .firstOrNull { attribute ->  attribute.value.children.any { it == childWebTemplateNode.amNode } }
+                    ?.key ?: throw BuilderException("AM node for ${childWebTemplateNode.path} not found.")
+
                 val type = childWebTemplateNode.rmType
-                if (StringUtils.isNotBlank(type) && type.startsWith("DV_")) {
+                if (StringUtils.isNotBlank(type) && type.startsWith("DV_") && "value" == key) {
                     childWebTemplateNode.jsonId = buildTypedId(type)
                     childWebTemplateNode.alternativeId = "${segments.peek().id}/value${if (index > 0) (index + 1).toString() else ""}"
                     childWebTemplateNode.alternativeJsonId = "value${if (index > 0) (index + 1).toString() else ""}"
+                } else {
+                    childWebTemplateNode.jsonId = key
                 }
             }
             buildIds(childWebTemplateNode, nodes)
