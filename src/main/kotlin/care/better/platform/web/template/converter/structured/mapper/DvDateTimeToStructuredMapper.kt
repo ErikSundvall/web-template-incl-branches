@@ -17,6 +17,7 @@ package care.better.platform.web.template.converter.structured.mapper
 
 import care.better.platform.utils.DateTimeConversionUtils
 import care.better.platform.utils.JSR310ConversionUtils
+import care.better.platform.web.template.builder.model.WebTemplateNode
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.mapper.ConversionObjectMapper
 import care.better.platform.web.template.converter.mapper.putIfNotNull
@@ -24,7 +25,6 @@ import care.better.platform.web.template.converter.mapper.resolve
 import care.better.platform.web.template.converter.value.ValueConverter
 import care.better.platform.web.template.date.partial.PartialDateTime
 import com.fasterxml.jackson.databind.JsonNode
-import care.better.platform.web.template.builder.model.WebTemplateNode
 import org.openehr.rm.datatypes.DvDateTime
 import java.time.DateTimeException
 
@@ -39,7 +39,7 @@ internal object DvDateTimeToStructuredMapper : DvQuantifiedToStructuredMapper<Dv
         with(ConversionObjectMapper.createObjectNode()) {
             val value = requireNotNull(rmObject.value) { "DV_DATE_TIME value must not be null!" }
 
-            if (DateTimeConversionUtils.isPartialDateTime(value)){
+            if (DateTimeConversionUtils.isPartialDateTime(value)) {
                 this.putIfNotNull("", value)
             } else {
                 try {

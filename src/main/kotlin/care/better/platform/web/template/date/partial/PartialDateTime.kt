@@ -56,6 +56,13 @@ class PartialDateTime(val partialDate: PartialDate, val partialTime: PartialTime
                     PartialDateTime(PartialDate.from(value), null)
             }
 
+        /**
+         * Parses a [String] to a [PartialDateTime] matching it against the constraint pattern from the archetype.
+         *
+         * @param value [String] value
+         * @param pattern Pattern
+         * @return [PartialTime]
+         */
         @JvmStatic
         fun from(value: String, pattern: String): PartialDateTime =
             with(value.indexOf('T')) {
