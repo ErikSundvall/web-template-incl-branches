@@ -18,8 +18,11 @@ package care.better.platform.web.template.converter.raw.factory.node
 import care.better.platform.template.AmNode
 import care.better.platform.template.AmUtils
 import care.better.platform.web.template.converter.WebTemplatePath
+import care.better.platform.web.template.converter.constant.WebTemplateConstants
+import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.raw.extensions.createFromAmNode
+import care.better.platform.web.template.converter.raw.extensions.createFromOpenEhrTerminology
 import org.openehr.base.basetypes.GenericId
 import org.openehr.base.basetypes.PartyRef
 import org.openehr.rm.common.PartyIdentified
@@ -60,10 +63,9 @@ internal object CompositionFactory : LocatableFactory<Composition>() {
 
             this.category = when {
                 categoryDvCodedText != null -> categoryDvCodedText
-                conversionContext.category != null && conversionContext.category == "persistent" -> {
-                    DvCodedText.createWithOpenEHRTerminology("431", "persistent")
-                }
-                else -> DvCodedText.createWithOpenEHRTerminology("433", "event")
+                conversionContext.category != null ->
+                    DvCodedText.createFromOpenEhrTerminology(WebTemplateConstants.COMPOSITION_CATEGORY_GROUP_NAME, conversionContext.category)
+                else -> throw ConversionException("Composition category is not valid: ${conversionContext.category}")
             }
 
             conversionContext.language?.also { this.language = CodePhrase.createLanguagePhrase(it) }

@@ -86,19 +86,19 @@ internal fun RmObject?.isNotEmpty(): Boolean = !this.isEmpty()
  * Creates and returns [DvCodedText] for the openEHR terminology.
  * Note that group ID and name pair must exits in the [OpenEhrTerminology].
  *
- * @param groupId Group ID
- * @param name Name
+ * @param groupName Group name
+ * @param code code
  * @return [DvCodedText] for the openEHR terminology.
  */
 @JvmSynthetic
-internal fun DvCodedText.Companion.createFromOpenEhrTerminology(groupId: String, name: String): DvCodedText =
-    with(OpenEhrTerminology.getInstance().getId(groupId, name)) {
+internal fun DvCodedText.Companion.createFromOpenEhrTerminology(groupName: String, code: String): DvCodedText =
+    with(OpenEhrTerminology.getInstance().getId(groupName, code)) {
         if (this == null) {
-            val text = OpenEhrTerminology.getInstance().getText(DEFAULT_LANGUAGE, name)
-                ?: throw ConversionException("OpenEHR code for groupid/name not found: $groupId/$name")
-            return create("openehr", name, text)
+            val text = OpenEhrTerminology.getInstance().getText(DEFAULT_LANGUAGE, code)
+                ?: throw ConversionException("OpenEHR code for groupid/name not found: $groupName/$code")
+            return create("openehr", code, text)
         }
-        return create("openehr", this, name)
+        return create("openehr", this, code)
     }
 
 
