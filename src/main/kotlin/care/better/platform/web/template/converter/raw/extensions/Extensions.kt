@@ -41,10 +41,11 @@ import org.openehr.rm.datatypes.DvIdentifier
 /**
  * Checks if [RmObject] is empty.
  *
+ * @param strict [Boolean] indicating if strict mode is enabled
  * @return [Boolean] indicating if [RmObject] is empty
  */
 @JvmSynthetic
-internal fun RmObject?.isEmpty(): Boolean = isRmObjectEmpty(this)
+internal fun RmObject?.isEmpty(strict: Boolean = false): Boolean = !strict && isRmObjectEmpty(this)
 
 /**
  * Checks if the RM object in RAW format is empty.
@@ -77,10 +78,11 @@ private fun isRmObjectEmpty(rmObject: RmObject?): Boolean =
 /**
  * Checks if [RmObject] is not empty.
  *
+ * @param strict [Boolean] indicating if strict mode is enabled
  * @return [Boolean] indicating if [RmObject] is not empty
  */
 @JvmSynthetic
-internal fun RmObject?.isNotEmpty(): Boolean = !this.isEmpty()
+internal fun RmObject?.isNotEmpty(strict: Boolean = false): Boolean = !this.isEmpty(strict)
 
 /**
  * Creates and returns [DvCodedText] for the openEHR terminology.
