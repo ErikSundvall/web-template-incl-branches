@@ -59,7 +59,7 @@ private fun isRmObjectEmpty(rmObject: RmObject?): Boolean =
         is ItemList -> rmObject.items.isEmpty()
         is ItemSingle -> rmObject.item == null
         is ItemTable -> rmObject.rows.isEmpty()
-        is History -> rmObject.events.isEmpty()
+        is History -> rmObject.events.isEmpty() && isRmObjectEmpty(rmObject.summary)
         is Section -> rmObject.items.isEmpty()
         is Observation -> isRmObjectEmpty(rmObject.data) && isRmObjectEmpty(rmObject.state) && isRmObjectEmpty(rmObject.protocol)
         is Evaluation -> isRmObjectEmpty(rmObject.data)
