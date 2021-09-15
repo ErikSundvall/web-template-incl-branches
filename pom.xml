@@ -28,16 +28,15 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <kotlin.version>1.4.21</kotlin.version>
+        <kotlin.version>1.5.0</kotlin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <kotlin-annotations.version>20.1.0</kotlin-annotations.version>
         <log4j-api-kotlin.version>1.0.0</log4j-api-kotlin.version>
-        <jackson-kotlin.version>2.11.2</jackson-kotlin.version>
 
-        <ehr-common.version>3.1.0-A48</ehr-common.version>
+        <ehr-common.version>3.1.0-DS3</ehr-common.version>
 
-        <jackson.version>2.11.3</jackson.version>
+        <jackson.version>2.12.5</jackson.version>
         <jakarta.xml.version>2.3.3</jakarta.xml.version>
         <joda.version>2.10.8</joda.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
