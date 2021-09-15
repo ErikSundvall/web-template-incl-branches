@@ -29,10 +29,11 @@ import care.better.platform.web.template.converter.exceptions.ConversionExceptio
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.value.LocaleBasedValueConverter
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.datatype.joda.JodaModule
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
 import com.google.common.collect.ImmutableSet
@@ -145,7 +146,9 @@ class LocaleTest : AbstractWebTemplateTest() {
     @Throws(IOException::class, JAXBException::class)
     fun testSerialization() {
         val webTemplate = WebTemplateBuilder.buildNonNull(getTemplate("/convert/templates/Testing.opt"),  WebTemplateBuilderContext("en"))
-        val mapper = ObjectMapper()
+        val mapper = JsonMapper.builder()
+                .addModule(JavaTimeModule())
+                .build()
         val jsonNode: JsonNode = mapper.valueToTree(webTemplate)
         val node = jsonNode.path("tree").path("children").path(0)
         assertThat(node.path("aqlPath").isMissingNode).isFalse
