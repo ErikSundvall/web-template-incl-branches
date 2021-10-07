@@ -66,8 +66,8 @@ class PartialDateTime(val partialDate: PartialDate, val partialTime: PartialTime
         @JvmStatic
         fun from(value: String, pattern: String): PartialDateTime =
             with(value.indexOf('T')) {
+                val patternParts = pattern.split("T")
                 if (this != -1) {
-                    val patternParts = pattern.split("T")
                     PartialDateTime(
                         PartialDate.from(value.substring(0, this), patternParts[0]),
                         if (patternParts.size == 2)
@@ -75,7 +75,7 @@ class PartialDateTime(val partialDate: PartialDate, val partialTime: PartialTime
                         else
                             PartialTime.from(value.substring(this + 1)))
                 } else {
-                    PartialDateTime(PartialDate.from(value, pattern), null)
+                    PartialDateTime(PartialDate.from(value, patternParts[0]), null)
                 }
             }
 

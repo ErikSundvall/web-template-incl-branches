@@ -17,6 +17,7 @@ package care.better.platform.web.template.converter.raw.factory.leaf
 
 import care.better.platform.template.AmNode
 import care.better.platform.template.AmUtils
+import care.better.platform.utils.DateTimeConversionUtils
 import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.raw.context.ConversionContext
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.openehr.am.aom.CDateTime
 import org.openehr.rm.datatypes.DvDate
 import org.openehr.rm.datatypes.DvDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
 
@@ -80,7 +82,14 @@ internal object DvDateTimeFactory : DvQuantifiedFactory<DvDateTime>() {
         } else {
             if (pattern.isNotBlank() && (pattern.contains("?") || pattern.contains("X"))) {
                 try {
-                    rmObject.value = conversionContext.valueConverter.parsePartialDateTime(dateTimeString, pattern).format(pattern)
+                    val localDateTimeString =
+                            if (dateTimeString.contains("Z") && pattern.toUpperCase().replace(":XX", "").length < FULL_PATTERN.length)
+                                DateTimeConversionUtils.toZonedDateTime(dateTimeString)
+                                        .withZoneSameInstant(ZoneId.systemDefault())
+                                        .toLocalDateTime()
+                                        .format(DateTimeFormatter.ISO_DATE_TIME)
+                            else dateTimeString
+                    rmObject.value = conversionContext.valueConverter.parsePartialDateTime(localDateTimeString, pattern).format(pattern)
                 } catch (ex: IllegalArgumentException) {
                     if (conversionContext.strictMode){
                         throw ConversionException("Invalid partial datetime for pattern $pattern", webTemplatePath.toString())
