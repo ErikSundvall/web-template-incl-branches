@@ -18,7 +18,7 @@
 
     <groupId>care.better.platform</groupId>
     <artifactId>web-template</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.1.1-SNAPSHOT</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>WebTemplate implementation for openEHR CDR</description>
@@ -33,8 +33,9 @@
 
         <kotlin-annotations.version>20.1.0</kotlin-annotations.version>
         <log4j-api-kotlin.version>1.0.0</log4j-api-kotlin.version>
+        <jackson-kotlin.version>2.12.5</jackson-kotlin.version>
 
-        <ehr-common.version>3.1.0-DS5</ehr-common.version>
+        <ehr-common.version>3.1.1-DS1</ehr-common.version>
 
         <jackson.version>2.12.5</jackson.version>
         <jakarta.xml.version>2.3.3</jakarta.xml.version>
@@ -115,6 +116,12 @@
         <dependency>
             <groupId>care.better.platform</groupId>
             <artifactId>ehr-common-utils</artifactId>
+            <version>${ehr-common.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>care.better.platform</groupId>
+            <artifactId>ehr-common-time</artifactId>
             <version>${ehr-common.version}</version>
         </dependency>
 
@@ -209,6 +216,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>${jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
             <version>${jupiter.version}</version>
             <scope>test</scope>
         </dependency>
