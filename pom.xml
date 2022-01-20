@@ -27,16 +27,15 @@
     <packaging>jar</packaging>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>16</java.version>
         <kotlin.version>1.5.30</kotlin.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <kotlin-annotations.version>20.1.0</kotlin-annotations.version>
+        <kotlin-annotations.version>21.0.1</kotlin-annotations.version>
         <log4j-api-kotlin.version>1.0.0</log4j-api-kotlin.version>
 
-        <ehr-common.version>3.1.4</ehr-common.version>
+        <ehr-common.version>3.1.4-JTEEN1</ehr-common.version>
 
-        <jackson.version>2.13.0</jackson.version>
+        <jackson.version>2.13.1</jackson.version>
         <jakarta.xml.version>2.3.3</jakarta.xml.version>
         <joda.version>2.10.8</joda.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
@@ -49,7 +48,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-dokka-plugin.version>1.5.30</maven-dokka-plugin.version>
+        <maven-dokka-plugin.version>${kotlin.version}</maven-dokka-plugin.version>
         <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-jacoco-plugin.version>0.8.7</maven-jacoco-plugin.version>
@@ -57,6 +56,8 @@
         <maven-scm-provider-gitexe.version>1.9.5</maven-scm-provider-gitexe.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
@@ -456,13 +457,6 @@
         <developer>
             <name>Dušan Marković</name>
             <email>dusan.markovic@better.care</email>
-            <organization>Better Ltd</organization>
-            <organizationUrl>https://www.better.care/</organizationUrl>
-        </developer>
-
-        <developer>
-            <name>Domen Muren</name>
-            <email>domen.muren@better.care</email>
             <organization>Better Ltd</organization>
             <organizationUrl>https://www.better.care/</organizationUrl>
         </developer>
