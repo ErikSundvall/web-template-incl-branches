@@ -31,7 +31,7 @@ import org.openehr.rm.datastructures.ItemTree
 import org.openehr.rm.datastructures.PointEvent
 import org.openehr.rm.datatypes.DvCodedText
 import java.io.IOException
-import javax.xml.bind.JAXBException
+import jakarta.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst
