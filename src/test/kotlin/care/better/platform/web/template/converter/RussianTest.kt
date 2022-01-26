@@ -47,7 +47,7 @@ import java.time.Year
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
-import javax.xml.bind.JAXBException
+import jakarta.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

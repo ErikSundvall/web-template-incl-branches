@@ -25,7 +25,7 @@ import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.Test
 import org.openehr.rm.composition.Composition
 import java.io.IOException
-import javax.xml.bind.JAXBException
+import jakarta.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst
