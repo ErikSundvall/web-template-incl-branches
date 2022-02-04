@@ -28,7 +28,7 @@ import org.openehr.rm.datastructures.Element
 import org.openehr.rm.datastructures.ItemTree
 import org.openehr.rm.datatypes.*
 import java.io.IOException
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBException
 
 /**
  * @author Matija Polajnar

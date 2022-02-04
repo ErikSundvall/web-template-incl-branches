@@ -37,7 +37,7 @@ import org.openehr.rm.datatypes.DvText
 import org.openehr.rm.datatypes.TermMapping
 import java.io.IOException
 import java.util.*
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

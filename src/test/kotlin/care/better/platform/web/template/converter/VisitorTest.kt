@@ -27,7 +27,7 @@ import org.openehr.rm.composition.Evaluation
 import org.openehr.rm.datatypes.DvParsable
 import java.io.IOException
 import java.util.*
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

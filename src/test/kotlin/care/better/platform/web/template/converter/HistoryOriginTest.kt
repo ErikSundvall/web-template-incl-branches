@@ -31,7 +31,7 @@ import java.io.IOException
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

@@ -37,7 +37,7 @@ import org.openehr.rm.composition.Composition
 import org.openehr.rm.composition.Observation
 import org.openehr.rm.datastructures.Cluster
 import java.io.IOException
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

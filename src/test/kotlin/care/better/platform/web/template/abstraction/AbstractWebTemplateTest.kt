@@ -34,8 +34,8 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.*
-import jakarta.xml.bind.JAXBException
-import jakarta.xml.bind.Unmarshaller
+import javax.xml.bind.JAXBException
+import javax.xml.bind.Unmarshaller
 import javax.xml.transform.stream.StreamSource
 
 /**

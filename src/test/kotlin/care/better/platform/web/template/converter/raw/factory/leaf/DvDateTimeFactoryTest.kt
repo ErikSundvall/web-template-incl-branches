@@ -390,11 +390,11 @@ class DvDateTimeFactoryTest : AbstractWebTemplateTest() {
                 args("", "06.08.2021 4:03:02+02:00", CONVERSION_EXCEPTION, CONVERSION_EXCEPTION),
                 args("", "08.2021", CONVERSION_EXCEPTION, CONVERSION_EXCEPTION),
                 args("", "6.8.2021", "2021-08-06T00:00:00+02:00", "2021-08-06T00:00:00+02:00"),
-//                args("", "06.08.2021 4:03:02", "2021-08-06T04:03:02+02:00", "2021-08-06T04:03:02+02:00"),
-//                args("", "6.8.2021 4:3:2", "2021-08-06T04:03:02+02:00", "2021-08-06T04:03:02+02:00"),
-//                args("", "6.8.2021 04:03:02", "2021-08-06T04:03:02+02:00", "2021-08-06T04:03:02+02:00"),
+                args("", "06.08.2021 4:03:02", CONVERSION_EXCEPTION, CONVERSION_EXCEPTION),
+                args("", "6.8.2021 4:3:2", CONVERSION_EXCEPTION, CONVERSION_EXCEPTION),
+                args("", "6.8.2021 04:03:02", CONVERSION_EXCEPTION, CONVERSION_EXCEPTION),
                 args("yyyy-mm-ddTHH:mm:SS", "06.08.2021", "2021-08-06T00:00:00+02:00", "2021-08-06T00:00:00+02:00"),
-//                args("yyyy-mm-ddTHH:mm:SS", "06.08.2021 04:03:02", "2021-08-06T04:03:02+02:00", "2021-08-06T04:03:02+02:00"),
+                args("yyyy-mm-ddTHH:mm:SS", "06.08.2021 04:03:02", CONVERSION_EXCEPTION, CONVERSION_EXCEPTION),
                 args("yyyy-mm-ddTHH:mm:SS", "06.08.2021 4:03:02+02:00", CONVERSION_EXCEPTION, CONVERSION_EXCEPTION),
         )
 

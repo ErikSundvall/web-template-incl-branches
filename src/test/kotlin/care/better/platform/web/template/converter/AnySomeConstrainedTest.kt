@@ -32,7 +32,7 @@ import org.openehr.rm.datatypes.DvCodedText
 import org.openehr.rm.datatypes.DvQuantity
 import org.openehr.rm.datatypes.DvText
 import java.io.IOException
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

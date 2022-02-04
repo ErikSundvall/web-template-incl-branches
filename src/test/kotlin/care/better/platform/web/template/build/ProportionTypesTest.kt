@@ -23,7 +23,7 @@ import care.better.platform.web.template.builder.model.WebTemplateNode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.IOException
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

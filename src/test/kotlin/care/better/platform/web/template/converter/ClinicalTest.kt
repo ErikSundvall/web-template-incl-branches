@@ -47,8 +47,8 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
-import jakarta.xml.bind.JAXBElement
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBElement
+import javax.xml.bind.JAXBException
 import javax.xml.namespace.QName
 
 /**

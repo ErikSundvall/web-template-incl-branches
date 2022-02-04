@@ -29,7 +29,7 @@ import org.openehr.base.basetypes.PartyRef
 import org.openehr.rm.common.PartyIdentified
 import org.openehr.rm.composition.Composition
 import java.io.IOException
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

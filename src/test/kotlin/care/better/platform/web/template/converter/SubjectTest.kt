@@ -32,7 +32,7 @@ import org.openehr.rm.composition.Evaluation
 import org.openehr.rm.composition.Observation
 import org.openehr.rm.composition.Section
 import java.io.IOException
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

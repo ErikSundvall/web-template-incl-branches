@@ -37,7 +37,7 @@ import org.openehr.rm.composition.Section
 import org.openehr.rm.datatypes.DvMultimedia
 import org.openehr.rm.datatypes.DvParsable
 import java.io.IOException
-import jakarta.xml.bind.JAXBException
+import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst
