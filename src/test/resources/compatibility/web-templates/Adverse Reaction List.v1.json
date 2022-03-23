@@ -2109,5 +2109,6 @@
         "inContext": true
       }
     ]
-  }
+  },
+  "ehrSingleton" : false
 }

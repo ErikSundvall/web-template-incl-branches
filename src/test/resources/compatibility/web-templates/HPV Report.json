@@ -1288,5 +1288,6 @@
         "inContext": true
       }
     ]
-  }
+  },
+  "ehrSingleton": false
 }
