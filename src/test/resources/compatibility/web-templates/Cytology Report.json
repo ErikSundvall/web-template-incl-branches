@@ -1474,5 +1474,6 @@
         "inContext": true
       }
     ]
-  }
+  },
+  "ehrSingleton": false
 }

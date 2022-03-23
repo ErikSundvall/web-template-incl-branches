@@ -1506,5 +1506,6 @@
         "inContext": true
       }
     ]
-  }
+  },
+  "ehrSingleton" : false
 }

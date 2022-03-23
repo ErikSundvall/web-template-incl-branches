@@ -37,4 +37,5 @@ data class WebTemplateBuilderContext @JvmOverloads constructor(
         val languages: Collection<String> = emptyList(),
         val contextLanguage: String? = null,
         val isAddDescriptions: Boolean = true,
-        val filter: PathFilter = NoopPathFilter)
+        val filter: PathFilter = NoopPathFilter,
+        val ehrSingleton: Boolean = false)

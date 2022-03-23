@@ -25,6 +25,7 @@ import care.better.platform.web.template.builder.context.WebTemplateBuilderConte
 import care.better.platform.web.template.builder.model.WebTemplateNode
 import com.google.common.base.Splitter
 import org.openehr.am.aom.Template
+import org.openehr.rm.common.StringDictionaryItem
 import org.openehr.rm.datatypes.DataValue
 import java.util.regex.Pattern
 
@@ -57,20 +58,20 @@ object WebTemplateBuilderUtils {
 
     @JvmStatic
     internal fun getDataValueClass(amNode: AmNode): Class<*>? =
-        sequenceOf(amNode, amNode.parent)
-            .filter { it != null }
-            .mapNotNull {
-                try {
-                    val rmClass = RmUtils.getRmClass((it as AmNode).rmType)
-                    if (DataValue::class.java.isAssignableFrom(rmClass))
-                        rmClass
-                    else
-                        null
+            sequenceOf(amNode, amNode.parent)
+                    .filter { it != null }
+                    .mapNotNull {
+                        try {
+                            val rmClass = RmUtils.getRmClass((it as AmNode).rmType)
+                            if (DataValue::class.java.isAssignableFrom(rmClass))
+                                rmClass
+                            else
+                                null
 
-                } catch (ignored: RmClassCastException) {
-                    null
-                }
-            }.firstOrNull()
+                        } catch (ignored: RmClassCastException) {
+                            null
+                        }
+                    }.firstOrNull()
 
 
     @JvmStatic
@@ -122,7 +123,12 @@ object WebTemplateBuilderUtils {
 
     @JvmStatic
     fun buildWebTemplate(template: Template): WebTemplate {
-        val webTemplateBuilderContext = WebTemplateBuilderContext(template.language?.codeString, TemplateUtils.findTemplateLanguages(template))
+        val webTemplateBuilderContext = WebTemplateBuilderContext(
+                defaultLanguage = template.language?.codeString,
+                languages = TemplateUtils.findTemplateLanguages(template))
         return requireNotNull(WebTemplateBuilder.build(template, webTemplateBuilderContext))
     }
+
+    @JvmStatic
+    fun containsEhrSingletonTemplateDefinition(sdi: StringDictionaryItem) : Boolean = sdi.id == "is_singleton" && "EHR".equals(sdi.value, true)
 }

@@ -91,38 +91,38 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
         private const val CURRENT_VERSION = "2.3"
 
         private val IGNORED_RM_PROPERTIES: Set<RmProperty> =
-            setOf(
-                RmProperty(Composition::class.java, "category"), // always constrained in the template otherwise default is OK
-                RmProperty(History::class.java, "origin"), // can be calculated from events
-                RmProperty(DvCodedText::class.java, "value"), // from code
-                RmProperty(Locatable::class.java, "archetype_node_id"), // from template
-                RmProperty(Locatable::class.java, "name")) // from template
+                setOf(
+                        RmProperty(Composition::class.java, "category"), // always constrained in the template otherwise default is OK
+                        RmProperty(History::class.java, "origin"), // can be calculated from events
+                        RmProperty(DvCodedText::class.java, "value"), // from code
+                        RmProperty(Locatable::class.java, "archetype_node_id"), // from template
+                        RmProperty(Locatable::class.java, "name")) // from template
 
         private val OVERRIDE_OPTIONAL: Set<RmProperty> =
-            setOf(RmProperty(Activity::class.java, "timing")) // no longer mandatory in RM 1.0.4 (added for backward compatibility)
+                setOf(RmProperty(Activity::class.java, "timing")) // no longer mandatory in RM 1.0.4 (added for backward compatibility)
 
         private val SKIP_PATHS: Set<String> = setOf("name")
 
         private val ANY_DATA_TYPES =
-            arrayOf(
-                RmUtils.getRmTypeName(DvCodedText::class.java),
-                RmUtils.getRmTypeName(DvText::class.java),
-                RmUtils.getRmTypeName(DvMultimedia::class.java),
-                RmUtils.getRmTypeName(DvParsable::class.java),
-                RmUtils.getRmTypeName(DvState::class.java),
-                RmUtils.getRmTypeName(DvBoolean::class.java),
-                RmUtils.getRmTypeName(DvIdentifier::class.java),
-                RmUtils.getRmTypeName(DvUri::class.java),
-                RmUtils.getRmTypeName(DvEhrUri::class.java),
-                RmUtils.getRmTypeName(DvDuration::class.java),
-                RmUtils.getRmTypeName(DvQuantity::class.java),
-                RmUtils.getRmTypeName(DvCount::class.java),
-                RmUtils.getRmTypeName(DvProportion::class.java),
-                RmUtils.getRmTypeName(DvDateTime::class.java),
-                RmUtils.getRmTypeName(DvDate::class.java),
-                RmUtils.getRmTypeName(DvTime::class.java),
-                RmUtils.getRmTypeName(DvOrdinal::class.java),
-                RmUtils.getRmTypeName(DvScale::class.java))
+                arrayOf(
+                        RmUtils.getRmTypeName(DvCodedText::class.java),
+                        RmUtils.getRmTypeName(DvText::class.java),
+                        RmUtils.getRmTypeName(DvMultimedia::class.java),
+                        RmUtils.getRmTypeName(DvParsable::class.java),
+                        RmUtils.getRmTypeName(DvState::class.java),
+                        RmUtils.getRmTypeName(DvBoolean::class.java),
+                        RmUtils.getRmTypeName(DvIdentifier::class.java),
+                        RmUtils.getRmTypeName(DvUri::class.java),
+                        RmUtils.getRmTypeName(DvEhrUri::class.java),
+                        RmUtils.getRmTypeName(DvDuration::class.java),
+                        RmUtils.getRmTypeName(DvQuantity::class.java),
+                        RmUtils.getRmTypeName(DvCount::class.java),
+                        RmUtils.getRmTypeName(DvProportion::class.java),
+                        RmUtils.getRmTypeName(DvDateTime::class.java),
+                        RmUtils.getRmTypeName(DvDate::class.java),
+                        RmUtils.getRmTypeName(DvTime::class.java),
+                        RmUtils.getRmTypeName(DvOrdinal::class.java),
+                        RmUtils.getRmTypeName(DvScale::class.java))
 
         /**
          * Builds [WebTemplate] from the [Template].
@@ -136,11 +136,11 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
         @JvmStatic
         @JvmOverloads
         fun build(template: Template, context: WebTemplateBuilderContext, from: String? = null): WebTemplate? =
-            WebTemplateBuilder(template, context).build(
-                AmTreeBuilder(template).build(),
-                from,
-                requireNotNull(template.templateId.value) { "Template ID is mandatory." },
-                TemplateUtils.extractSemVerFromTemplateDescription(template))
+                WebTemplateBuilder(template, context).build(
+                        AmTreeBuilder(template).build(),
+                        from,
+                        requireNotNull(template.templateId.value) { "Template ID is mandatory." },
+                        TemplateUtils.extractSemVerFromTemplateDescription(template))
 
         /**
          * Builds [WebTemplate] from the [Template].
@@ -154,12 +154,15 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
         @JvmStatic
         @JvmOverloads
         fun buildNonNull(template: Template, context: WebTemplateBuilderContext, from: String? = null): WebTemplate =
-            build(template, context, from) ?: throw BuilderException("Web template is null.")
+                build(template, context, from) ?: throw BuilderException("Web template is null.")
     }
 
     private val templateLanguage: String = requireNotNull(template.language?.codeString) { "Template default language is mandatory." }
     private val defaultLanguage = webTemplateBuilderContext.defaultLanguage ?: templateLanguage
-    private val context = webTemplateBuilderContext.copy(defaultLanguage = defaultLanguage)
+    private val context = webTemplateBuilderContext.copy(
+            defaultLanguage = defaultLanguage,
+            ehrSingleton = template.description?.otherDetails?.any { WebTemplateBuilderUtils.containsEhrSingletonTemplateDefinition(it) } ?: false
+    )
 
     private val segments: Deque<WebTemplateNode> = ArrayDeque()
     private val compactor: WebTemplateCompactor = MediumWebTemplateCompactor()
@@ -167,29 +170,30 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
     private val postProcess: Boolean = true
 
     private fun build(root: AmNode, from: String?, templateId: String, semVer: String?): WebTemplate? =
-        with(if (from == null) root else resolvePath(root, from)) {
-            val nodes: Multimap<AmNode, WebTemplateNode> = ArrayListMultimap.create()
-            if (this != null) {
-                WebTemplate(
-                    buildNode(null, this).apply {
-                        compactor.compact(this)
-                        idBuilder.buildIds(this, nodes)
-                    },
-                    templateId,
-                    semVer,
-                    context.contextLanguage ?: defaultLanguage,
-                    context.languages,
-                    CURRENT_VERSION,
-                    nodes)
-            } else {
-                null
+            with(if (from == null) root else resolvePath(root, from)) {
+                val nodes: Multimap<AmNode, WebTemplateNode> = ArrayListMultimap.create()
+                if (this != null) {
+                    WebTemplate(
+                            buildNode(null, this).apply {
+                                compactor.compact(this)
+                                idBuilder.buildIds(this, nodes)
+                            },
+                            templateId,
+                            semVer,
+                            context.contextLanguage ?: defaultLanguage,
+                            context.languages,
+                            CURRENT_VERSION,
+                            nodes,
+                            context.ehrSingleton)
+                } else {
+                    null
+                }
             }
-        }
 
     private fun buildNode(attributeName: String?, amNode: AmNode): WebTemplateNode =
-        createNode(attributeName, amNode).apply {
-            buildNodeChildren(amNode, this)
-        }
+            createNode(attributeName, amNode).apply {
+                buildNodeChildren(amNode, this)
+            }
 
     private fun buildNodeChildren(amNode: AmNode, webTemplateNode: WebTemplateNode) {
         segments.push(webTemplateNode)
@@ -243,11 +247,11 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
     }
 
     private fun getRmType(node: WebTemplateNode): Class<*>? =
-        try {
-            RmUtils.getRmClass(node.rmType)
-        } catch (ignored: RmClassCastException) {
-            null
-        }
+            try {
+                RmUtils.getRmClass(node.rmType)
+            } catch (ignored: RmClassCastException) {
+                null
+            }
 
     private fun addSpecialAttributes(amNode: AmNode, children: MutableList<WebTemplateNode>) {
         if ("INSTRUCTION" == amNode.rmType) {
@@ -256,28 +260,28 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
     }
 
     private fun addAttributes(rmType: Class<*>?): Boolean =
-        rmType == null || DvInterval::class.java.isAssignableFrom(rmType) || !DataValue::class.java.isAssignableFrom(rmType)
+            rmType == null || DvInterval::class.java.isAssignableFrom(rmType) || !DataValue::class.java.isAssignableFrom(rmType)
 
     private fun createNode(attributeName: String?, amNode: AmNode): WebTemplateNode =
-        WebTemplateNode(amNode, amNode.rmType, getPath(attributeName, amNode)).apply {
-            this.name = amNode.name
+            WebTemplateNode(amNode, amNode.rmType, getPath(attributeName, amNode)).apply {
+                this.name = amNode.name
 
-            val amNodeParent = amNode.parent
-            if (StringUtils.isNotBlank(amNode.nodeId))
-                setLocalizedNames(amNode, this)
-            else if (amNodeParent != null && "ELEMENT" == amNodeParent.rmType)
-                setLocalizedNames(amNodeParent, this)
+                val amNodeParent = amNode.parent
+                if (StringUtils.isNotBlank(amNode.nodeId))
+                    setLocalizedNames(amNode, this)
+                else if (amNodeParent != null && "ELEMENT" == amNodeParent.rmType)
+                    setLocalizedNames(amNodeParent, this)
 
-            this.nodeId = amNode.archetypeNodeId
-            this.occurences = WebTemplateIntegerRange(amNode.occurrences)
+                this.nodeId = amNode.archetypeNodeId
+                this.occurences = WebTemplateIntegerRange(amNode.occurrences)
 
-            amNode.annotations?.forEach { setNodeAnnotations(this, it) }
-            setArchetypeAnnotations(amNode, this)
+                amNode.annotations?.forEach { setNodeAnnotations(this, it) }
+                setArchetypeAnnotations(amNode, this)
 
-            amNode.viewConstraints?.also { setNodeViewAnnotations(this, it) }
+                amNode.viewConstraints?.also { setNodeViewAnnotations(this, it) }
 
-            setTermBindings(this)
-        }
+                setTermBindings(this)
+            }
 
     private fun setNodeAnnotations(node: WebTemplateNode, annotation: Annotation) {
         annotation.items.forEach { node.annotations[it.id!!] = it.value!! }
@@ -322,28 +326,28 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
         try {
             val rmClass = RmUtils.getRmClass(parent.rmType)
             parent.attributes.entries.asSequence()
-                .filter { isRequiredAttribute(rmClass, it) }
-                .forEach {
-                    val attributeName = it.key
-                    val amNode = it.value.children[0]
-                    if (children.none { child -> child.amNode == amNode }) {
-                        children.add(createCustomNode(amNode, attributeName, WebTemplateIntegerRange(1, 1)))
+                    .filter { isRequiredAttribute(rmClass, it) }
+                    .forEach {
+                        val attributeName = it.key
+                        val amNode = it.value.children[0]
+                        if (children.none { child -> child.amNode == amNode }) {
+                            children.add(createCustomNode(amNode, attributeName, WebTemplateIntegerRange(1, 1)))
+                        }
                     }
-                }
         } catch (ignored: RmClassCastException) {
         }
     }
 
     private fun isRequiredAttribute(rmClass: Class<out RmObject?>, entry: Map.Entry<String, AmAttribute>): Boolean =
-        OVERRIDE_OPTIONAL.contains(RmProperty(rmClass, entry.key)) || entry.value.rmOnly && 1 == entry.value.existence?.lower && !isIgnored(entry, rmClass)
+            OVERRIDE_OPTIONAL.contains(RmProperty(rmClass, entry.key)) || entry.value.rmOnly && 1 == entry.value.existence?.lower && !isIgnored(entry, rmClass)
 
     private fun createCustomNode(amNode: AmNode, attributeName: String?, existence: WebTemplateIntegerRange): WebTemplateNode =
-        buildNode(attributeName, amNode).apply {
-            this.name = "${attributeName?.substring(0, 1)?.uppercase()}${attributeName?.substring(1)}"
-            this.inContext = true
-            this.occurences = existence
-            setTermBindings(this)
-        }
+            buildNode(attributeName, amNode).apply {
+                this.name = "${attributeName?.substring(0, 1)?.uppercase()}${attributeName?.substring(1)}"
+                this.inContext = true
+                this.occurences = existence
+                setTermBindings(this)
+            }
 
     private fun isIgnored(entry: Map.Entry<String, AmAttribute>, rmClass: Class<out RmObject?>): Boolean {
         var clazz: Class<*>? = rmClass
@@ -398,9 +402,9 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
         if (isNameConstrained(amNode) && !useConstrainedCode) {
             if (isConstrainedNameTranslated(amNode, nameCode)) {
                 context.languages.asSequence() // translations in ADL designer
-                    .map { Pair(it, findText(amNode, it, nameCode)) }
-                    .filter { it.second.isNotNullOrBlank() }
-                    .forEach { webTemplateNode.localizedNames[it.first] = it.second }
+                        .map { Pair(it, findText(amNode, it, nameCode)) }
+                        .filter { it.second.isNotNullOrBlank() }
+                        .forEach { webTemplateNode.localizedNames[it.first] = it.second }
             } else if (defaultLanguage.isNotNullOrBlank()) {
                 webTemplateNode.localizedNames[defaultLanguage] = webTemplateNode.name
             }
@@ -412,7 +416,7 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
     }
 
     private fun isConstrainedNameTranslated(amNode: AmNode, nameCode: String?): Boolean =
-        amNode.name == findText(amNode, templateLanguage, nameCode)
+            amNode.name == findText(amNode, templateLanguage, nameCode)
 
     private fun addLocalizedNamesByCode(amNode: AmNode, nameCode: String?, wtNode: WebTemplateNode) {
         context.languages.forEach {
@@ -424,9 +428,9 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
 
     private fun addLocalizedNamesFromAnnotations(webTemplateNode: WebTemplateNode, localizedNamesFromAnnotations: Map<String, String?>) {
         localizedNamesFromAnnotations.entries.asSequence()
-            .filter { StringUtils.isNotBlank(it.value) }
-            .filter { context.languages.contains(it.key) }
-            .forEach { webTemplateNode.localizedNames[it.key] = it.value }
+                .filter { StringUtils.isNotBlank(it.value) }
+                .filter { context.languages.contains(it.key) }
+                .forEach { webTemplateNode.localizedNames[it.key] = it.value }
     }
 
     private fun addLocalizedDescription(amNode: AmNode, nameCode: String?, wtNode: WebTemplateNode, language: String) {
@@ -459,9 +463,9 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
         val careflowStepWtNode = createCareFlowStepNode(amNode, careflowStep, allowedCurrentStates)
 
         webTemplateNode.children.add(
-            createCurrentStateInput(
-                currentState,
-                if (allowedCurrentStates.isEmpty()) OpenEhrTerminology.getInstance().getGroupChildren(ISM_TRANSITION_GROUP_NAME) else allowedCurrentStates))
+                createCurrentStateInput(
+                        currentState,
+                        if (allowedCurrentStates.isEmpty()) OpenEhrTerminology.getInstance().getGroupChildren(ISM_TRANSITION_GROUP_NAME) else allowedCurrentStates))
 
         webTemplateNode.children.add(createCustomNode(transition, "transition", WebTemplateIntegerRange(0, 1)))
         webTemplateNode.children.add(careflowStepWtNode)
@@ -471,107 +475,107 @@ class WebTemplateBuilder private constructor(template: Template, webTemplateBuil
     }
 
     private fun createCareFlowStepNode(amNode: AmNode, careflowStep: AmNode, allowedCurrentStates: MutableSet<String>): WebTemplateNode =
-        createCustomNode(careflowStep, "careflow_step", WebTemplateIntegerRange(0, 1)).apply {
-            val ismTransitionAttribute = amNode.attributes["ism_transition"]
-            if (ismTransitionAttribute != null) {
-                val transitionInput = WebTemplateInput(WebTemplateInputType.CODED_TEXT, "code")
-                val options = ismTransitionAttribute.children.asSequence()
-                    .filter { !it.nodeId.isNullOrBlank() }
-                    .map {
-                        val codedValue = CodePhraseUtils.getCodedValue("local", it.nodeId!!, amNode, context)
-                        val currentStateCCodePhrase = getCObjectItem(it, CCodePhrase::class.java, "current_state", "defining_code")
-                        CareflowStepWebTemplateCodedValue(
-                            codedValue,
-                            if (currentStateCCodePhrase?.codeList != null) currentStateCCodePhrase.codeList else emptyList()).apply {
-                            allowedCurrentStates.addAll(this.currentStates)
-                        }
-                    }.toList()
-                transitionInput.list.addAll(options)
-                this.inputs.clear()
-                this.inputs.add(transitionInput)
+            createCustomNode(careflowStep, "careflow_step", WebTemplateIntegerRange(0, 1)).apply {
+                val ismTransitionAttribute = amNode.attributes["ism_transition"]
+                if (ismTransitionAttribute != null) {
+                    val transitionInput = WebTemplateInput(WebTemplateInputType.CODED_TEXT, "code")
+                    val options = ismTransitionAttribute.children.asSequence()
+                            .filter { !it.nodeId.isNullOrBlank() }
+                            .map {
+                                val codedValue = CodePhraseUtils.getCodedValue("local", it.nodeId!!, amNode, context)
+                                val currentStateCCodePhrase = getCObjectItem(it, CCodePhrase::class.java, "current_state", "defining_code")
+                                CareflowStepWebTemplateCodedValue(
+                                        codedValue,
+                                        if (currentStateCCodePhrase?.codeList != null) currentStateCCodePhrase.codeList else emptyList()).apply {
+                                    allowedCurrentStates.addAll(this.currentStates)
+                                }
+                            }.toList()
+                    transitionInput.list.addAll(options)
+                    this.inputs.clear()
+                    this.inputs.add(transitionInput)
+                }
             }
-        }
 
     private fun createCurrentStateInput(currentState: AmNode, currentStates: Collection<String>): WebTemplateNode =
-        createCustomNode(currentState, "current_state", WebTemplateIntegerRange(1, 1)).apply {
-            val currentStateInput = WebTemplateInput(WebTemplateInputType.CODED_TEXT, "code")
-            val currentStateOptions = currentStates.map { WebTemplateCodedValue(it, CodePhraseUtils.getOpenEhrTerminologyText(it, "en")) }
+            createCustomNode(currentState, "current_state", WebTemplateIntegerRange(1, 1)).apply {
+                val currentStateInput = WebTemplateInput(WebTemplateInputType.CODED_TEXT, "code")
+                val currentStateOptions = currentStates.map { WebTemplateCodedValue(it, CodePhraseUtils.getOpenEhrTerminologyText(it, "en")) }
 
-            currentStateInput.list.addAll(currentStateOptions)
-            this.inputs.clear()
-            this.inputs.add(currentStateInput)
-        }
+                currentStateInput.list.addAll(currentStateOptions)
+                this.inputs.clear()
+                this.inputs.add(currentStateInput)
+            }
 
     private fun getPath(attributeName: String?, amNode: AmNode): String =
-        if (attributeName == null)
-            ""
-        else
-            "${if (segments.isEmpty()) "" else segments.peek()?.path}/${attributeName}${
-                getArchetypePredicate(
-                    amNode,
-                    if (isNameConstrained(amNode)) amNode.name else null)
-            }"
+            if (attributeName == null)
+                ""
+            else
+                "${if (segments.isEmpty()) "" else segments.peek()?.path}/${attributeName}${
+                    getArchetypePredicate(
+                            amNode,
+                            if (isNameConstrained(amNode)) amNode.name else null)
+                }"
 
     private fun getPath(attributeName: String, amNode: AmNode, customName: String?): String =
-        "${if (segments.isEmpty()) "" else segments.peek()?.path}/${attributeName}${getArchetypePredicate(amNode, customName)}"
+            "${if (segments.isEmpty()) "" else segments.peek()?.path}/${attributeName}${getArchetypePredicate(amNode, customName)}"
 
     private fun getArchetypePredicate(amNode: AmNode, nameConstraint: String?): String =
-        if (amNode.archetypeNodeId.isNullOrBlank())
-            ""
-        else
-            "[${amNode.archetypeNodeId}${nameConstraint?.let { ",'$nameConstraint']" } ?: "]"}"
+            if (amNode.archetypeNodeId.isNullOrBlank())
+                ""
+            else
+                "[${amNode.archetypeNodeId}${nameConstraint?.let { ",'$nameConstraint']" } ?: "]"}"
 
     private fun createIsmTransitionAttribute(parent: AmNode, attributeName: String, existence: IntervalOfInteger): AmNode =
-        createAmNode(parent, "DV_CODED_TEXT", attributeName, IsmTransition::class.java).apply {
-            parent.attributes[attributeName] = AmAttribute(existence, Lists.newArrayList(this)).apply { this.rmOnly = true }
-        }
+            createAmNode(parent, "DV_CODED_TEXT", attributeName, IsmTransition::class.java).apply {
+                parent.attributes[attributeName] = AmAttribute(existence, Lists.newArrayList(this)).apply { this.rmOnly = true }
+            }
 
     @Suppress("UNCHECKED_CAST")
     private fun createAmNode(parent: AmNode, rmType: String, attributeName: String, parentClass: Class<*>): AmNode =
-        AmNode(parent, rmType).apply {
-            this.name = attributeName
-            this.setter = RmUtils.getSetterForAttribute(attributeName, (parentClass as Class<out RmObject?>))
-            val getter = RmUtils.getGetterForAttribute(attributeName, parentClass)
-            this.getter = getter
-            if (getter != null) {
-                val returnType = getter.returnType
-                if (MutableCollection::class.java.isAssignableFrom(returnType)) {
-                    val fieldType = RmUtils.getFieldType(parentClass, RmUtils.getFieldForAttribute(attributeName))
-                    if (MutableList::class.java.isAssignableFrom(returnType)) {
-                        this.setType(TypeInfo(fieldType, CollectionInfo(CollectionType.LIST)))
+            AmNode(parent, rmType).apply {
+                this.name = attributeName
+                this.setter = RmUtils.getSetterForAttribute(attributeName, (parentClass as Class<out RmObject?>))
+                val getter = RmUtils.getGetterForAttribute(attributeName, parentClass)
+                this.getter = getter
+                if (getter != null) {
+                    val returnType = getter.returnType
+                    if (MutableCollection::class.java.isAssignableFrom(returnType)) {
+                        val fieldType = RmUtils.getFieldType(parentClass, RmUtils.getFieldForAttribute(attributeName))
+                        if (MutableList::class.java.isAssignableFrom(returnType)) {
+                            this.setType(TypeInfo(fieldType, CollectionInfo(CollectionType.LIST)))
+                        } else {
+                            this.setType(TypeInfo(fieldType, CollectionInfo(CollectionType.SET)))
+                        }
                     } else {
-                        this.setType(TypeInfo(fieldType, CollectionInfo(CollectionType.SET)))
+                        this.setType(TypeInfo(returnType, null))
                     }
-                } else {
-                    this.setType(TypeInfo(returnType, null))
                 }
             }
-        }
 
     private fun requiresCardinality(amAttribute: AmAttribute): Boolean =
-        with(WebTemplateIntegerRange(amAttribute.cardinality?.interval)) {
-            if (this.isEmpty()) {
-                false
-            } else {
-                val min = this.min
-                val max = this.max
-                if (min == null || 0 == min) { // no lower limit
+            with(WebTemplateIntegerRange(amAttribute.cardinality?.interval)) {
+                if (this.isEmpty()) {
                     false
                 } else {
-                    val childrenCount = amAttribute.children.size
-                    if (bothOne(min, max) && childrenCount == 1)  // only one child - required
+                    val min = this.min
+                    val max = this.max
+                    if (min == null || 0 == min) { // no lower limit
                         false
-                    else
-                        min > 1 || max != null && max < childrenCount
+                    } else {
+                        val childrenCount = amAttribute.children.size
+                        if (bothOne(min, max) && childrenCount == 1)  // only one child - required
+                            false
+                        else
+                            min > 1 || max != null && max < childrenCount
+                    }
                 }
             }
-        }
 
     private fun getCardinalities(amNode: AmNode, node: WebTemplateNode?): MutableList<WebTemplateCardinality> =
-        amNode.attributes.entries.asSequence()
-            .filter { it.value.cardinality != null && requiresCardinality(it.value) }
-            .map { WebTemplateCardinality(WebTemplateIntegerRange(it.value.cardinality?.interval), "${node?.path}/${it.key}") }
-            .toMutableList()
+            amNode.attributes.entries.asSequence()
+                    .filter { it.value.cardinality != null && requiresCardinality(it.value) }
+                    .map { WebTemplateCardinality(WebTemplateIntegerRange(it.value.cardinality?.interval), "${node?.path}/${it.key}") }
+                    .toMutableList()
 
     private fun setArchetypeAnnotations(amNode: AmNode, node: WebTemplateNode) {
         val archetypeTerm = findTerm(amNode.terms, amNode.nodeId) // special annotation from Archetype (extra value on term)
