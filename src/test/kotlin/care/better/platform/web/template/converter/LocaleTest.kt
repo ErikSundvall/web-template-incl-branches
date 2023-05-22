@@ -59,7 +59,7 @@ import java.time.OffsetDateTime
 import java.time.YearMonth
 import java.time.ZoneOffset
 import java.util.*
-import javax.xml.bind.JAXBException
+import jakarta.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

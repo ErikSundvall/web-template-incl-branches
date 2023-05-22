@@ -23,6 +23,8 @@ import care.better.platform.web.template.builder.model.WebTemplateNode
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.Lists
+import jakarta.xml.bind.JAXBException
+import jakarta.xml.bind.Unmarshaller
 import org.apache.commons.io.IOUtils
 import org.joda.time.DateTimeZone
 import org.junit.jupiter.api.AfterAll
@@ -34,8 +36,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.*
-import javax.xml.bind.JAXBException
-import javax.xml.bind.Unmarshaller
 import javax.xml.transform.stream.StreamSource
 
 /**
