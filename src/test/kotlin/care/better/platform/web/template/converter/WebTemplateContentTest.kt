@@ -17,9 +17,10 @@ package care.better.platform.web.template.converter
 
 import care.better.platform.web.template.WebTemplate
 import care.better.platform.web.template.abstraction.AbstractWebTemplateTest
+import care.better.platform.web.template.builder.model.WebTemplateNode
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.google.common.collect.ImmutableMap
-import care.better.platform.web.template.builder.model.WebTemplateNode
+import jakarta.xml.bind.JAXBException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -27,7 +28,6 @@ import org.openehr.rm.composition.Composition
 import java.io.IOException
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
-import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

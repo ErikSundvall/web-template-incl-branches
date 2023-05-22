@@ -22,6 +22,7 @@ import care.better.platform.web.template.builder.context.WebTemplateBuilderConte
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.collect.ImmutableList
+import jakarta.xml.bind.JAXBException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.openehr.rm.composition.Composition
@@ -33,7 +34,6 @@ import org.openehr.rm.datastructures.PointEvent
 import org.openehr.rm.datatypes.DvCodedText
 import org.openehr.rm.datatypes.DvOrdinal
 import java.io.IOException
-import javax.xml.bind.JAXBException
 
 /**
  * @author Maja Razinger
