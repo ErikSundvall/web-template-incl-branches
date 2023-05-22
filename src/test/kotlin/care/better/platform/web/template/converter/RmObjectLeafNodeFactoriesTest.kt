@@ -30,10 +30,10 @@ import care.better.platform.web.template.converter.utils.WebTemplateConversionUt
 import care.better.platform.web.template.converter.value.LocaleBasedValueConverter
 import com.fasterxml.jackson.databind.node.TextNode
 import com.google.common.collect.ImmutableMap
+import jakarta.xml.bind.JAXBException
 import org.assertj.core.api.Assertions.*
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
-import org.joda.time.format.ISODateTimeFormat
 import org.junit.jupiter.api.Test
 import org.openehr.rm.composition.Composition
 import java.io.IOException
@@ -43,7 +43,6 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst
