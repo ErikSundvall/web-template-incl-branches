@@ -149,7 +149,7 @@ class ConversionContext private constructor(
             val participationList: MutableList<Participation> = mutableListOf()
             participationNames.forEachIndexed { index, name ->
                 participationList.add(Participation().apply {
-                    if (participationIds.size > index) {
+                    if (participationFunctions.size > index) {
                         this.function = DvText(participationFunctions[index])
                     }
                     val mode = if (participationModes.size > index) participationModes[index] else null
@@ -179,10 +179,81 @@ class ConversionContext private constructor(
             entryParticipation
         }
 
+
+    /**
+     * Creates a copy of [ConversionContext] with different web template path.
+     * @param aqlPath AQL path
+     *
+     * @return [ConversionContext]
+     */
+    fun copyWithAqlPath(aqlPath: String): ConversionContext = createBuilder(aqlPath = aqlPath).build()
+
+    /**
+     * Creates a copy of [ConversionContext] with different web template path.
+     * @param webTemplatePath Web template path
+     *
+     * @return [ConversionContext]
+     */
+    fun copyWithWebTemplatePath(webTemplatePath: String): ConversionContext = createBuilder(webTemplatePath = webTemplatePath).build()
+
+    private fun createBuilder(aqlPath: String? = null, webTemplatePath: String? = null): Builder = Builder(
+            locale,
+            language,
+            territory,
+            category,
+            setting,
+            composerName,
+            composerId,
+            composerSelf,
+            composer,
+            time,
+            actionTime,
+            historyOrigin,
+            endTime,
+            encoding,
+            idNamespace,
+            idScheme,
+            providerName,
+            providerId,
+            participationNames.toMutableList(),
+            participationIds.toMutableList(),
+            participationFunctions.toMutableList(),
+            participationModes.toMutableList(),
+            participationIdentifiers.map { it.toMutableList() }.toMutableList(),
+            ismTransitionCurrentState,
+            instructionNarrative,
+            activityTiming,
+            ismTransition,
+            subject,
+            entryProvider,
+            entryParticipation.toMutableList(),
+            identifierIssuer,
+            identifierAssigner,
+            identifierType,
+            activityTimingProvider,
+            instructionNarrativeProvider,
+            actionIsmTransitionProvider,
+            uidGenerator,
+            healthCareFacility,
+            location,
+            workflowId,
+            links.toMutableList(),
+            termBindingTerminologies.toMutableSet(),
+            actionToInstructionHandler,
+            rmVisitors.toMutableMap(),
+            valueConverter,
+            incompleteMode,
+            strictMode,
+            aqlPath,
+            webTemplatePath,
+            webTemplate)
+
     /**
      * Creates a new [Builder] from this [ConversionContext].
      *
      * @param webTemplate [WebTemplate]
+     *
+     * @return [ConversionContext] [Builder]
      */
     internal fun createBuilder(webTemplate: WebTemplate): Builder =
         Builder(
@@ -254,7 +325,7 @@ class ConversionContext private constructor(
             private var composerSelf: Boolean = false,
             private var composer: PartyProxy? = null,
             private var time: OffsetDateTime = OffsetDateTime.now(),
-            private var actionTime: OffsetDateTime? = OffsetDateTime.now(),
+            private var actionTime: OffsetDateTime? = null,
             private var historyOrigin: OffsetDateTime? = null,
             private var endTime: OffsetDateTime? = null,
             private var encoding: String? = Charsets.UTF_8.toString(),
@@ -345,40 +416,40 @@ class ConversionContext private constructor(
         fun getAqlPath() = aqlPath
         fun getWebTemplatePath() = webTemplatePath
 
-        fun withLocale(locale: Locale) = apply { this.locale = locale }
-        fun withLanguage(language: String) = apply {
-            if (territory != null && locale == null) {
+        fun withLocale(locale: Locale?) = apply { this.locale = locale }
+        fun withLanguage(language: String?) = apply {
+            if (territory != null && language != null && locale == null) {
                 this.locale = Locale(language, territory)
             }
             this.language = language
         }
 
-        fun withTerritory(territory: String) = apply {
-            if (language != null && locale == null) {
+        fun withTerritory(territory: String?) = apply {
+            if (language != null && territory != null && locale == null) {
                 this.locale = Locale(language, territory)
             }
             this.territory = territory
         }
 
-        fun withCategory(category: String) = apply { this.category = category }
-        fun withSetting(setting: String) = apply { this.setting = setting }
-        fun withComposerName(composerName: String) = apply { this.composerName = composerName }
-        fun withComposerId(composerId: String) = apply { this.composerId = composerId }
+        fun withCategory(category: String?) = apply { this.category = category }
+        fun withSetting(setting: String?) = apply { this.setting = setting }
+        fun withComposerName(composerName: String?) = apply { this.composerName = composerName }
+        fun withComposerId(composerId: String?) = apply { this.composerId = composerId }
         fun withComposerSelf(composerSelf: Boolean) = apply { this.composerSelf = composerSelf }
-        fun withComposer(composer: PartyProxy) = apply { this.composer = composer }
+        fun withComposer(composer: PartyProxy?) = apply { this.composer = composer }
         fun withTime(time: OffsetDateTime) = apply { this.time = time }
         fun withTime(time: ZonedDateTime) = apply { this.time = time.toOffsetDateTime() }
-        fun withActionTime(time: OffsetDateTime) = apply { this.actionTime = time }
-        fun withActionTime(time: ZonedDateTime) = apply { this.actionTime = time.toOffsetDateTime() }
-        fun withHistoryOrigin(time: OffsetDateTime) = apply { this.historyOrigin = time }
-        fun withHistoryOrigin(time: ZonedDateTime) = apply { this.historyOrigin = time.toOffsetDateTime() }
-        fun withEndTime(time: OffsetDateTime) = apply { this.endTime = time }
-        fun withEndTime(time: ZonedDateTime) = apply { this.endTime = time.toOffsetDateTime() }
-        fun withEncoding(encoding: String) = apply { this.encoding = encoding }
-        fun withIdNamespace(idNamespace: String) = apply { this.idNamespace = idNamespace }
-        fun withIdScheme(idScheme: String) = apply { this.idScheme = idScheme }
-        fun withProviderName(providerName: String) = apply { this.providerName = providerName }
-        fun withProviderId(providerId: String) = apply { this.providerId = providerId }
+        fun withActionTime(time: OffsetDateTime?) = apply { this.actionTime = time }
+        fun withActionTime(time: ZonedDateTime?) = apply { this.actionTime = time?.toOffsetDateTime() }
+        fun withHistoryOrigin(time: OffsetDateTime?) = apply { this.historyOrigin = time }
+        fun withHistoryOrigin(time: ZonedDateTime?) = apply { this.historyOrigin = time?.toOffsetDateTime() }
+        fun withEndTime(time: OffsetDateTime?) = apply { this.endTime = time }
+        fun withEndTime(time: ZonedDateTime?) = apply { this.endTime = time?.toOffsetDateTime() }
+        fun withEncoding(encoding: String?) = apply { this.encoding = encoding }
+        fun withIdNamespace(idNamespace: String?) = apply { this.idNamespace = idNamespace }
+        fun withIdScheme(idScheme: String?) = apply { this.idScheme = idScheme }
+        fun withProviderName(providerName: String?) = apply { this.providerName = providerName }
+        fun withProviderId(providerId: String?) = apply { this.providerId = providerId }
         fun addParticipationName(participationName: String) = apply { this.participationNames.add(participationName) }
         fun addParticipationName(participationName: String, index: Int) = apply { this.participationNames.add(index, participationName) }
         fun addParticipationNames(participationNames: List<String>) = apply { this.participationNames.addAll(participationNames) }
@@ -406,42 +477,42 @@ class ConversionContext private constructor(
         fun withIsmTransitionCurrentState(ismTransitionCurrentState: String) = apply { this.ismTransitionCurrentState = ismTransitionCurrentState }
         fun withInstructionNarrative(instructionNarrative: String) = apply { this.instructionNarrative = instructionNarrative }
         fun withActivityTiming(activityTiming: String) = apply { this.activityTiming = activityTiming }
-        fun withIsmTransition(ismTransition: IsmTransition) = apply { this.ismTransition = ismTransition }
-        fun withSubject(subject: PartyProxy) = apply { this.subject = subject }
-        fun withEntryProvider(entryProvider: PartyProxy) = apply { this.entryProvider = entryProvider }
+        fun withIsmTransition(ismTransition: IsmTransition?) = apply { this.ismTransition = ismTransition }
+        fun withSubject(subject: PartyProxy?) = apply { this.subject = subject }
+        fun withEntryProvider(entryProvider: PartyProxy?) = apply { this.entryProvider = entryProvider }
         fun addEntryParticipation(entryParticipation: Participation) = apply { this.entryParticipation.add(entryParticipation) }
         fun addEntryParticipation(entryParticipation: Participation, index: Int) = apply { this.entryParticipation.add(index, entryParticipation) }
         fun addEntryParticipation(entryParticipation: List<Participation>) = apply { this.entryParticipation.addAll(entryParticipation) }
-        fun withIdentifierIssuer(identifierIssuer: String) = apply { this.identifierIssuer = identifierIssuer }
-        fun withIdentifierAssigner(identifierAssigner: String) = apply { this.identifierAssigner = identifierAssigner }
-        fun withIdentifierType(identifierType: String) = apply { this.identifierType = identifierType }
-        fun withActivityTimingProvider(activityTimingProvider: ActivityTimingProvider) = apply { this.activityTimingProvider = activityTimingProvider }
-        fun withInstructionNarrativeProvider(instructionNarrativeProvider: InstructionNarrativeProvider) = apply {
+        fun withIdentifierIssuer(identifierIssuer: String?) = apply { this.identifierIssuer = identifierIssuer }
+        fun withIdentifierAssigner(identifierAssigner: String?) = apply { this.identifierAssigner = identifierAssigner }
+        fun withIdentifierType(identifierType: String?) = apply { this.identifierType = identifierType }
+        fun withActivityTimingProvider(activityTimingProvider: ActivityTimingProvider?) = apply { this.activityTimingProvider = activityTimingProvider }
+        fun withInstructionNarrativeProvider(instructionNarrativeProvider: InstructionNarrativeProvider?) = apply {
             this.instructionNarrativeProvider = instructionNarrativeProvider
         }
 
-        fun withActionIsmTransitionProvider(actionIsmTransitionProvider: ActionIsmTransitionProvider) = apply {
+        fun withActionIsmTransitionProvider(actionIsmTransitionProvider: ActionIsmTransitionProvider?) = apply {
             this.actionIsmTransitionProvider = actionIsmTransitionProvider
         }
 
         internal fun withUidGenerator(uidGenerator: (String) -> String) = apply { this.uidGenerator = uidGenerator }
 
-        fun withHealthCareFacility(healthCareFacility: PartyIdentified) = apply { this.healthCareFacility = healthCareFacility }
-        fun withLocation(location: String) = apply { this.location = location }
-        fun withWorkFlowId(workflowId: ObjectRef) = apply { this.workflowId = workflowId }
+        fun withHealthCareFacility(healthCareFacility: PartyIdentified?) = apply { this.healthCareFacility = healthCareFacility }
+        fun withLocation(location: String?) = apply { this.location = location }
+        fun withWorkFlowId(workflowId: ObjectRef?) = apply { this.workflowId = workflowId }
         fun addLink(link: Link) = apply { this.links.add(link) }
         fun addLink(link: Link, index: Int) = apply { this.links.add(index, link) }
         fun addLinks(links: List<Link>) = apply { this.links.addAll(links) }
         fun addTermBindingTerminology(termBindingTerminology: String) = apply { this.termBindingTerminologies.add(termBindingTerminology) }
         fun addTermBindingTerminologies(termBindingTerminologies: List<String>) = apply { this.termBindingTerminologies.addAll(termBindingTerminologies) }
-        fun withActionToInstructionHandler(actionToInstructionHandler: ActionToInstructionHandler) = apply {
+        fun withActionToInstructionHandler(actionToInstructionHandler: ActionToInstructionHandler?) = apply {
             this.actionToInstructionHandler =
                 actionToInstructionHandler
         }
 
         fun putRmVisitor(rmObjectClass: Class<*>, rmVisitor: RmVisitor<RmObject>) = apply { this.rmVisitors[rmObjectClass] = rmVisitor }
         fun putRmVisitors(rmVisitors: Map<Class<*>, RmVisitor<RmObject>>) = apply { this.rmVisitors.putAll(rmVisitors) }
-        fun withValueConvert(valueConverter: ValueConverter) = apply { this.valueConverter = valueConverter }
+        fun withValueConvert(valueConverter: ValueConverter?) = apply { this.valueConverter = valueConverter }
         fun withIncompleteMode() = apply {
             if (strictMode) {
                 throw ConversionException("Incomplete mode can only be used when strict mode is disabled!")
@@ -454,8 +525,8 @@ class ConversionContext private constructor(
             }
             this.strictMode = true
         }
-        fun forAqlPath(aqlPath: String) = apply { this.aqlPath = aqlPath }
-        fun forWebTemplatePath(webTemplatePath: String) = apply { this.webTemplatePath = webTemplatePath }
+        fun forAqlPath(aqlPath: String?) = apply { this.aqlPath = aqlPath }
+        fun forWebTemplatePath(webTemplatePath: String?) = apply { this.webTemplatePath = webTemplatePath }
         fun withNoLocale() = apply { this.locale = null }
 
         /**
