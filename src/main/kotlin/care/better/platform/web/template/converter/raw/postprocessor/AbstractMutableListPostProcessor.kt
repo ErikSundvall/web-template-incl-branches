@@ -39,7 +39,7 @@ abstract class AbstractMutableListPostProcessor : PostProcessor<MutableList<Any>
             if (mustRemove(next, conversionContext)) {
                 iterator.remove()
             } else {
-                if (next is Locatable) {
+                if (next is Locatable && next.name?.value != null) {
                     val name = next.name?.value!!
                     val pair = Pair(next.archetypeNodeId!!, name)
                     val index = nameSuffixIndexMap[pair]
