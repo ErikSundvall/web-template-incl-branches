@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 3.2.7 - 2024-03-29
+
+- Fix `feeder_audit/originating_system_audit/time` handling in FLAT format input
+- Fix Null Pointer Exception when a multiple-occurrence Locatable has a null name
+
 ## 3.2.6 - 2024-02-12
 
 - Fix DV_PROPORTION conversion to ignore values with null numerator
