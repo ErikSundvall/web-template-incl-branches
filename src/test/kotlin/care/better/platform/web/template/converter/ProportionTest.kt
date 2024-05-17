@@ -47,6 +47,16 @@ class ProportionTest : AbstractWebTemplateTest() {
 
     @Test
     @Throws(IOException::class, JAXBException::class)
+    fun testProportionWithValueAndType() {
+        val templateName = "/convert/templates/older/Demo Vitals.opt"
+        val webTemplate: WebTemplate = WebTemplateBuilder.buildNonNull(getTemplate(templateName), WebTemplateBuilderContext("en"))
+        val structuredComposition: ObjectNode = getObjectMapper().readTree(getJson("/convert/compositions/vitals_proportion_value_and_type.json")) as ObjectNode
+        val composition: Composition? = webTemplate.convertFromStructuredToRaw(structuredComposition, ConversionContext.create().build())
+        assertThat(composition?.content ?: emptyList()).isEmpty()
+    }
+
+    @Test
+    @Throws(IOException::class, JAXBException::class)
     fun testInvalidAttributeFailed() {
         val templateName = "/convert/templates/older/Demo Vitals.opt"
         val webTemplate: WebTemplate = WebTemplateBuilder.buildNonNull(getTemplate(templateName), WebTemplateBuilderContext("en"))

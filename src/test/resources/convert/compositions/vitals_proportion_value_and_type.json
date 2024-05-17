@@ -13,7 +13,10 @@
 // limitations under the License.
 
 {
-  "tanner_stages": {
+  "vitals": {
+    "_uid": [
+      "49b13469-f4e6-4490-8cf6-792bc53132a7::Testing Doctor::1"
+    ],
     "language": [
       {
         "|code": "en",
@@ -22,14 +25,14 @@
     ],
     "territory": [
       {
-        "|code": "SI",
+        "|code": "US",
         "|terminology": "ISO_3166-1"
       }
     ],
     "context": [
       {
         "start_time": [
-          "2021-02-17T11:11:00+01:00"
+          "2017-05-19T12:03:09.131+02:00"
         ],
         "setting": [
           {
@@ -40,62 +43,45 @@
         ]
       }
     ],
-    "tanner_stages": [
+    "vitals": [
       {
-        "any_point_in_time_event": [
+        "haemoglobin_a1c": [
           {
-            "genitals": [
+            "any_event": [
               {
-                "|code": "at0010",
-                "|value": "Stage 4",
-                "|terminology": "local"
+                "hba1c": [
+                  {
+                    "|numerator": "",
+                    "|denominator": 100,
+                    "|value": 0.77,
+                    "|type": 2
+                  }
+                ],
+                "time": [
+                  "2017-05-19T12:03:09.131+02:00"
+                ]
               }
             ],
-            "pubic_hair": [
+            "language": [
               {
-                "|code": "at0018",
-                "|value": "Stage 2",
-                "|terminology": "local"
+                "|code": "en",
+                "|terminology": "ISO_639-1"
               }
             ],
-            "comment": [
-              "teste"
-            ],
-            "time": [
-              "2021-02-17T11:11:00+01:00"
+            "encoding": [
+              {
+                "|code": "UTF-8",
+                "|terminology": "IANA_character-sets"
+              }
             ]
-          }
-        ],
-        "language": [
-          {
-            "|code": "en",
-            "|terminology": "ISO_639-1"
-          }
-        ],
-        "encoding": [
-          {
-            "|code": "UTF-8",
-            "|terminology": "IANA_character-sets"
           }
         ]
       }
     ],
-    "category": [
+    "composer": [
       {
-        "|code": "433",
-        "|value": "event",
-        "|terminology": "openehr"
+        "|name": "Testing Doctor"
       }
     ]
-  },
-  "ctx": {
-    "generic_fields": {
-      "/generic-coded_text-8052464": [
-        {
-          "|code": "9cd9da98-f192-4517-8612-0a03f1c09c15",
-          "|value": "Male"
-        }
-      ]
-    }
   }
 }
