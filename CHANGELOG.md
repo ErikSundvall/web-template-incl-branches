@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 3.2.8 - 2024-05-23
+
+- Add support for GENERIC_ENTRY conversion
+
 ## 3.2.7 - 2024-03-29
 
 - Fix `feeder_audit/originating_system_audit/time` handling in FLAT format input
