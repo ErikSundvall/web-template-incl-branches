@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## 4.0.2 - 2024-05-28
+
+- Update dependency to ehr-common
+
+## 4.0.1 - 2024-05-23
+
+- Fix `feeder_audit/originating_system_audit/time` handling in FLAT format input
+- Fix Null Pointer Exception when a multiple-occurrence Locatable has a null name
+- Add support for GENERIC_ENTRY conversion
+
+## 4.0.0 - 2024-02-15
+
+- Initial 4.0.x version based on 3.2.6
+- Java 17 supported and required
+- Based on Kotlin 1.9.20
+- Support for `|formatting` attribute on DV_TEXT and DV_CODED_TEXT
+
+## 3.2.6 - 2024-02-12
+
+- Fix DV_PROPORTION conversion to ignore values with null numerator
+
 ## 3.2.5 - 2023-09-20
 
 - Fix ctx/action_time to fall back to ctx/time (instead of current time)
