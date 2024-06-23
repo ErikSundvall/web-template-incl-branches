@@ -28,20 +28,20 @@
 
     <properties>
         <java.version>17</java.version>
-        <kotlin.version>1.9.20</kotlin.version>
+        <kotlin.version>1.9.24</kotlin.version>
 
-        <jetbrains-annotations.version>23.1.0</jetbrains-annotations.version>
+        <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
         <log4j-api-kotlin.version>1.2.0</log4j-api-kotlin.version>
 
-        <ehr-common.version>4.0.0-SNAPSHOT</ehr-common.version>
+        <ehr-common.version>4.0.3-SNAPSHOT</ehr-common.version>
 
         <assertj.version>3.25.3</assertj.version>
         <commons-io.version>2.11.0</commons-io.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-lang3.version>3.14.0</commons-lang3.version>
         <commons-math3.version>3.6.1</commons-math3.version>
         <jackson.version>2.17.1</jackson.version>
         <jakarta.xml.bind.version>4.0.2</jakarta.xml.bind.version>
-        <jakarta.xml.version>4.0.2</jakarta.xml.version>
+        <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
         <joda-time.version>2.12.5</joda-time.version>
         <jsonassert.version>1.5.1</jsonassert.version>
         <jupiter.version>5.10.2</jupiter.version>
@@ -49,21 +49,21 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
-        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-dependency-check-plugin.version>8.3.1</maven-dependency-check-plugin.version>
         <maven-dokka-plugin.version>1.9.10</maven-dokka-plugin.version>
-        <maven-enforcer-plugin.version>3.3.0</maven-enforcer-plugin.version>
+        <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
+        <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
         <maven-jacoco-plugin.version>0.8.10</maven-jacoco-plugin.version>
-        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+        <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
         <maven-nexus-staging-plugin.version>1.6.13</maven-nexus-staging-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-scm-provider-gitexe.version>1.9.5</maven-scm-provider-gitexe.version>
         <maven-sonar-plugin.version>3.9.1.2184</maven-sonar-plugin.version>
-        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
 
         <!--suppress UnresolvedMavenProperty -->
         <sonar.coverage.jacoco.xmlReportPaths>
@@ -214,7 +214,7 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>${jakarta.xml.version}</version>
+            <version>${jaxb-runtime.version}</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -366,7 +366,6 @@
                     <configuration>
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
-                        <optimize>true</optimize>
                         <encoding>utf-8</encoding>
                         <showWarnings>true</showWarnings>
                         <parameters>true</parameters>
