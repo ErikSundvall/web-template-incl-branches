@@ -27,6 +27,7 @@ import org.openehr.rm.common.Participation
 import org.openehr.rm.composition.*
 import org.openehr.rm.datastructures.*
 import org.openehr.rm.datatypes.DvInterval
+import org.openehr.rm.integration.GenericEntry
 
 /**
  * @author Primoz Delopst
@@ -99,6 +100,7 @@ object RmObjectNodeFactoryDelegator {
         Pair(RmUtils.getRmTypeName(ReviewDatasetSpec::class.java), LocatableInstanceFactory { ReviewDatasetSpec() }),
         Pair(RmUtils.getRmTypeName(Section::class.java), LocatableInstanceFactory { Section() }),
         Pair(RmUtils.getRmTypeName(StateTrigger::class.java), LocatableInstanceFactory { StateTrigger() }),
+        Pair(RmUtils.getRmTypeName(GenericEntry::class.java), LocatableInstanceFactory { GenericEntry() }),
         Pair(RmUtils.getRmTypeName(StateVariable::class.java), RmObjectInstanceClassFactory(StateVariable::class.java)),
         Pair(RmUtils.getRmTypeName(SubjectPrecondition::class.java), RmObjectInstanceFactory { SubjectPrecondition() }),
         Pair(RmUtils.getRmTypeName(SubPlan::class.java), LocatableInstanceFallbackNameFactory({ SubPlan() }, SubPlan::class.java)),
