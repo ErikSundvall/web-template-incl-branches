@@ -33,7 +33,7 @@
         <jetbrains-annotations.version>23.1.0</jetbrains-annotations.version>
         <log4j-api-kotlin.version>1.2.0</log4j-api-kotlin.version>
 
-        <ehr-common.version>4.0.2</ehr-common.version>
+        <ehr-common.version>4.0.3-A2</ehr-common.version>
 
         <assertj.version>3.24.2</assertj.version>
         <commons-io.version>2.11.0</commons-io.version>
@@ -49,11 +49,11 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
+        <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-dependency-check-plugin.version>8.3.1</maven-dependency-check-plugin.version>
         <maven-dokka-plugin.version>1.9.10</maven-dokka-plugin.version>
-        <maven-enforcer-plugin.version>3.3.0</maven-enforcer-plugin.version>
+        <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
         <maven-jacoco-plugin.version>0.8.10</maven-jacoco-plugin.version>
@@ -63,7 +63,7 @@
         <maven-scm-provider-gitexe.version>1.9.5</maven-scm-provider-gitexe.version>
         <maven-sonar-plugin.version>3.9.1.2184</maven-sonar-plugin.version>
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
 
         <!--suppress UnresolvedMavenProperty -->
         <sonar.coverage.jacoco.xmlReportPaths>
