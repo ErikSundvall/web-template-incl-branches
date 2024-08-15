@@ -2,9 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 4.0.3 - 2024-05-28
+
+- Update dependency of ehr-common to 4.0.3
+
 ## 4.0.2 - 2024-05-28
 
-- Update dependency to ehr-common
+- Update dependency of ehr-common to 4.0.2
 
 ## 4.0.1 - 2024-05-23
 
