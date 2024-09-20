@@ -104,8 +104,7 @@ internal object ConversionContextExtractor : (JsonNode, ConversionContext) -> Co
                 hasCtxElementHasFlatKeys(this as ObjectNode) -> {
                     val flatCtxValues: MutableMap<String, Any?> = mutableMapOf()
                     this.fields().forEach {
-                        flatCtxValues["ctx/${it.key}"] = it.value.asTextOrNull()
-
+                        it.value.asTextOrNull()?.let { nonNull -> flatCtxValues["ctx/${it.key}"] = nonNull }
                     }
                     FlatToStructuredConverter.getInstance().invoke(flatCtxValues).get("ctx")
                 }
@@ -116,7 +115,7 @@ internal object ConversionContextExtractor : (JsonNode, ConversionContext) -> Co
         val flatCtxValues: MutableMap<String, Any?> = mutableMapOf()
         structuredObjectNode.fields().forEach {
             if (it.key.startsWith("ctx/")) {
-                flatCtxValues[it.key] = it.value.asTextOrNull()
+                it.value.asTextOrNull()?.let { nonNull -> flatCtxValues[it.key] = nonNull }
             }
         }
 
