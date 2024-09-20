@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 3.2.9 - 2024-09-20
+
+- Fix an issue that ELEMENT including DATA_VALUE was created for WebTemplate input even if the ELEMENT already existed
+- Fix an issue that `ctx` value could not be null
+
 ## 3.2.8 - 2024-05-23
 
 - Add support for GENERIC_ENTRY conversion
