@@ -135,7 +135,6 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
      * @param webTemplatePath Web template path from root to the current [WebTemplateNode]
      * @return RM object in RAW format
      */
-    @Suppress("UNCHECKED_CAST")
     private fun convertObjectNode(objectNode: ObjectNode, webTemplateNode: WebTemplateNode, webTemplatePath: WebTemplatePath): Any? {
         if (objectNode.isEmpty && conversionContext.isStrictModeNotEnabled() && isEmptyToNullConversionAllowable(webTemplateNode)) { //ObjectNode is empty; nothing will be created.
             return null
@@ -234,12 +233,15 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
                     val webTemplateInput = getMandatoryFields(child)
                     if (webTemplateInput != null) {
                         val chain = getAmNodeChain(webTemplateNode.amNode, child.amNode)
-                        convertArrayNode(
-                            ConversionObjectMapper.createArrayNode().apply { this.add(ConversionObjectMapper.nullNode()) },
-                            chain,
-                            webTemplatePath + child.jsonId,
-                            { _, wtPath, _ -> createChildNodeForWebTemplateInput(wtPath, child, webTemplateInput) }).also {
-                            chainConversionResult.add(it)
+                        val handled = handleWebTemplateInputOnExistingElement(chain, rmObject, webTemplatePath, webTemplateInput)
+                        if (!handled) {
+                            convertArrayNode(
+                                    ConversionObjectMapper.createArrayNode().apply { this.add(ConversionObjectMapper.nullNode()) },
+                                    chain,
+                                    webTemplatePath + child.jsonId,
+                                    { _, wtPath, _ -> createChildNodeForWebTemplateInput(wtPath, child, webTemplateInput) }).also {
+                                chainConversionResult.add(it)
+                            }
                         }
                     }
                 }
@@ -651,6 +653,47 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
                     this,
                     webTemplateInput)
             }
+
+    /**
+     * Handles [WebTemplateInput] on existing RM object.
+     *
+     * @param chain [List] of [AmNode] from parent [WebTemplateNode] [AmNode] to child [WebTemplateNode] [AmNode]
+     * @param rmObject RM object in RAW format
+     * @param webTemplatePath Web template path from the root to the current [WebTemplateNode]
+     * @param webTemplateInput [WebTemplateInput]
+     * @return True if the [WebTemplateInput] was handled, otherwise, return false
+     */
+    private fun handleWebTemplateInputOnExistingElement(
+            chain: List<AmNode>,
+            rmObject: RmObject,
+            webTemplatePath: WebTemplatePath,
+            webTemplateInput: WebTemplateInput): Boolean {
+        val (elementAmNode: AmNode, dataValueAmNode: AmNode) = if (chain.isNotEmpty() && chain.first().isForElement()) chain[0] to chain[1] else return false
+        val element = elementAmNode.getOnParent(rmObject).let {
+            if (it is Collection<*>)
+                it.mapNotNull { element -> element as? Element? }.firstOrNull { element -> element.archetypeNodeId == elementAmNode.archetypeNodeId }
+            else
+                (it as? Element?)?.let { element -> if (element.archetypeNodeId == elementAmNode.archetypeNodeId) element else null  }
+        } ?: return false
+
+        val dataValue = RmObjectLeafNodeFactoryDelegator
+            .delegateOrThrow<RmObject>(
+                    dataValueAmNode.rmType,
+                    conversionContext,
+                    dataValueAmNode,
+                    webTemplatePath.copy(dataValueAmNode)) as DataValue
+
+        RmObjectLeafNodeFactoryDelegator.delegateWebTemplateInputHandling(
+                dataValueAmNode.rmType,
+                conversionContext,
+                dataValueAmNode,
+                dataValue,
+                webTemplateInput)
+
+        element.value = dataValue
+
+        return true
+    }
 
     /**
      * Converts the RM object in STRUCTURED format to the RM object or to [Collection] of the RM objects in RAW format for the RM attribute.
