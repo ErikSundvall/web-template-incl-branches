@@ -1,0 +1,774 @@
+// Copyright 2021 Better Ltd (www.better.care)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+{
+  "referral_document": {
+    "_uid": [
+      "5b2cc5a0-7f2d-42da-9db0-8a33e3eef721::default::1"
+    ],
+    "language": [
+      {
+        "|code": "en",
+        "|terminology": "ISO_639-1"
+      }
+    ],
+    "territory": [
+      {
+        "|code": "US",
+        "|terminology": "ISO_3166-1"
+      }
+    ],
+    "context": [
+      {
+        "_participation": [
+          {
+            "|function": "requester",
+            "|mode": "face-to-face communication",
+            "|name": "Dr. Marcus Johnson",
+            "|id": "199",
+            "|id_namespace": "HOSPITAL-NS",
+            "|id_scheme": "HOSPITAL-NS"
+          },
+          {
+            "|function": "performer",
+            "|mode": "not specified",
+            "|name": "Lara Markham",
+            "|id": "198",
+            "|id_namespace": "HOSPITAL-NS",
+            "|id_scheme": "HOSPITAL-NS"
+          }
+        ],
+        "_health_care_facility": [
+          {
+            "|id": "9091",
+            "|id_scheme": "HOSPITAL-NS",
+            "|id_namespace": "HOSPITAL-NS",
+            "|name": "Hospital"
+          }
+        ],
+        "personal_demographics": [
+          {
+            "personal_name_for_slovenia": [
+              {
+                "personal_name": [
+                  {
+                    "structured_name": [
+                      {
+                        "given_name": [
+                          "GIVEN_NAME 12"
+                        ],
+                        "family_name": [
+                          "FAMILY_NAME 56"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "unique_identifier": [
+              "Ident. 89"
+            ],
+            "internal_identifier": [
+              "Ident. 10"
+            ],
+            "birth_date": [
+              "2024-10-11T13:25:42.460315+02:00"
+            ],
+            "sex": [
+              {
+                "|code": "at0020",
+                "|value": "Male",
+                "|terminology": "local"
+              }
+            ]
+          }
+        ],
+        "personal_insurance": [
+          {
+            "patient_insurance_type_id": [
+              {
+                "|code": "at0006",
+                "|value": "3",
+                "|terminology": "local"
+              }
+            ],
+            "patient_insurance_identifier": [
+              "Ident. 74"
+            ],
+            "patient_insurance_state_id": [
+              {
+                "|code": "I.70",
+                "|value": "I.70 description",
+                "|terminology": "ISO_3166-1"
+              }
+            ]
+          }
+        ],
+        "specific_details": [
+          {
+            "referral_unique_identifier": [
+              "Ident. 10"
+            ],
+            "referral_internal_identifier": [
+              "Ident. 40"
+            ],
+            "prev_referral_unique_identifier": [
+              "Ident. 84"
+            ],
+            "referral_media_type_id": [
+              {
+                "|code": "at0029",
+                "|value": "1",
+                "|terminology": "local"
+              }
+            ],
+            "referral_creation_datetime": [
+              "2024-10-11T13:25:42.468523+02:00"
+            ]
+          }
+        ],
+        "start_time": [
+          "2024-10-11T13:49:03.166216+02:00"
+        ],
+        "setting": [
+          {
+            "|code": "238",
+            "|value": "other care",
+            "|terminology": "openehr"
+          }
+        ]
+      }
+    ],
+    "referral_request_slovenia": [
+      {
+        "_uid": [
+          "3c640ceb-34cf-43b1-bc1e-8af08525cd8f"
+        ],
+        "_other_participation": [
+          {
+            "|function": "requester",
+            "|mode": "face-to-face communication",
+            "|name": "Dr. Marcus Johnson",
+            "|id": "199",
+            "|id_namespace": "HOSPITAL-NS",
+            "|id_scheme": "HOSPITAL-NS"
+          },
+          {
+            "|function": "performer",
+            "|mode": "not specified",
+            "|name": "Lara Markham",
+            "|id": "198",
+            "|id_namespace": "HOSPITAL-NS",
+            "|id_scheme": "HOSPITAL-NS"
+          }
+        ],
+        "referral_request": [
+          {
+            "medical_procedure_id": [
+              {
+                "|code": "S.97",
+                "|value": "S.97 description",
+                "|terminology": "VZD"
+              }
+            ],
+            "medical_procedure_side": [
+              {
+                "|code": "at0.0.2",
+                "|value": "0",
+                "|terminology": "local"
+              }
+            ],
+            "scope": [
+              {
+                "scope_examination": [
+                  false
+                ],
+                "scope_treatment": [
+                  false
+                ],
+                "scope_specialist": [
+                  false
+                ]
+              }
+            ],
+            "referral_reason_id": [
+              {
+                "|code": "at0.0.6",
+                "|value": "3",
+                "|terminology": "local"
+              }
+            ],
+            "referral_urgency_type_id": [
+              {
+                "|code": "at0.0.62",
+                "|value": "4",
+                "|terminology": "local"
+              }
+            ],
+            "precedence": [
+              {
+                "precedence_pregnancy": [
+                  false
+                ],
+                "precedence_nursing": [
+                  false
+                ],
+                "precedence_prevention": [
+                  false
+                ],
+                "precedence_inability": [
+                  true
+                ]
+              }
+            ],
+            "referral_validity": [
+              {
+                "referral_validity_id": [
+                  {
+                    "|code": "at0.0.0.66",
+                    "|value": "2",
+                    "|terminology": "local"
+                  }
+                ],
+                "referral_validity_duration": [
+                  "P4M"
+                ]
+              }
+            ],
+            "patient_contact": [
+              {
+                "personal_name_for_slovenia": [
+                  {
+                    "personal_name": [
+                      {
+                        "structured_name": [
+                          {
+                            "given_name": [
+                              "GIVEN_NAME 13"
+                            ],
+                            "family_name": [
+                              "FAMILY_NAME 12"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "patient_contact_role": [
+                  {
+                    "|code": "at0.0.0.54",
+                    "|value": "2",
+                    "|terminology": "local"
+                  }
+                ],
+                "telecom_details": [
+                  {
+                    "telecoms": [
+                      {
+                        "telecoms_type": [
+                          {
+                            "|code": "at0013",
+                            "|value": "Telephone",
+                            "|terminology": "local"
+                          }
+                        ],
+                        "structured_telecoms": [
+                          {
+                            "country_code": [
+                              "Country code 10"
+                            ],
+                            "number": [
+                              "Number 68"
+                            ],
+                            "extension": [
+                              "Extension 23"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "telecoms_type": [
+                          {
+                            "|code": "at0014",
+                            "|value": "Telephone",
+                            "|terminology": "local"
+                          }
+                        ],
+                        "structured_telecoms": [
+                          {
+                            "country_code": [
+                              "Country code 11"
+                            ],
+                            "number": [
+                              "Number 69"
+                            ],
+                            "extension": [
+                              "Extension 24"
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "email_address": [
+                      "Email address 43"
+                    ]
+                  }
+                ],
+                "address_slovenia": [
+                  {
+                    "address": [
+                      {
+                        "address_type": [
+                          {
+                            "|code": "at0011",
+                            "|value": "Residential",
+                            "|terminology": "local"
+                          }
+                        ],
+                        "statical_region": [
+                          "STATICAL_REGION 40"
+                        ],
+                        "structured_address": [
+                          {
+                            "property_number": [
+                              "Property number 99"
+                            ],
+                            "address_line": [
+                              "Address line 99"
+                            ]
+                          }
+                        ],
+                        "city": [
+                          {
+                            "post_code": [
+                              "Post code 77"
+                            ],
+                            "city_name": [
+                              "City name 2"
+                            ]
+                          }
+                        ],
+                        "foreign_address": [
+                          "Foreign address 6"
+                        ],
+                        "district": [
+                          {
+                            "district_name": [
+                              "District Name 15"
+                            ],
+                            "district_code": [
+                              "District code 8"
+                            ]
+                          }
+                        ],
+                        "country": [
+                          {
+                            "country_name": [
+                              "Country name 30"
+                            ],
+                            "country_code": [
+                              {
+                                "|code": "E.80",
+                                "|value": "E.80 description",
+                                "|terminology": "ISO_3166-1"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "personal_name_for_slovenia": [
+                  {
+                    "personal_name": [
+                      {
+                        "structured_name": [
+                          {
+                            "given_name": [
+                              "GIVEN_NAME 22"
+                            ],
+                            "family_name": [
+                              "FAMILY_NAME 23"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "patient_contact_role": [
+                  {
+                    "|code": "at0.0.0.54",
+                    "|value": "2",
+                    "|terminology": "local"
+                  }
+                ],
+                "telecom_details": [
+                  {
+                    "telecoms": [
+                      {
+                        "telecoms_type": [
+                          {
+                            "|code": "at0013",
+                            "|value": "Telephone",
+                            "|terminology": "local"
+                          }
+                        ],
+                        "structured_telecoms": [
+                          {
+                            "country_code": [
+                              "Country code 12"
+                            ],
+                            "number": [
+                              "Number 70"
+                            ],
+                            "extension": [
+                              "Extension 23"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "telecoms_type": [
+                          {
+                            "|code": "at0013",
+                            "|value": "Telephone",
+                            "|terminology": "local"
+                          }
+                        ],
+                        "structured_telecoms": [
+                          {
+                            "country_code": [
+                              "Country code 13"
+                            ],
+                            "number": [
+                              "Number 100"
+                            ],
+                            "extension": [
+                              "Extension 24"
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "email_address": [
+                      "Email address 43"
+                    ]
+                  }
+                ],
+                "address_slovenia": [
+                  {
+                    "address": [
+                      {
+                        "address_type": [
+                          {
+                            "|code": "at0011",
+                            "|value": "Residential",
+                            "|terminology": "local"
+                          }
+                        ],
+                        "statical_region": [
+                          "STATICAL_REGION 40"
+                        ],
+                        "structured_address": [
+                          {
+                            "property_number": [
+                              "Property number 99"
+                            ],
+                            "address_line": [
+                              "Address line 99"
+                            ]
+                          }
+                        ],
+                        "city": [
+                          {
+                            "post_code": [
+                              "Post code 77"
+                            ],
+                            "city_name": [
+                              "City name 2"
+                            ]
+                          }
+                        ],
+                        "foreign_address": [
+                          "Foreign address 6"
+                        ],
+                        "district": [
+                          {
+                            "district_name": [
+                              "District Name 15"
+                            ],
+                            "district_code": [
+                              "District code 8"
+                            ]
+                          }
+                        ],
+                        "country": [
+                          {
+                            "country_name": [
+                              "Country name 30"
+                            ],
+                            "country_code": [
+                              {
+                                "|code": "E.80",
+                                "|value": "E.80 description",
+                                "|terminology": "ISO_3166-1"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "administrative_data": [
+              {
+                "injury": [
+                  {
+                    "injury_employer_identifier": [
+                      "Ident. 47"
+                    ],
+                    "injury_datetime": [
+                      "2024-10-11T13:25:42.469307+02:00"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "reason_for_cancellation_description": [
+              "reason_for_cancellation_description 46"
+            ],
+            "reason_for_cancellation_code": [
+              {
+                "|code": "at0.0.54",
+                "|value": "1",
+                "|terminology": "local"
+              }
+            ],
+            "timing": [
+              {
+                "|value": "R3/2024-10-11T13:00:00+02:00/P1M",
+                "|formalism": "timing"
+              }
+            ]
+          }
+        ],
+        "professional_individual_demographics_for_slovenia": [
+          {
+            "doc_identifier": [
+              "Ident. 45"
+            ],
+            "personal_name_for_slovenia": [
+              {
+                "personal_name": [
+                  {
+                    "structured_name": [
+                      {
+                        "given_name": [
+                          "GIVEN_NAME 17"
+                        ],
+                        "family_name": [
+                          "FAMILY_NAME 90"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "professional_role": [
+              {
+                "unstructured_role": [
+                  {
+                    "|code": "at0.4",
+                    "|value": "1",
+                    "|terminology": "local"
+                  }
+                ]
+              }
+            ],
+            "organisation": [
+              {
+                "org_identifier": [
+                  {
+                    "|code": "N.87",
+                    "|value": "N.87 description",
+                    "|terminology": "BPI"
+                  }
+                ],
+                "org_name": [
+                  "ORG_NAME 54"
+                ],
+                "org_department_identifier": [
+                  {
+                    "org_department_identifier_1": [
+                      {
+                        "|code": "C.77",
+                        "|value": "C.77 description",
+                        "|terminology": "VZD"
+                      }
+                    ],
+                    "org_department_identifier_2": [
+                      {
+                        "|code": "F.40",
+                        "|value": "F.40 description",
+                        "|terminology": "VZD"
+                      }
+                    ]
+                  }
+                ],
+                "in_public_healthcare": [
+                  false
+                ],
+                "org_stat_region": [
+                  "ORG_STAT_REGION 37"
+                ]
+              }
+            ]
+          }
+        ],
+        "expiry_time": [
+          "2024-10-11T13:25:42.470841+02:00"
+        ],
+        "narrative": [
+          "Human readable instruction narrative"
+        ],
+        "language": [
+          {
+            "|code": "en",
+            "|terminology": "ISO_639-1"
+          }
+        ],
+        "encoding": [
+          {
+            "|code": "UTF-8",
+            "|terminology": "IANA_character-sets"
+          }
+        ]
+      }
+    ],
+    "referral_summery_specification": [
+      {
+        "ihe_narratives": [
+          {
+            "_other_participation": [
+              {
+                "|function": "requester",
+                "|mode": "face-to-face communication",
+                "|name": "Dr. Marcus Johnson",
+                "|id": "199",
+                "|id_namespace": "HOSPITAL-NS",
+                "|id_scheme": "HOSPITAL-NS"
+              },
+              {
+                "|function": "performer",
+                "|mode": "not specified",
+                "|name": "Lara Markham",
+                "|id": "198",
+                "|id_namespace": "HOSPITAL-NS",
+                "|id_scheme": "HOSPITAL-NS"
+              }
+            ],
+            "ihe_reason_for_referral_narrative": [
+              "IHE_REASON_FOR_REFERRAL_NARRATIVE 26"
+            ],
+            "ihe_reason_for_referral_coded": [
+              {
+                "|code": "A.87",
+                "|value": "A.87 description",
+                "|terminology": "external_terminology"
+              }
+            ],
+            "ihe_active_problems": [
+              "IHE_ACTIVE_PROBLEMS 5"
+            ],
+            "ihe_patients_relevant_studies": [
+              "IHE_PATIENTS_RELEVANT_STUDIES 60"
+            ],
+            "ihe_history_present_illness": [
+              "IHE_HISTORY_PRESENT_ILLNESS 82"
+            ],
+            "ihe_current_meds": [
+              "IHE_CURRENT_MEDS 7"
+            ],
+            "ihe_allergies": [
+              "IHE_ALLERGIES 23"
+            ],
+            "ihe_history_of_past_illness": [
+              "IHE_HISTORY_OF_PAST_ILLNESS 1"
+            ],
+            "ihe_list_of_surgeries": [
+              "IHE_LIST_OF_SURGERIES 83"
+            ],
+            "ihe_immunizations": [
+              "IHE_IMMUNIZATIONS 72"
+            ],
+            "ihe_family_history": [
+              "IHE_FAMILY_HISTORY 22"
+            ],
+            "ihe_social_history": [
+              "IHE_SOCIAL_HISTORY 92"
+            ],
+            "ihe_vital_signs": [
+              "IHE_VITAL_SIGNS 91"
+            ],
+            "ihe_physical_exam": [
+              "IHE_PHYSICAL_EXAM 8"
+            ],
+            "ihe_plan_of_care": [
+              "IHE_PLAN_OF_CARE 21"
+            ],
+            "ihe_advanced_directives": [
+              "IHE_ADVANCED_DIRECTIVES 16"
+            ],
+            "ihe_pertinent_review_of_systems": [
+              "IHE_PERTINENT_REVIEW_OF_SYSTEMS 31"
+            ],
+            "language": [
+              {
+                "|code": "en",
+                "|terminology": "ISO_639-1"
+              }
+            ],
+            "encoding": [
+              {
+                "|code": "UTF-8",
+                "|terminology": "IANA_character-sets"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "category": [
+      {
+        "|code": "433",
+        "|value": "event",
+        "|terminology": "openehr"
+      }
+    ],
+    "composer": [
+      {
+        "|name": "Silvia Blake"
+      }
+    ]
+  }
+}
