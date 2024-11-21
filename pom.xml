@@ -33,7 +33,7 @@
         <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
         <log4j-api-kotlin.version>1.4.0</log4j-api-kotlin.version>
 
-        <ehr-common.version>5.0.0-SNAPSHOT</ehr-common.version>
+        <ehr-common.version>5.0.0-XB1</ehr-common.version>
 
         <assertj.version>3.26.3</assertj.version>
         <commons-io.version>2.18.0</commons-io.version>
