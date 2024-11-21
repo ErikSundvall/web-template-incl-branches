@@ -30,6 +30,7 @@ import care.better.platform.web.template.builder.predicate.MatchingChildAmNodePr
 import care.better.platform.web.template.builder.predicate.MatchingConstrainedChildAmNodePredicate
 import care.better.platform.web.template.converter.FromRawConversion
 import care.better.platform.web.template.converter.ReversedWebTemplatePath
+import care.better.platform.web.template.converter.flat.FlatCompositionFilter
 import care.better.platform.web.template.converter.flat.FormattedRawToFlatConverter
 import care.better.platform.web.template.converter.flat.RawToFlatConverter
 import care.better.platform.web.template.converter.raw.StructuredToRawConverter
@@ -37,6 +38,7 @@ import care.better.platform.web.template.converter.raw.context.ConversionContext
 import care.better.platform.web.template.converter.structured.FlatToStructuredConverter
 import care.better.platform.web.template.converter.structured.FormattedRawToStructuredConverter
 import care.better.platform.web.template.converter.structured.RawToStructuredConverter
+import care.better.platform.web.template.converter.structured.StructuredCompositionFilter
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
@@ -184,6 +186,24 @@ open class WebTemplate internal constructor(
     @JvmOverloads
     open fun <T : RmObject> convertFormattedFromRawToStructured(rmObject: T, fromRawConversion: FromRawConversion = FromRawConversion.create()): JsonNode? =
         FormattedRawToStructuredConverter(fromRawConversion.valueConverter, fromRawConversion.objectMapper).convert(this, fromRawConversion, rmObject)
+
+    /**
+     * Prunes the object in STRUCTURED format based on the WebTemplate path.
+     *
+     * @param root Object node for STRUCTURED format
+     * @param path WebTemplate path for pruning
+     */
+    open fun pruneStructuredCompositionToPath(root: ObjectNode, path: String) =
+        StructuredCompositionFilter().pruneStructuredComposition(root, path)
+
+    /**
+     * Prunes the object in FLAT format based on the WebTemplate path.
+     *
+     * @param root MutableMap for FLAT format
+     * @param path WebTemplate path for pruning
+     */
+    open fun pruneFlatCompositionToPath(root: MutableMap<String, String>, path: String) =
+        FlatCompositionFilter().pruneFlatCompositionToPath(root, path)
 
     /**
      * Converts [WebTemplate] to JSON formatted [String].

@@ -15,6 +15,7 @@
 
 package care.better.platform.web.template.converter
 
+import care.better.platform.path.NameAndNodeMatchingPathValueExtractor
 import care.better.platform.template.AmNode
 import care.better.platform.web.template.WebTemplate
 import care.better.platform.web.template.abstraction.AbstractWebTemplateTest
@@ -38,6 +39,7 @@ import org.junit.jupiter.api.Test
 import org.openehr.rm.composition.Composition
 import org.openehr.rm.composition.Observation
 import org.openehr.rm.composition.Section
+import org.openehr.rm.datastructures.Cluster
 import org.openehr.rm.datastructures.Element
 import org.openehr.rm.datastructures.ItemTree
 import org.openehr.rm.datatypes.DvCodedText
@@ -344,6 +346,29 @@ class NullFlavourTest : AbstractWebTemplateTest() {
         assertThat(composition?.content ?: emptyList()).isNotEmpty
     }
 
+    @Test
+    fun testNullFlavourWithSingleDefaultValue() {
+        val builderContext = WebTemplateBuilderContext("en")
+        val webTemplate: WebTemplate = WebTemplateBuilder.buildNonNull(getTemplate("/convert/templates/PIANISSIMO - Pain assessment.opt"), builderContext)
+
+        val flatComposition = mapOf(
+                "ctx/language" to "en",
+                "ctx/territory" to "LU",
+                "ctx/composer_name" to "vanessap",
+                "pianissimo_-_pain_assessment/symptom_sign_screening_questionnaire/any_event:0/specific_symptom_sign/symptom_sign_name/_null_flavour|code" to "273",
+                "pianissimo_-_pain_assessment/symptom_sign_screening_questionnaire/any_event:0/specific_symptom_sign/symptom_sign_name/_null_flavour|value" to "not applicable")
+
+        val composition: Composition? = webTemplate.convertFromFlatToRaw(flatComposition, ConversionContext.create().build())
+
+        assertThat(composition).isNotNull
+
+        val items =
+            (NameAndNodeMatchingPathValueExtractor(webTemplate.findWebTemplateNode("pianissimo_-_pain_assessment/symptom_sign_screening_questionnaire/any_event:0/specific_symptom_sign").path)
+                .getValue(composition).first() as Cluster).items
+
+        assertThat(items).hasSize(1)
+    }
+
     @Throws(IOException::class)
     private fun getDemoVitalsComposition(webTemplate: WebTemplate, nullFlavor: Boolean): Composition {
         val context = ConversionContext.create().withLanguage("sl").withTerritory("SI").withComposerName("test_composer").build()
@@ -354,12 +379,12 @@ class NullFlavourTest : AbstractWebTemplateTest() {
         val section = composition!!.content[0] as Section
         val observation = section.items[1] as Observation
         val stateItem = observation.data!!.events[0].state as ItemTree?
-        val stateEllement = stateItem!!.items[0] as Element
-        stateEllement.value = DvText("Null flavor test")
+        val stateElement = stateItem!!.items[0] as Element
+        stateElement.value = DvText("Null flavor test")
 
         if (nullFlavor) {
-            stateEllement.nullFlavour = DvCodedText.createWithOpenEHRTerminology("271", "no information")
-            stateEllement.value = null
+            stateElement.nullFlavour = DvCodedText.createWithOpenEHRTerminology("271", "no information")
+            stateElement.value = null
         }
         return composition
     }

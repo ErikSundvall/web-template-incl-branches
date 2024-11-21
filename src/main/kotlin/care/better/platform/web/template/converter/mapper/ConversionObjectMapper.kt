@@ -137,7 +137,7 @@ private fun getObjectNodeForWebTemplatePathRecursively(objectNode: ObjectNode, w
  *
  * @return [String] or null
  */
-internal fun JsonNode.asTextOrNull(): String = this.asText(null)
+internal fun JsonNode.asTextOrNull(): String? = this.asText(null)
 
 /**
  * Extension function that returns [List] of entry keys for [ObjectNode].

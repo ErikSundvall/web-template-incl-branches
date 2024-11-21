@@ -2,9 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## 4.0.5 -
+
+- Add support for composition filtering by path
+
+## 4.0.4 - 2024-10-11
+
+- Update dependency of ehr-common to 4.0.4
+- Fix an issue that ELEMENT including DATA_VALUE was created for WebTemplate input even if the ELEMENT already existed
+- Fix an issue that `ctx` value could not be null
+
+## 4.0.3 - 2024-08-15
+
+- Update dependency of ehr-common to 4.0.3
+
 ## 4.0.2 - 2024-05-28
 
-- Update dependency to ehr-common
+- Update dependency of ehr-common to 4.0.2
 
 ## 4.0.1 - 2024-05-23
 
@@ -18,6 +32,20 @@ All notable changes to this project will be documented in this file.
 - Java 17 supported and required
 - Based on Kotlin 1.9.20
 - Support for `|formatting` attribute on DV_TEXT and DV_CODED_TEXT
+
+## 3.2.9 - 2024-09-20
+
+- Fix an issue that ELEMENT including DATA_VALUE was created for WebTemplate input even if the ELEMENT already existed
+- Fix an issue that `ctx` value could not be null
+
+## 3.2.8 - 2024-05-23
+
+- Add support for GENERIC_ENTRY conversion
+
+## 3.2.7 - 2024-03-29
+
+- Fix `feeder_audit/originating_system_audit/time` handling in FLAT format input
+- Fix Null Pointer Exception when a multiple-occurrence Locatable has a null name
 
 ## 3.2.6 - 2024-02-12
 
