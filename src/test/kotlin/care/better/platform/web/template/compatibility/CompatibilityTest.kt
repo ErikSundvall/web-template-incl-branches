@@ -34,13 +34,12 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import net.javacrumbs.jsonunit.assertj.assertThatJson
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehr.rm.composition.Composition
-import org.skyscreamer.jsonassert.JSONAssert
-import org.skyscreamer.jsonassert.JSONCompareMode
 import java.io.File
 import java.io.StringWriter
 import java.nio.file.Files
@@ -264,11 +263,7 @@ class CompatibilityTest : AbstractWebTemplateTest() {
         val actualJson = WebTemplateObjectMapper.getWriter(pretty = true).writeValueAsString(value)
         val tempFileOnFailure = Files.createTempFile(tempDirectory, File(referenceJsonFile).name, ".json")
         try {
-            JSONAssert.assertEquals(
-                    "$description\nExpected: contents of $referenceJsonFile\nActual: contents of $tempFileOnFailure\n",
-                    getJson(referenceJsonFile),
-                    actualJson,
-                    JSONCompareMode.LENIENT)
+            assertThatJson(getJson(referenceJsonFile)).isEqualTo(actualJson)
             tempFileOnFailure.deleteIfExists()
         } catch (e: AssertionError) {
             tempFileOnFailure.writeText(actualJson)
