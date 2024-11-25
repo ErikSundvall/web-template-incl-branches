@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 4.0.5 -
+## 4.0.5 - 2024-11-25
 
 - Add support for composition filtering by path
 
