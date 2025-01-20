@@ -589,8 +589,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
         } else {
             when {
                 value.isObject && (value.has("|raw") || value.has("raw")) -> { //DO NOT POST-PROCESS RAW values
-                    ConversionObjectMapper.convertRawJsonNode(
-                        conversionContext,
+                    conversionContext.rawDataMapper.convertRawJsonNode(conversionContext,
                         webTemplateNode.amNode,
                         value,
                         webTemplatePath.copy(webTemplateNode.amNode))
@@ -718,7 +717,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
         } else {
             when {
                 value.isObject && (value.has("|raw") || value.has("raw")) -> {
-                    ConversionObjectMapper.convertRawJsonNode(conversionContext, amNode, value, webTemplatePath.copy(amNode))
+                    conversionContext.rawDataMapper.convertRawJsonNode(conversionContext, amNode, value, webTemplatePath.copy(amNode))
                 }
                 RmUtils.isRmClass(amNode.getTypeOnParent().type) -> {
                     RmObjectLeafNodeFactoryDelegator.delegateOrThrow(amNode.rmType, conversionContext, amNode, value, webTemplatePath.copy(amNode), parents)

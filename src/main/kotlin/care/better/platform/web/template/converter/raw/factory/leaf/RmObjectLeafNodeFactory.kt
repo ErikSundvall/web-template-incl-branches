@@ -22,6 +22,7 @@ import care.better.platform.utils.RmUtils
 import care.better.platform.web.template.builder.model.input.WebTemplateInput
 import care.better.platform.web.template.converter.WebTemplatePath
 import care.better.platform.web.template.converter.exceptions.ConversionException
+import care.better.platform.web.template.converter.mapper.*
 import care.better.platform.web.template.converter.mapper.ConversionObjectMapper
 import care.better.platform.web.template.converter.mapper.getFieldNames
 import care.better.platform.web.template.converter.mapper.isEmptyInDepth
@@ -315,7 +316,7 @@ internal abstract class RmObjectLeafNodeFactory<T : RmObject> {
                 PostProcessDelegator.delegate(conversionContext, amNode, collection, webTemplatePath.copy(amNode))
                 collection
             }
-            jsonNode.isObject && jsonNode.has("|raw") -> ConversionObjectMapper.convertRawJsonNode(
+            jsonNode.isObject && jsonNode.has("|raw") -> conversionContext.rawDataMapper.convertRawJsonNode(
                 conversionContext,
                 amNode,
                 jsonNode,

@@ -208,5 +208,4 @@ object WebTemplateHelperUtils {
     @JvmStatic
     fun createPartyIdentified(name: String, id: String?, idScheme: String?, idNamespace: String?): PartyIdentified =
         PartyIdentified.createPartyIdentified(name, id, idScheme, idNamespace)
-
 }
