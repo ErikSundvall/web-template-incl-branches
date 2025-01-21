@@ -108,7 +108,9 @@ class FlatToStructuredConverter(private val objectMapper: ObjectMapper) : (Map<S
             when {
                 entry.key == ctx -> convertCtx(entry.value, currentNode)
                 entry.value.all { it.child == null } -> {
-                    if (entry.value.size == 1 && (entry.key.startsWith("|") || entry.key.isBlank())) {
+                    if (entry.value.size == 1 && entry.key == "|raw") {
+                        currentNode.replace(entry.key, getWithoutRaw(entry.value.iterator().next().value))
+                    } else if (entry.value.size == 1 && (entry.key.startsWith("|") || entry.key.isBlank())) {
                         currentNode.replace(entry.key, get(entry.value.iterator().next().value))
                     } else {
                         currentNode.putArray(entry.key).apply {
@@ -226,6 +228,12 @@ class FlatToStructuredConverter(private val objectMapper: ObjectMapper) : (Map<S
             }
     }
 
+    private fun getWithoutRaw(value: Any?): JsonNode =
+        when (value) {
+            is RmObject -> objectMapper.convertValue(value, JsonNode::class.java)
+            else -> get(value)
+        }
+
     private fun get(value: Any?): JsonNode =
         when (value) {
             null -> ConversionObjectMapper.nullNode()
@@ -256,7 +264,7 @@ class FlatToStructuredConverter(private val objectMapper: ObjectMapper) : (Map<S
             is OpenEhrOffsetTime -> TextNode.valueOf(convertOpenEhrOffsetTime(value))
             is OpenEhrLocalTime -> TextNode.valueOf(convertOpenEhrLocalTime(value))
             is Period -> TextNode.valueOf(ISOPeriodFormat.standard().print(value))
-            is RmObject -> objectMapper.convertValue(value, JsonNode::class.java)
+            is RmObject -> ConversionObjectMapper.createObjectNode().apply { this.replace("|raw", ConversionObjectMapper.valueToTree(value)) }
             else -> throw ConversionException("${value::class.java.name} is not supported!")
         }
 
