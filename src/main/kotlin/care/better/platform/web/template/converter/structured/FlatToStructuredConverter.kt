@@ -48,9 +48,8 @@ class FlatToStructuredConverter(private val objectMapper: ObjectMapper) : (Map<S
         private val segmentSeparatorPattern = Pattern.compile("/", Pattern.LITERAL)
         private const val ctx = "ctx"
 
-
         @JvmStatic
-        fun getInstance(objectMapper: ObjectMapper): FlatToStructuredConverter = FlatToStructuredConverter(objectMapper)
+        fun getInstance(objectMapper: ObjectMapper = ConversionObjectMapper): FlatToStructuredConverter = FlatToStructuredConverter(objectMapper)
     }
 
     /**
