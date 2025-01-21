@@ -47,6 +47,7 @@ class FlatToStructuredConverter(private val objectMapper: ObjectMapper) : (Map<S
     companion object {
         private val segmentSeparatorPattern = Pattern.compile("/", Pattern.LITERAL)
         private const val ctx = "ctx"
+        private const val raw = "raw"
 
         private val INSTANCE: FlatToStructuredConverter = FlatToStructuredConverter(ConversionObjectMapper)
 
@@ -108,6 +109,7 @@ class FlatToStructuredConverter(private val objectMapper: ObjectMapper) : (Map<S
                 entry.key == ctx -> convertCtx(entry.value, currentNode)
                 entry.value.all { it.child == null } -> {
                     if (entry.value.size == 1 && (entry.key.startsWith("|") || entry.key.isBlank())) {
+                        val value = get(entry.value.iterator().next().value)
                         currentNode.replace(entry.key, get(entry.value.iterator().next().value))
                     } else {
                         currentNode.putArray(entry.key).apply {
@@ -255,7 +257,7 @@ class FlatToStructuredConverter(private val objectMapper: ObjectMapper) : (Map<S
             is OpenEhrOffsetTime -> TextNode.valueOf(convertOpenEhrOffsetTime(value))
             is OpenEhrLocalTime -> TextNode.valueOf(convertOpenEhrLocalTime(value))
             is Period -> TextNode.valueOf(ISOPeriodFormat.standard().print(value))
-            is RmObject -> ConversionObjectMapper.createObjectNode().apply { this.replace("|raw", ConversionObjectMapper.valueToTree(value)) }
+            is RmObject -> objectMapper.convertValue(value, JsonNode::class.java)
             else -> throw ConversionException("${value::class.java.name} is not supported!")
         }
 
