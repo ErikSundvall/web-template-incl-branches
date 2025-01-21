@@ -109,7 +109,6 @@ class FlatToStructuredConverter(private val objectMapper: ObjectMapper) : (Map<S
                 entry.key == ctx -> convertCtx(entry.value, currentNode)
                 entry.value.all { it.child == null } -> {
                     if (entry.value.size == 1 && (entry.key.startsWith("|") || entry.key.isBlank())) {
-                        val value = get(entry.value.iterator().next().value)
                         currentNode.replace(entry.key, get(entry.value.iterator().next().value))
                     } else {
                         currentNode.putArray(entry.key).apply {

@@ -42,7 +42,7 @@ class DataValueTest : AbstractWebTemplateTest() {
         val context = ConversionContext.create().withLanguage("sl").withTerritory("SI").withComposerName("composer").build()
         val composition: Composition? = webTemplate.convertFromFlatToRaw(
             ImmutableMap.builder<String, Any>()
-                .put("vitals/vitals/body_temperature/any_event/temperature", DvQuantity(39.1, "°C"))
+                .put("vitals/vitals/body_temperature/any_event/temperature|raw", DvQuantity(39.1, "°C"))
                 .put("vitals/vitals/haemoglobin_a1c/any_event/test_status|terminology", "local")
                 .put("vitals/vitals/haemoglobin_a1c/any_event/test_status|code", "at0037")
                 .build(),
