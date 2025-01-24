@@ -49,7 +49,14 @@ class FlatToStructuredConverter(private val objectMapper: ObjectMapper) : (Map<S
         private const val ctx = "ctx"
 
         @JvmStatic
-        fun getInstance(objectMapper: ObjectMapper = ConversionObjectMapper): FlatToStructuredConverter = FlatToStructuredConverter(objectMapper)
+        fun getInstance(objectMapper: ObjectMapper): FlatToStructuredConverter {
+            return FlatToStructuredConverter(objectMapper)
+        }
+
+        @JvmStatic
+        fun getInstance(): FlatToStructuredConverter {
+            return getInstance(ConversionObjectMapper)
+        }
     }
 
     /**
