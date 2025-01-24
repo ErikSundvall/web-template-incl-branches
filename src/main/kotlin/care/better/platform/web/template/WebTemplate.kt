@@ -130,7 +130,7 @@ open class WebTemplate internal constructor(
      * @return RM object in RAW format
      */
     open fun <T : RmObject> convertFromFlatToRaw(flatRmObject: Map<String, Any?>, conversionContext: ConversionContext): T? =
-        convertFromStructuredToRaw(FlatToStructuredConverter.getInstance().invoke(flatRmObject, conversionContext) as ObjectNode, conversionContext)
+        convertFromStructuredToRaw(FlatToStructuredConverter.getInstance(conversionContext.rawDataMapper).invoke(flatRmObject, conversionContext) as ObjectNode, conversionContext)
 
     /**
      * Converts the RM object in STRUCTURED format to the RM object in RAW format.
