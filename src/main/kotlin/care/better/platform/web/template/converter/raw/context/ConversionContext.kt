@@ -19,11 +19,13 @@ import care.better.openehr.rm.RmObject
 import care.better.platform.web.template.WebTemplate
 import care.better.platform.web.template.converter.constant.WebTemplateConstants.PARTICIPATION_MODE_GROUP_NAME
 import care.better.platform.web.template.converter.exceptions.ConversionException
+import care.better.platform.web.template.converter.mapper.ConversionObjectMapper
 import care.better.platform.web.template.converter.raw.extensions.createFromOpenEhrTerminology
 import care.better.platform.web.template.converter.raw.extensions.createPartyIdentified
 import care.better.platform.web.template.converter.value.LocaleBasedValueConverter
 import care.better.platform.web.template.converter.value.SimpleValueConverter
 import care.better.platform.web.template.converter.value.ValueConverter
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang3.StringUtils
 import org.openehr.base.basetypes.ObjectRef
 import org.openehr.rm.common.*
@@ -90,7 +92,8 @@ class ConversionContext private constructor(
         val incompleteMode: Boolean,
         val strictMode: Boolean,
         val aqlPath: String?,
-        val webTemplatePath: String?) {
+        val webTemplatePath: String?,
+        val rawDataMapper: ObjectMapper) {
 
 
     companion object {
@@ -246,7 +249,8 @@ class ConversionContext private constructor(
             strictMode,
             aqlPath,
             webTemplatePath,
-            webTemplate)
+            webTemplate,
+            rawDataMapper)
 
     /**
      * Creates a new [Builder] from this [ConversionContext].
@@ -306,7 +310,8 @@ class ConversionContext private constructor(
             strictMode,
             aqlPath,
             webTemplatePath,
-            webTemplate)
+            webTemplate,
+            rawDataMapper)
 
 
     /**
@@ -364,7 +369,8 @@ class ConversionContext private constructor(
             private var strictMode: Boolean = false,
             private var aqlPath: String? = null,
             private var webTemplatePath: String? = null,
-            private var webTemplate: WebTemplate? = null) {
+            private var webTemplate: WebTemplate? = null,
+            private var rawDataMapper: ObjectMapper = ConversionObjectMapper) {
 
         fun getLocale() = locale
         fun getLanguage() = language
@@ -415,6 +421,7 @@ class ConversionContext private constructor(
         fun isForStrictMode() = strictMode
         fun getAqlPath() = aqlPath
         fun getWebTemplatePath() = webTemplatePath
+        fun getRawDataMapper() = rawDataMapper
 
         fun withLocale(locale: Locale?) = apply { this.locale = locale }
         fun withLanguage(language: String?) = apply {
@@ -528,6 +535,7 @@ class ConversionContext private constructor(
         fun forAqlPath(aqlPath: String?) = apply { this.aqlPath = aqlPath }
         fun forWebTemplatePath(webTemplatePath: String?) = apply { this.webTemplatePath = webTemplatePath }
         fun withNoLocale() = apply { this.locale = null }
+        fun withRawDataMapper(objectMapper: ObjectMapper) = apply { this.rawDataMapper = objectMapper }
 
         /**
          * Creates and returns a new instance of [ConversionContext].
@@ -584,7 +592,8 @@ class ConversionContext private constructor(
                 incompleteMode,
                 strictMode,
                 aqlPath,
-                webTemplatePath).also { it.webTemplate = webTemplate }
+                webTemplatePath,
+                rawDataMapper).also { it.webTemplate = webTemplate }
 
         /**
          * Retrieves or creates the [ValueConverter].

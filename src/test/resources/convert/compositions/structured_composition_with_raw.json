@@ -1,0 +1,27 @@
+{
+  "ctx": {
+    "language": "de",
+    "territory": "DE",
+    "template_id": "AtemfrequenzTemplate",
+    "health_care_facility": {
+      "name": "194"
+    }
+  },
+  "report": {
+    "respirations_en": [
+      {
+        "any_event": [
+          {
+            "rate_en": {
+              "raw": {
+                "_type": "DV_QUANTITY",
+                "magnitude": 20,
+                "unit": "min"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

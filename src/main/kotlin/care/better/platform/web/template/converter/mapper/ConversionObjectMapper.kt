@@ -27,6 +27,7 @@ import care.better.platform.web.template.converter.raw.postprocessor.PostProcess
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.NullNode
@@ -46,34 +47,6 @@ internal object ConversionObjectMapper : BetterObjectMapper() {
         this.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         this.setDefaultPropertyInclusion(JsonInclude.Value.construct(JsonInclude.Include.NON_EMPTY, JsonInclude.Include.USE_DEFAULTS))
     }
-
-    /**
-     * Converts [JsonNode] with only "|raw" entry ([JsonNode] in RAW format) to the RM object in RAW format.
-     *
-     * @param conversionContext [ConversionContext]
-     * @param amNode [AmNode]
-     * @param jsonNode [JsonNode]
-     * @param webTemplatePath [WebTemplatePath]
-     * @return RM object in RAW format
-     */
-    fun convertRawJsonNode(conversionContext: ConversionContext, amNode: AmNode, jsonNode: JsonNode, webTemplatePath: WebTemplatePath): Any? =
-        with(ConversionObjectMapper.readValue(extractRawNodeString(jsonNode), object : TypeReference<RmObject>() {})) {
-            PostProcessDelegator.delegate(
-                conversionContext,
-                amNode,
-                this,
-                webTemplatePath)
-            if (this.isEmpty(conversionContext.strictMode)) null else this
-        }
-
-    private fun extractRawNodeString(jsonNode: JsonNode): String =
-        if (jsonNode.has("|raw")) {
-            val rawNode = jsonNode["|raw"]
-            if (rawNode.isTextual) rawNode.asText() else rawNode.toString()
-        } else {
-            val rawNode = jsonNode["raw"]
-            if (rawNode.isTextual) rawNode.asText() else rawNode.toString()
-        }
 }
 
 /**
@@ -387,4 +360,33 @@ private fun ArrayNode.mergeToSingletonReversed(): JsonNode {
         objectNode.getFieldNames().size == 1 && objectNode.has("") -> objectNode.get("")
         else -> objectNode
     }
+}
+
+private fun extractRawNodeString(jsonNode: JsonNode): String =
+    if (jsonNode.has("|raw")) {
+        val rawNode = jsonNode["|raw"]
+        if (rawNode.isTextual) rawNode.asText() else rawNode.toString()
+    } else {
+        val rawNode = jsonNode["raw"]
+        if (rawNode.isTextual) rawNode.asText() else rawNode.toString()
+    }
+
+/**
+ * Converts [JsonNode] with only "|raw" entry ([JsonNode] in RAW format) to the RM object in RAW format.
+ *
+ * @param conversionContext [ConversionContext]
+ * @param amNode [AmNode]
+ * @param jsonNode [JsonNode]
+ * @param webTemplatePath [WebTemplatePath]
+ * @return RM object in RAW format
+ */
+internal fun ObjectMapper.convertRawJsonNode(
+    conversionContext: ConversionContext,
+    amNode: AmNode,
+    jsonNode: JsonNode,
+    webTemplatePath: WebTemplatePath
+): Any? {
+    val rmObject = this.readValue(extractRawNodeString(jsonNode), object : TypeReference<RmObject>() {})
+    PostProcessDelegator.delegate(conversionContext, amNode, rmObject, webTemplatePath)
+    return if (rmObject.isEmpty(conversionContext.strictMode)) null else rmObject
 }

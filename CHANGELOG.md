@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 4.0.5 - 2024-11-25
+
+- Add support for composition filtering by path
+
 ## 4.0.4 - 2024-10-11
 
 - Update dependency of ehr-common to 4.0.4

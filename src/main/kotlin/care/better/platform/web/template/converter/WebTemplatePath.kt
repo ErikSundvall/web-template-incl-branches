@@ -153,6 +153,7 @@ data class WebTemplatePathSegment(val key: String, val index: Int?, val attribut
     companion object {
         private val attributeSeparatorPattern = Pattern.compile("|", Pattern.LITERAL)
         private val indexSeparatorPattern = Pattern.compile(":", Pattern.LITERAL)
+        private val segmentSeparatorPattern = Pattern.compile("/", Pattern.LITERAL)
 
 
         /**
@@ -182,6 +183,11 @@ data class WebTemplatePathSegment(val key: String, val index: Int?, val attribut
             } catch (ex: Exception) {
                 throw PathFormatException(webTemplatePathSegment)
             }
+        }
+
+        @JvmStatic
+        fun fromPathString(webTemplatePath: String): List<WebTemplatePathSegment> {
+            return webTemplatePath.split(segmentSeparatorPattern).map { fromString(it) }
         }
 
         private fun <E> List<E>.padWithNulls(limit: Int): List<E?> {

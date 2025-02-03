@@ -100,7 +100,7 @@ class FromRawConversion private constructor(
          */
         @JvmOverloads
         @JvmStatic
-        fun crateForWebTemplatePath(webTemplatePath: String, locale: Locale, objectMapper: ObjectMapper = ConversionObjectMapper) =
+        fun createForWebTemplatePath(webTemplatePath: String, locale: Locale, objectMapper: ObjectMapper = ConversionObjectMapper) =
             FromRawConversion(webTemplatePath = webTemplatePath, valueConverter = LocaleBasedValueConverter(locale), objectMapper = objectMapper)
     }
 }

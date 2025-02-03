@@ -70,7 +70,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
     private val genericFieldFeederAudit = GenericFieldExtractor.invoke(structuredRmObject)
     private val conversionContext: ConversionContext = ConversionContextExtractor.invoke(structuredRmObject, conversionContext)
 
-    private val mandatoryFieldsHandler: MutableMap<WebTemplateNode, () -> Unit> = mutableMapOf()
+    private val mandatoryFieldsHandler: MutableMap<Pair<WebTemplatePath, WebTemplateNode>, () -> Unit> = mutableMapOf()
 
     /**
      * Holder for singleton objects that were created in the chain with multiple nodes (only possibilities are ITEM_STRUCTURE and HISTORY)
@@ -227,7 +227,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
             val chainConversionResult: MutableList<ChainConversionResult> = mutableListOf()
 
             webTemplateNode.children.forEach { child ->
-                val handler = mandatoryFieldsHandler[child]
+                val handler = mandatoryFieldsHandler[WebTemplatePath(child.jsonId, webTemplatePath, 0) to child]
                 if (handler != null) {
                     handler.invoke()
                 } else {
@@ -589,8 +589,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
         } else {
             when {
                 value.isObject && (value.has("|raw") || value.has("raw")) -> { //DO NOT POST-PROCESS RAW values
-                    ConversionObjectMapper.convertRawJsonNode(
-                        conversionContext,
+                    conversionContext.rawDataMapper.convertRawJsonNode(conversionContext,
                         webTemplateNode.amNode,
                         value,
                         webTemplatePath.copy(webTemplateNode.amNode))
@@ -609,7 +608,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
                         if (rmObject != null) {
                             val webTemplateInput = getMandatoryFields(webTemplateNode)
                             if (webTemplateInput != null) {
-                                mandatoryFieldsHandler[webTemplateNode] = {
+                                mandatoryFieldsHandler[webTemplatePath to webTemplateNode] = {
                                     RmObjectLeafNodeFactoryDelegator.delegateWebTemplateInputHandling(
                                         webTemplateNode.rmType,
                                         conversionContext,
@@ -718,7 +717,7 @@ class StructuredToRawConverter(conversionContext: ConversionContext, private val
         } else {
             when {
                 value.isObject && (value.has("|raw") || value.has("raw")) -> {
-                    ConversionObjectMapper.convertRawJsonNode(conversionContext, amNode, value, webTemplatePath.copy(amNode))
+                    conversionContext.rawDataMapper.convertRawJsonNode(conversionContext, amNode, value, webTemplatePath.copy(amNode))
                 }
                 RmUtils.isRmClass(amNode.getTypeOnParent().type) -> {
                     RmObjectLeafNodeFactoryDelegator.delegateOrThrow(amNode.rmType, conversionContext, amNode, value, webTemplatePath.copy(amNode), parents)
