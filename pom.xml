@@ -411,8 +411,8 @@
                     <configuration>
                         <formats>json,html</formats>
                         <outputDirectory>${dependency.check.report.dir}</outputDirectory>
-                        <nvdApiKey>332efca4-5cc1-49ee-8145-426bbd5f33a9</nvdApiKey>
-                        <nvdDatafeedUrl>http://repo-vm.better.care/nvd/cache/nvdcve-{0}.json.gz</nvdDatafeedUrl>
+                        <nvdApiKey>${dependency.check.nvdApiKey}</nvdApiKey>
+                        <nvdDatafeedUrl>${dependency.check.nvdDatafeedUrl}</nvdDatafeedUrl>
                         <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                     </configuration>
                 </plugin>
@@ -571,7 +571,7 @@
 
     <developers>
         <developer>
-            <name>Bostjan Lah</name>
+            <name>Boštjan Lah</name>
             <email>bostjan.lah@better.care</email>
             <organization>Better Ltd</organization>
             <organizationUrl>https://www.better.care/</organizationUrl>
@@ -594,13 +594,6 @@
         <developer>
             <name>Dušan Marković</name>
             <email>dusan.markovic@better.care</email>
-            <organization>Better Ltd</organization>
-            <organizationUrl>https://www.better.care/</organizationUrl>
-        </developer>
-
-        <developer>
-            <name>Matic Ribič</name>
-            <email>matic.ribic@better.care</email>
             <organization>Better Ltd</organization>
             <organizationUrl>https://www.better.care/</organizationUrl>
         </developer>
