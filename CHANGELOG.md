@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## 4.0.6 - 2025-02-06
+## 4.0.7 - 2025-02-06
 
 - Fix `_raw` RM json conversion
 - Fix an issue of defaults not being applied in some edge cases
+
+## 4.0.6 - 2025-02-06
+
+- Release was not published
 
 ## 4.0.5 - 2024-11-25
 
