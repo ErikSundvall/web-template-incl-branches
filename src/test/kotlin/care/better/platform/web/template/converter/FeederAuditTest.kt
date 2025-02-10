@@ -18,14 +18,15 @@ package care.better.platform.web.template.converter
 import care.better.platform.path.NameAndNodeMatchingPathValueExtractor
 import care.better.platform.web.template.WebTemplate
 import care.better.platform.web.template.abstraction.AbstractWebTemplateTest
+import care.better.platform.web.template.builder.WebTemplateBuilder
+import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
-import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
-import care.better.platform.web.template.builder.WebTemplateBuilder
+import jakarta.xml.bind.JAXBException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.Test
@@ -39,9 +40,7 @@ import org.openehr.rm.datastructures.Element
 import org.openehr.rm.datastructures.ItemTree
 import org.openehr.rm.datatypes.DvMultimedia
 import org.openehr.rm.datatypes.DvParsable
-import java.awt.color.CMMException
 import java.io.IOException
-import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

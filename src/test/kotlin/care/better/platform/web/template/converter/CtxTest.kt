@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.junit.jupiter.api.Test
 import org.openehr.rm.composition.Composition
 import java.io.IOException
-import javax.xml.bind.JAXBException
+import jakarta.xml.bind.JAXBException
 
 class CtxTest : AbstractWebTemplateTest() {
     @Test

@@ -19,6 +19,9 @@ import care.better.platform.path.NameAndNodeMatchingPathValueExtractor
 import care.better.platform.template.AmNode
 import care.better.platform.web.template.WebTemplate
 import care.better.platform.web.template.abstraction.AbstractWebTemplateTest
+import care.better.platform.web.template.builder.WebTemplateBuilder
+import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
+import care.better.platform.web.template.builder.model.WebTemplateNode
 import care.better.platform.web.template.converter.flat.context.FlatMappingContext
 import care.better.platform.web.template.converter.flat.context.FormattedFlatMappingContext
 import care.better.platform.web.template.converter.flat.mapper.ElementToFlatMapper
@@ -29,9 +32,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
-import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
-import care.better.platform.web.template.builder.WebTemplateBuilder
-import care.better.platform.web.template.builder.model.WebTemplateNode
+import jakarta.xml.bind.JAXBException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.Test
@@ -45,7 +46,6 @@ import org.openehr.rm.datatypes.DvCodedText
 import org.openehr.rm.datatypes.DvParsable
 import org.openehr.rm.datatypes.DvText
 import java.io.IOException
-import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

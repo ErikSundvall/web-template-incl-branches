@@ -17,19 +17,19 @@ package care.better.platform.web.template.converter
 
 import care.better.platform.web.template.WebTemplate
 import care.better.platform.web.template.abstraction.AbstractWebTemplateTest
+import care.better.platform.web.template.builder.WebTemplateBuilder
+import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
+import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.collect.ImmutableList
-import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
-import care.better.platform.web.template.builder.WebTemplateBuilder
-import care.better.platform.web.template.converter.exceptions.ConversionException
+import jakarta.xml.bind.JAXBException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.openehr.rm.composition.Composition
 import java.io.IOException
-import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

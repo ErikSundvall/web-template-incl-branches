@@ -20,6 +20,7 @@ import care.better.platform.web.template.abstraction.AbstractWebTemplateTest
 import care.better.platform.web.template.converter.exceptions.ConversionException
 import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.google.common.collect.ImmutableMap
+import jakarta.xml.bind.JAXBException
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.openehr.rm.composition.Composition
@@ -28,7 +29,6 @@ import org.openehr.rm.datastructures.Element
 import org.openehr.rm.datastructures.ItemTree
 import org.openehr.rm.datatypes.*
 import java.io.IOException
-import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst

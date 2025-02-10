@@ -27,7 +27,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.IOException
-import javax.xml.bind.JAXBException
+import jakarta.xml.bind.JAXBException
 
 /**
  * @author Bian Klančnik

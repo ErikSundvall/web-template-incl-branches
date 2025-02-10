@@ -18,13 +18,14 @@ package care.better.platform.web.template.converter
 import care.better.platform.path.NameAndNodeMatchingPathValueExtractor
 import care.better.platform.web.template.WebTemplate
 import care.better.platform.web.template.abstraction.AbstractWebTemplateTest
-import care.better.platform.web.template.converter.raw.context.ConversionContext
-import com.google.common.collect.ImmutableMap
-import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
 import care.better.platform.web.template.builder.WebTemplateBuilder
+import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
 import care.better.platform.web.template.converter.exceptions.ConversionException
+import care.better.platform.web.template.converter.raw.context.ConversionContext
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.google.common.collect.ImmutableMap
+import jakarta.xml.bind.JAXBException
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.openehr.rm.common.Participation
@@ -32,7 +33,6 @@ import org.openehr.rm.composition.Composition
 import org.openehr.rm.composition.Observation
 import org.openehr.rm.composition.Section
 import java.io.IOException
-import javax.xml.bind.JAXBException
 
 /**
  * @author Primoz Delopst
