@@ -40,6 +40,11 @@ import org.openehr.rm.datatypes.DvText
  */
 internal abstract class AbstractRawToFlatConverter<T> {
 
+    companion object {
+        private val dvTextRmType = RmUtils.getRmTypeName(DvText::class.java)
+        private val dvCodedTextRmType = RmUtils.getRmTypeName(DvCodedText::class.java)
+    }
+
     private val exported = Sets.newIdentityHashSet<Any>()
 
     /**
@@ -227,10 +232,31 @@ internal abstract class AbstractRawToFlatConverter<T> {
     private fun rmObjectMatches(amNode: AmNode, rmObject: RmObject, webTemplateNode: WebTemplateNode?): Boolean =
         try {
             val rmClass = RmUtils.getRmClass(amNode.rmType)
-            rmClass.isInstance(rmObject) || isCodedTextForOtherAttribute(rmObject, rmClass, webTemplateNode)
+            val rmType = RmUtils.getRmTypeName(rmObject::class.java)
+
+            if (!canOmitDvText(rmType, amNode)) {
+                rmClass.isInstance(rmObject) || isCodedTextForOtherAttribute(rmObject, rmClass, webTemplateNode)
+            } else {
+                false
+            }
         } catch (ignored: RmClassCastException) {
             false
         }
+
+    /**
+     * Checks if RM object is of type DV_CODED_TEXT and amNode is of type DV_TEXT
+     * and amNode's parent has children of both DV_CODED_TEXT and DV_TEXT types.
+     *
+     * @param rmType Type of [RmObject] in RAW format
+     * @param amNode [AmNode]
+     * @return [Boolean] indicating that [AmNode] type of DV_TEXT can be omitted when this condition is true
+     */
+    private fun canOmitDvText(rmType: String, amNode: AmNode): Boolean =
+        rmType == dvCodedTextRmType &&
+                amNode.rmType == dvTextRmType &&
+                amNode.parent?.attributes?.get("value")?.children?.let { children ->
+                    children.any { it.rmType == dvCodedTextRmType } && children.any { it.rmType == dvTextRmType }
+                } == true
 
     /**
      * Checks if the RM object in RAW format was created for [DvCodedText] with "|other" attribute.
