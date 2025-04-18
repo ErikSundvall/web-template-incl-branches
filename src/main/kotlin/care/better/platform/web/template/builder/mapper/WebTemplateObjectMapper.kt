@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectWriter
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.joda.JodaModule
-import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 /**
  * @author Primoz Delopst
@@ -32,7 +32,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 internal object WebTemplateObjectMapper : ObjectMapper() {
     init {
         this.registerModule(JodaModule())
-        this.registerModule(KotlinModule())
+        this.registerKotlinModule()
         this.registerModule(OpenEhrTimeModule())
         this.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
     }
