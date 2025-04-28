@@ -15,13 +15,13 @@
 
 package care.better.platform.web.template.converter
 
+import care.better.platform.json.jackson.better.BetterObjectMapper
 import care.better.platform.web.template.WebTemplate
 import care.better.platform.web.template.abstraction.AbstractWebTemplateTest
 import care.better.platform.web.template.builder.WebTemplateBuilder
 import care.better.platform.web.template.builder.context.WebTemplateBuilderContext
 import care.better.platform.web.template.converter.raw.context.ConversionContext
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.collect.ImmutableList
 import org.assertj.core.api.Assertions.assertThat
@@ -33,6 +33,7 @@ import javax.xml.bind.JAXBException
 
 /**
  * @author Igor Popovic
+ * @since 4.0.8
  */
 class DuplicatedTextInFlatFormatTest : AbstractWebTemplateTest() {
 
@@ -48,13 +49,30 @@ class DuplicatedTextInFlatFormatTest : AbstractWebTemplateTest() {
         val flatMap = webTemplate.convertFromRawToFlat(structuredComposition)
 
         assertThat(flatMap).contains(
-                entry("coded_text_1/context/dv_coded_text/coded_text_value|code", "at0003"),
-                entry("coded_text_1/context/dv_coded_text/coded_text_value|value", "Yes"),
-                entry("coded_text_1/context/dv_coded_text/coded_text_value|terminology", "local"))
+            entry("coded_text_1/context/dv_coded_text/coded_text_value|code", "at0003"),
+            entry("coded_text_1/context/dv_coded_text/coded_text_value|value", "Yes"),
+            entry("coded_text_1/context/dv_coded_text/coded_text_value|terminology", "local"))
 
         assertThat(flatMap.keys).doesNotContain(
-                "coded_text_1/context/dv_coded_text/text_value|code",
-                "coded_text_1/context/dv_coded_text/text_value|value",
-                "coded_text_1/context/dv_coded_text/text_value|terminology")
+            "coded_text_1/context/dv_coded_text/text_value|code",
+            "coded_text_1/context/dv_coded_text/text_value|value",
+            "coded_text_1/context/dv_coded_text/text_value|terminology")
+    }
+
+    @Test
+    fun testDvTextIsPresent() {
+        val betterObjectMapper = BetterObjectMapper().apply {
+            enable(JsonParser.Feature.ALLOW_COMMENTS)
+        }
+
+        val builderContext = WebTemplateBuilderContext("en", ImmutableList.of("en", "sl"))
+        val webTemplate: WebTemplate = WebTemplateBuilder.buildNonNull(getTemplate("/convert/templates/problem-list.opt"), builderContext)
+
+        val composition = betterObjectMapper.readValue(
+            AbstractWebTemplateTest::class.java.getResourceAsStream("/convert/compositions/problem_list.json"),
+            Composition::class.java)
+
+        val flatComposition = webTemplate.convertFromRawToFlat(composition, FromRawConversion.create())
+        assertThat(flatComposition).hasSize(3)
     }
 }
