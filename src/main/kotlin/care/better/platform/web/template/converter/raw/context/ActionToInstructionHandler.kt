@@ -70,7 +70,7 @@ interface ActionToInstructionHandler {
  *
  * @constructor Creates a new instance of [InCompositionActionToInstructionHandler]
  */
-open class InCompositionActionToInstructionHandler(
+open class InCompositionActionToInstructionHandler @JvmOverloads constructor(
     private val propertyMethods: ConcurrentMap<MethodKey, Function<Any, Any?>> = ConcurrentHashMap(),
     private val nameAndNodeMatchingPathValueExtractorCache: Cache<String, NameAndNodeMatchingPathValueExtractor> = CacheBuilder.newBuilder().maximumSize(5000L).build()) :
     ActionToInstructionHandler {
