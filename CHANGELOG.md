@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 4.1.2 - 2025-07-22
+
+- Fix empty `DV_CODED_TEXT` labels
+
 ## 4.1.1 - 2025-05-30
 
 - `NameAndNodeMatchingPathValueExtractor` cache optimization
