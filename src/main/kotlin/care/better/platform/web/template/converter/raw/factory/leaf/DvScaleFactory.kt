@@ -26,7 +26,6 @@ import org.openehr.am.aom.CDvScale
 import org.openehr.base.basetypes.TerminologyId
 import org.openehr.rm.datatypes.CodePhrase
 import org.openehr.rm.datatypes.DvCodedText
-import org.openehr.rm.datatypes.DvOrdinal
 import org.openehr.rm.datatypes.DvScale
 
 /**
