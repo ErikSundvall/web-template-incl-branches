@@ -131,9 +131,8 @@ internal object DvScaleFactory : DvOrderedFactory<DvScale>() {
     }
 
     private fun handlePreferredTermAttributeIfNoConstraint(jsonNode: JsonNode, rmObject: DvScale) {
-        getInitializedSymbol(rmObject).definingCode = CodePhrase().apply {
-            this.preferredTerm = jsonNode.asText()
-        }
+        val symbol = getInitializedSymbol(rmObject)
+        symbol.definingCode?.preferredTerm = jsonNode.asText()
     }
 
     private fun handleTerminologyIdAttributeIfNoConstraint(jsonNode: JsonNode, rmObject: DvScale) {
@@ -143,9 +142,9 @@ internal object DvScaleFactory : DvOrderedFactory<DvScale>() {
     }
 
     private fun handleCodeAttributeIfNoConstraint(jsonNode: JsonNode, rmObject: DvScale) {
-        getInitializedSymbol(rmObject).definingCode = CodePhrase().apply {
-            this.codeString = jsonNode.asText()
-        }
+        val symbol = getInitializedSymbol(rmObject)
+        symbol.definingCode?.codeString = jsonNode.asText()
+
     }
 
     private fun handleScaleAttributeIfNoConstraint(jsonNode: JsonNode, rmObject: DvScale) {
