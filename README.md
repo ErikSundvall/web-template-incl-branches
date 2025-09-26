@@ -70,7 +70,7 @@ The library works with three main data formats:
 - **Converters**: Specialized converters for each format transformation with improved error handling
 - **Context**: Manages conversion settings like language, territory, and composer information
 
-## <a anchor="v4.0"></a>Major Changes from Github Master branch to 4.0
+## <a id="v4.0"></a>Major Changes from Github Master branch to 4.0
 
 This 4.0 branch represents a significant evolution from the master branch, featuring:
 
