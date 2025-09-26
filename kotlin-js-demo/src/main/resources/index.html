@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebTemplate Kotlin/JS Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        .output {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        
+        .error {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        .warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+        }
+        
+        .success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: none;
+        }
+        
+        .tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .tab-content {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            background-color: white;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebTemplate Kotlin/JS Demo</h1>
+    
+    <div class="container">
+        <h2>Healthcare Data Conversion Demo</h2>
+        <p>This demo shows how the WebTemplate library could work in JavaScript, converting between different data formats used in healthcare applications.</p>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('form')">Data Entry Form</div>
+        <div class="tab" onclick="showTab('json')">JSON Input</div>
+        <div class="tab" onclick="showTab('about')">About</div>
+    </div>
+
+    <div id="form-tab" class="tab-content">
+        <h3>Vital Signs Data Entry</h3>
+        <form id="vitalsForm">
+            <div class="form-group">
+                <label for="temperature">Body Temperature:</label>
+                <input type="number" id="temperature" step="0.1" min="30" max="45" placeholder="37.0">
+            </div>
+            
+            <div class="form-group">
+                <label for="tempUnit">Temperature Unit:</label>
+                <select id="tempUnit">
+                    <option value="°C">Celsius (°C)</option>
+                    <option value="°F">Fahrenheit (°F)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="setting">Clinical Setting:</label>
+                <select id="setting">
+                    <option value="emergency care">Emergency Care</option>
+                    <option value="other care">Other Care</option>
+                    <option value="home">Home Care</option>
+                    <option value="dental care">Dental Care</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="language">Language:</label>
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="sl">Slovenian</option>
+                    <option value="de">German</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="composerName">Healthcare Provider:</label>
+                <input type="text" id="composerName" placeholder="Dr. Smith" value="Dr. Smith">
+            </div>
+            
+            <button type="button" onclick="convertFormData()">Convert to Structured Format</button>
+            <button type="button" onclick="validateFormData()">Validate Data</button>
+            <button type="button" onclick="clearResults()">Clear Results</button>
+        </form>
+    </div>
+
+    <div id="json-tab" class="tab-content hidden">
+        <h3>Direct JSON Input</h3>
+        <div class="form-group">
+            <label for="jsonInput">Structured JSON Data:</label>
+            <textarea id="jsonInput" rows="10" style="width: 100%; font-family: monospace;">
+{
+  "vitals": {
+    "temperature": {
+      "magnitude": 37.5,
+      "unit": "°C"
+    }
+  },
+  "_context": {
+    "language": "en",
+    "setting": "emergency care",
+    "composer_name": "Dr. Johnson"
+  }
+}
+            </textarea>
+        </div>
+        <button type="button" onclick="convertJsonToFlat()">Convert to Flat Format</button>
+    </div>
+
+    <div id="about-tab" class="tab-content hidden">
+        <h3>About This Demo</h3>
+        <p>This demonstration shows how the WebTemplate library could be compiled from Kotlin to JavaScript for use in web browsers.</p>
+        
+        <h4>Key Features:</h4>
+        <ul>
+            <li><strong>Data Format Conversion:</strong> Convert between flat key-value pairs and structured JSON</li>
+            <li><strong>Healthcare Data Validation:</strong> Validate medical data against OpenEHR templates</li>
+            <li><strong>Browser Integration:</strong> Works directly in the browser without server calls</li>
+            <li><strong>Type Safety:</strong> Maintains Kotlin's type safety when compiled to JavaScript</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h3>Conversion Results</h3>
+        <div id="results" class="output">
+            Results will appear here after conversion...
+        </div>
+    </div>
+
+    <div class="container">
+        <h3>Validation Results</h3>
+        <div id="validation" class="output">
+            Validation results will appear here...
+        </div>
+    </div>
+
+    <script>
+        // Demo implementation simulating Kotlin/JS compiled output
+        class WebTemplateDemoJS {
+            constructor() {
+                this.templateId = "demo-vitals-v1";
+            }
+            
+            convertFromFlatToStructured(flatData, context = {}) {
+                const structured = {};
+                
+                Object.entries(flatData).forEach(([path, value]) => {
+                    if (path.startsWith('ctx/')) {
+                        if (!structured._context) structured._context = {};
+                        const key = path.substring(4);
+                        structured._context[key] = value;
+                    } else if (path.includes('|')) {
+                        const [basePath, attribute] = path.split('|');
+                        const pathParts = basePath.split('/');
+                        let current = structured;
+                        
+                        pathParts.forEach((part, index) => {
+                            if (part && index < pathParts.length - 1) {
+                                if (!current[part]) current[part] = {};
+                                current = current[part];
+                            }
+                        });
+                        
+                        const finalKey = pathParts[pathParts.length - 1];
+                        if (!current[finalKey]) current[finalKey] = {};
+                        
+                        current[finalKey][attribute] = attribute === 'magnitude' ? 
+                            parseFloat(value) || value : value;
+                    } else {
+                        const pathParts = path.split('/');
+                        let current = structured;
+                        
+                        pathParts.forEach((part, index) => {
+                            if (part) {
+                                if (index === pathParts.length - 1) {
+                                    current[part] = value;
+                                } else {
+                                    if (!current[part]) current[part] = {};
+                                    current = current[part];
+                                }
+                            }
+                        });
+                    }
+                });
+                
+                return JSON.stringify(structured, null, 2);
+            }
+            
+            validateFlatData(flatData) {
+                const errors = [];
+                const warnings = [];
+                
+                Object.entries(flatData).forEach(([path, value]) => {
+                    if (path.includes('temperature|magnitude')) {
+                        const temp = parseFloat(value);
+                        if (isNaN(temp)) {
+                            errors.push(`Temperature magnitude must be a number: ${path}`);
+                        } else if (temp < 30 || temp > 45) {
+                            warnings.push(`Temperature ${temp}°C seems unusual: ${path}`);
+                        }
+                    } else if (path.includes('temperature|unit')) {
+                        if (!['°C', '°F'].includes(value)) {
+                            errors.push(`Invalid temperature unit '${value}': ${path}`);
+                        }
+                    }
+                });
+                
+                return {
+                    valid: errors.length === 0,
+                    errors: errors,
+                    warnings: warnings
+                };
+            }
+        }
+        
+        const webTemplate = new WebTemplateDemoJS();
+        
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+        
+        function convertFormData() {
+            const formData = {
+                'vitals/temperature|magnitude': document.getElementById('temperature').value,
+                'vitals/temperature|unit': document.getElementById('tempUnit').value,
+                'ctx/setting': document.getElementById('setting').value,
+                'ctx/language': document.getElementById('language').value,
+                'ctx/composer_name': document.getElementById('composerName').value
+            };
+            
+            try {
+                const structured = webTemplate.convertFromFlatToStructured(formData);
+                displayResults(structured, 'success');
+            } catch (error) {
+                displayResults(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function validateFormData() {
+            const formData = {
+                'vitals/temperature|magnitude': document.getElementById('temperature').value,
+                'vitals/temperature|unit': document.getElementById('tempUnit').value,
+                'ctx/setting': document.getElementById('setting').value,
+                'ctx/language': document.getElementById('language').value,
+                'ctx/composer_name': document.getElementById('composerName').value
+            };
+            
+            const validation = webTemplate.validateFlatData(formData);
+            
+            let result = `Validation Result:\nValid: ${validation.valid}\n\n`;
+            
+            if (validation.errors.length > 0) {
+                result += `Errors:\n${validation.errors.map(e => `- ${e}`).join('\n')}\n\n`;
+            }
+            
+            if (validation.warnings.length > 0) {
+                result += `Warnings:\n${validation.warnings.map(w => `- ${w}`).join('\n')}`;
+            }
+            
+            if (validation.errors.length === 0 && validation.warnings.length === 0) {
+                result += "No validation issues found!";
+            }
+            
+            displayValidation(result, validation.valid ? 'success' : 'error');
+        }
+        
+        function convertJsonToFlat() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            
+            try {
+                const structured = JSON.parse(jsonInput);
+                const flat = {};
+                
+                const flatten = (obj, prefix = '') => {
+                    Object.entries(obj).forEach(([key, value]) => {
+                        const newKey = prefix ? `${prefix}/${key}` : key;
+                        
+                        if (key === '_context') {
+                            Object.entries(value).forEach(([ctxKey, ctxValue]) => {
+                                flat[`ctx/${ctxKey}`] = ctxValue;
+                            });
+                        } else if (typeof value === 'object' && value !== null) {
+                            if (value.magnitude !== undefined || value.unit !== undefined) {
+                                Object.entries(value).forEach(([attr, attrValue]) => {
+                                    flat[`${newKey}|${attr}`] = attrValue;
+                                });
+                            } else {
+                                flatten(value, newKey);
+                            }
+                        } else {
+                            flat[newKey] = value;
+                        }
+                    });
+                };
+                
+                flatten(structured);
+                
+                const flatFormatted = Object.entries(flat)
+                    .map(([key, value]) => `${key} = ${value}`)
+                    .join('\n');
+                
+                displayResults(`Flat Format:\n\n${flatFormatted}`, 'success');
+            } catch (error) {
+                displayResults(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function displayResults(content, type) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.textContent = content;
+            resultsDiv.className = `output ${type}`;
+        }
+        
+        function displayValidation(content, type) {
+            const validationDiv = document.getElementById('validation');
+            validationDiv.textContent = content;
+            validationDiv.className = `output ${type}`;
+        }
+        
+        function clearResults() {
+            document.getElementById('results').textContent = 'Results will appear here after conversion...';
+            document.getElementById('results').className = 'output';
+            document.getElementById('validation').textContent = 'Validation results will appear here...';
+            document.getElementById('validation').className = 'output';
+        }
+        
+        // Set default values
+        document.getElementById('temperature').value = '37.0';
+    </script>
+</body>
+</html>
