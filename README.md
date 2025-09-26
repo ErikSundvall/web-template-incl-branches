@@ -2,25 +2,16 @@
 
 A comprehensive Kotlin library for converting OpenEHR templates to web-compatible formats, enabling seamless integration of healthcare data standards in web applications.
 
-## Licence
-[![License](https://img.shields.io/badge/license-apache%202.0-60C060.svg)](https://choosealicense.com/licenses/apache-2.0/)
-
-## Release 
-[![Release Artifacts](https://maven-badges.herokuapp.com/maven-central/care.better.platform/web-template/badge.svg)](https://search.maven.org/artifact/care.better.platform/web-template)
-
-## CI/CD
-[![CI](https://circleci.com/gh/wagnerjfr/circleci-travisci-codecov-maven-github.svg?style=shield)](https://app.circleci.com/pipelines/github/better-care/web-template)
-
-## Test Coverage
-[![codecov](https://codecov.io/gh/better-care/web-template/branch/master/graph/badge.svg?token=XAL78TEMAF)](https://codecov.io/gh/better-care/web-template)
-
-## Major Changes from Master to 4.0
+* Licence [![License](https://img.shields.io/badge/license-apache%202.0-60C060.svg)](https://choosealicense.com/licenses/apache-2.0/)
+* Release [![Release Artifacts](https://maven-badges.herokuapp.com/maven-central/care.better.platform/web-template/badge.svg)](https://search.maven.org/artifact/care.better.platform/web-template)
+* CI/CD [![CI](https://circleci.com/gh/wagnerjfr/circleci-travisci-codecov-maven-github.svg?style=shield)](https://app.circleci.com/pipelines/github/better-care/web-template)
+* Test Coverage [![codecov](https://codecov.io/gh/better-care/web-template/branch/master/graph/badge.svg?token=XAL78TEMAF)](https://codecov.io/gh/better-care/web-template)
 
 ## Overview
 
 WebTemplate is a powerful library designed to work with OpenEHR (Open Electronic Health Record) templates, converting them between different formats suitable for web applications. It handles complex medical data structures and provides seamless conversion between flat key-value pairs, structured JSON objects, and raw OpenEHR objects.
 
-Note: <a href="v4.0">This 4.0 branch represents a significant evolution</a> when compared to the master branch
+Note: <a href="#v4.0">This 4.0 branch represents a significant evolution</a> when compared to the master branch
 
 ### Key Features
 
@@ -67,7 +58,7 @@ The library works with three main data formats:
    }
    ```
 
-3. **RAW Format**: Native OpenEHR objects for clinical processing
+3. **RAW Format**: Native OpenEHR objects for clinical processing, see https://github.com/openEHR/specifications-ITS-JSON/blob/master/README.adoc
    ```kotlin
    val composition: Composition = // OpenEHR Composition object
    ```
