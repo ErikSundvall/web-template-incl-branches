@@ -16,32 +16,11 @@ A comprehensive Kotlin library for converting OpenEHR templates to web-compatibl
 
 ## Major Changes from Master to 4.0
 
-This 4.0 branch represents a significant evolution from the master branch, featuring:
-
-### 🚀 **Modernized Platform**
-- **Java 17 Support**: Full compatibility with Java 17 LTS, providing enhanced performance and security
-- **Kotlin 1.9.20**: Updated to latest Kotlin version with improved compiler optimizations and language features
-- **Enhanced Dependencies**: Updated to latest stable versions of Jackson (2.18.3), Commons libraries, and other core dependencies
-
-### ✨ **New Features & Enhancements** 
-- **Text Formatting Support**: New `|formatting` attribute support for DV_TEXT and DV_CODED_TEXT data types
-- **GENERIC_ENTRY Conversion**: Added support for converting GENERIC_ENTRY OpenEHR compositions 
-- **Composition Path Filtering**: Support for filtering compositions by specific paths for improved performance
-- **Advanced Caching**: Optimized `NameAndNodeMatchingPathValueExtractor` with intelligent caching mechanisms
-- **Null Safety Improvements**: Enhanced null handling and validation throughout the conversion pipeline
-
-### 🔧 **Performance & Reliability**
-- **Memory Optimization**: Improved memory management with Caffeine caching integration
-- **Better Error Handling**: Enhanced exception handling and validation with more descriptive error messages
-- **Feeder Audit Improvements**: Refined handling of `feeder_audit/originating_system_audit/time` in FLAT format
-- **DV_CODED_TEXT Enhancements**: Fixed empty label handling and improved template-based terminology processing
-
-### 📦 **Version History**
-Current version: **4.2.1-SNAPSHOT** (evolved from 4.0.0 released 2024-02-15)
-
 ## Overview
 
 WebTemplate is a powerful library designed to work with OpenEHR (Open Electronic Health Record) templates, converting them between different formats suitable for web applications. It handles complex medical data structures and provides seamless conversion between flat key-value pairs, structured JSON objects, and raw OpenEHR objects.
+
+Note: <a href="v4.0">This 4.0 branch represents a significant evolution</a> when compared to the master branch
 
 ### Key Features
 
@@ -99,6 +78,31 @@ The library works with three main data formats:
 - **WebTemplate**: Main class providing conversion methods between different formats
 - **Converters**: Specialized converters for each format transformation with improved error handling
 - **Context**: Manages conversion settings like language, territory, and composer information
+
+## <a anchor="v4.0"></a>Major Changes from Github Master branch to 4.0
+
+This 4.0 branch represents a significant evolution from the master branch, featuring:
+
+### 🚀 **Modernized Platform**
+- **Java 17 Support**: Full compatibility with Java 17 LTS, providing enhanced performance and security
+- **Kotlin 1.9.20**: Updated to latest Kotlin version with improved compiler optimizations and language features
+- **Enhanced Dependencies**: Updated to latest stable versions of Jackson (2.18.3), Commons libraries, and other core dependencies
+
+### ✨ **New Features & Enhancements** 
+- **Text Formatting Support**: New `|formatting` attribute support for DV_TEXT and DV_CODED_TEXT data types
+- **GENERIC_ENTRY Conversion**: Added support for converting GENERIC_ENTRY OpenEHR compositions 
+- **Composition Path Filtering**: Support for filtering compositions by specific paths for improved performance
+- **Advanced Caching**: Optimized `NameAndNodeMatchingPathValueExtractor` with intelligent caching mechanisms
+- **Null Safety Improvements**: Enhanced null handling and validation throughout the conversion pipeline
+
+### 🔧 **Performance & Reliability**
+- **Memory Optimization**: Improved memory management with Caffeine caching integration
+- **Better Error Handling**: Enhanced exception handling and validation with more descriptive error messages
+- **Feeder Audit Improvements**: Refined handling of `feeder_audit/originating_system_audit/time` in FLAT format
+- **DV_CODED_TEXT Enhancements**: Fixed empty label handling and improved template-based terminology processing
+
+### 📦 **Version History**
+Current version: **4.2.1-SNAPSHOT** (evolved from 4.0.0 released 2024-02-15)
 
 ## Getting Started
 
