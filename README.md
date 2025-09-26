@@ -9,7 +9,7 @@ A comprehensive Kotlin library for converting OpenEHR templates to web-compatibl
 
 ## Overview
 
-WebTemplate is a powerful library designed to work with OpenEHR (Open Electronic Health Record) templates, converting them between different formats suitable for web applications. It handles complex medical data structures and provides seamless conversion between flat key-value pairs, structured JSON objects, and raw OpenEHR objects.
+WebTemplate is a powerful library designed to work with OpenEHR (Open Electronic Health Record) templates, converting them between different formats suitable for web applications. It handles complex medical data structures and provides seamless conversion between flat key-value pairs, structured JSON objects, and raw OpenEHR objects. (What Better calls RAW is the same as openEHR's standard canonical JSON format.)
 
 Note: <a href="#v4.0">This 4.0 branch represents a significant evolution</a> when compared to the master branch
 
