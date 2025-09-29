@@ -22,3 +22,12 @@ application-dev.properties
 *.lck
 
 .java-version
+
+# Gradle artifacts
+.gradle/
+build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+kotlin-js-demo/.gradle/
+kotlin-js-demo/build/
