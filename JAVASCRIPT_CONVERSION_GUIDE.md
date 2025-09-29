@@ -18,6 +18,9 @@ A working demonstration is available in the `kotlin-js-demo/` directory, showing
 - Real-time data validation
 - Interactive conversion between formats
 
+Runnable from https://raw.githack.com/ErikSundvall/web-template-incl-branches/refs/heads/master/kotlin-js-demo/src/main/resources/index.html
+...but note that this is mostly incomplete stubs with a hardcoded form.
+
 ## Kotlin/JS Compilation Approach
 
 ### Setup
