@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebTemplate JavaScript Demo - Healthcare Data Conversion</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background-color: #f8f9fa;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        input, select, textarea {
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #5a67d8;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background-color: #718096;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #4a5568;
+        }
+        
+        .btn-success {
+            background-color: #48bb78;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #38a169;
+        }
+        
+        .btn-warning {
+            background-color: #ed8936;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #dd6b20;
+        }
+        
+        .output-section {
+            background: #fff;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        .output-header {
+            background: #f7fafc;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e1e5e9;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .output-content {
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            min-height: 100px;
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: #fafafa;
+        }
+        
+        .success {
+            color: #2f855a;
+            background-color: #f0fff4;
+            border-color: #9ae6b4;
+        }
+        
+        .error {
+            color: #c53030;
+            background-color: #fed7d7;
+            border-color: #feb2b2;
+        }
+        
+        .warning {
+            color: #d69e2e;
+            background-color: #fffbeb;
+            border-color: #fbd38d;
+        }
+        
+        .info-box {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .conversion-arrows {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 24px;
+            color: #667eea;
+        }
+        
+        .format-example {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .format-example h4 {
+            margin: 0 0 10px 0;
+            color: #2d3748;
+        }
+        
+        .format-example pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>WebTemplate JavaScript Demo</h1>
+            <p>Healthcare Data Conversion: Flat ↔ Structured ↔ Raw openEHR JSON</p>
+        </div>
+        
+        <div class="content">
+            <div class="info-box">
+                <strong>Phase 1 Proof of Concept:</strong> This demo shows vanilla JavaScript conversion between healthcare data formats without external dependencies or frameworks. 
+                Features include real-time validation, bi-directional conversion, and openEHR canonical JSON generation.
+            </div>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('form')">Form Data Entry</button>
+                <button class="tab" onclick="showTab('json')">JSON Input</button>
+                <button class="tab" onclick="showTab('template')">Template Upload</button>
+                <button class="tab" onclick="showTab('about')">Documentation</button>
+            </div>
+
+            <!-- Form Data Entry Tab -->
+            <div id="form-tab" class="tab-content active">
+                <div class="form-section">
+                    <h3>Healthcare Data Form</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="temperature">Body Temperature</label>
+                            <input type="number" id="temperature" step="0.1" min="30" max="45" placeholder="37.0" value="37.5">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tempUnit">Temperature Unit</label>
+                            <select id="tempUnit">
+                                <option value="°C">Celsius (°C)</option>
+                                <option value="°F">Fahrenheit (°F)</option>
+                                <option value="K">Kelvin (K)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="setting">Clinical Setting</label>
+                            <select id="setting">
+                                <option value="emergency care">Emergency Care</option>
+                                <option value="other care">Other Care</option>
+                                <option value="home">Home Care</option>
+                                <option value="dental care">Dental Care</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="language">Language</label>
+                            <select id="language">
+                                <option value="en">English</option>
+                                <option value="sl">Slovenian</option>
+                                <option value="de">German</option>
+                                <option value="fr">French</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="composerName">Healthcare Provider</label>
+                            <input type="text" id="composerName" placeholder="Dr. Smith" value="Dr. Johnson">
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="validateAndConvert()">Validate & Convert All</button>
+                        <button class="btn-secondary" onclick="convertToStructured()">→ Structured JSON</button>
+                        <button class="btn-secondary" onclick="convertToRawOpenEHR()">→ Raw openEHR</button>
+                        <button class="btn-warning" onclick="clearAllResults()">Clear Results</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JSON Input Tab -->
+            <div id="json-tab" class="tab-content">
+                <div class="form-section">
+                    <h3>Direct JSON Conversion</h3>
+                    <div class="form-group">
+                        <label for="structuredInput">Structured JSON Input</label>
+                        <textarea id="structuredInput" rows="12" placeholder="Enter structured JSON here...">{
+  "vitals": {
+    "temperature": {
+      "magnitude": 37.5,
+      "unit": "°C"
+    }
+  },
+  "_context": {
+    "language": "en",
+    "setting": "emergency care",
+    "composer_name": "Dr. Johnson"
+  }
+}</textarea>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="convertStructuredToFlat()">→ Flat Format</button>
+                        <button class="btn-secondary" onclick="convertStructuredToRaw()">→ Raw openEHR</button>
+                        <button class="btn-success" onclick="validateStructuredJson()">Validate JSON</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template Upload Tab -->
+            <div id="template-tab" class="tab-content">
+                <div class="form-section">
+                    <h3>Template Management</h3>
+                    <div class="form-group">
+                        <label for="templateInput">Upload Template JSON</label>
+                        <textarea id="templateInput" rows="10" placeholder="Paste template JSON here...">{
+  "templateId": "vital_signs_v1",
+  "defaultLanguage": "en",
+  "tree": {
+    "jsonId": "vital_signs_encounter",
+    "name": "Vital Signs Encounter",
+    "rmType": "COMPOSITION",
+    "path": "/",
+    "children": [
+      {
+        "jsonId": "vitals",
+        "name": "Vital Signs",
+        "rmType": "OBSERVATION",
+        "path": "/vitals",
+        "children": [
+          {
+            "jsonId": "temperature",
+            "name": "Body Temperature",
+            "rmType": "DV_QUANTITY",
+            "path": "/vitals/temperature",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}</textarea>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="loadTemplate()">Load Template</button>
+                        <button class="btn-secondary" onclick="useDefaultTemplate()">Use Default Template</button>
+                        <button class="btn-success" onclick="showTemplateInfo()">Show Template Info</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documentation Tab -->
+            <div id="about-tab" class="tab-content">
+                <h3>WebTemplate JavaScript API Documentation</h3>
+                
+                <div class="format-example">
+                    <h4>Flat Format (Form Data)</h4>
+                    <pre>vitals/temperature|magnitude = 37.5
+vitals/temperature|unit = °C
+ctx/language = en
+ctx/setting = emergency care
+ctx/composer_name = Dr. Johnson</pre>
+                </div>
+                
+                <div class="format-example">
+                    <h4>Structured JSON Format</h4>
+                    <pre>{
+  "vitals": {
+    "temperature": {
+      "magnitude": 37.5,
+      "unit": "°C"
+    }
+  },
+  "_context": {
+    "language": "en",
+    "setting": "emergency care",
+    "composer_name": "Dr. Johnson"
+  }
+}</pre>
+                </div>
+                
+                <div class="format-example">
+                    <h4>Raw openEHR Canonical JSON</h4>
+                    <pre>{
+  "@type": "COMPOSITION",
+  "archetype_node_id": "demo-vitals-v1",
+  "name": {
+    "@type": "DV_TEXT",
+    "value": "Health Data"
+  },
+  "language": {
+    "@type": "CODE_PHRASE",
+    "terminology_id": {
+      "@type": "TERMINOLOGY_ID",
+      "value": "ISO_639-1"
+    },
+    "code_string": "en"
+  },
+  ...
+}</pre>
+                </div>
+                
+                <h4>Key Methods</h4>
+                <ul>
+                    <li><strong>convertFromFlatToStructured(flatData, context)</strong> - Convert form data to structured JSON</li>
+                    <li><strong>convertFromStructuredToFlat(structuredJson)</strong> - Convert structured JSON to flat format</li>
+                    <li><strong>convertToRawOpenEHR(flatData, context)</strong> - Convert to openEHR canonical format</li>
+                    <li><strong>validateFlatData(flatData)</strong> - Validate healthcare data with errors and warnings</li>
+                    <li><strong>fromJsonTemplate(templateJson)</strong> - Create instance from template definition</li>
+                </ul>
+            </div>
+
+            <!-- Output Sections -->
+            <div class="output-section">
+                <div class="output-header">Validation Results</div>
+                <div id="validation-output" class="output-content">Validation results will appear here...</div>
+            </div>
+
+            <div class="conversion-arrows">⬇️ CONVERSION RESULTS ⬇️</div>
+
+            <div class="output-section">
+                <div class="output-header">Flat Format (Key-Value Pairs)</div>
+                <div id="flat-output" class="output-content">Flat format results will appear here...</div>
+            </div>
+
+            <div class="output-section">
+                <div class="output-header">Structured JSON Format</div>
+                <div id="structured-output" class="output-content">Structured JSON results will appear here...</div>
+            </div>
+
+            <div class="output-section">
+                <div class="output-header">Raw openEHR Canonical JSON</div>
+                <div id="raw-output" class="output-content">Raw openEHR JSON results will appear here...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the WebTemplate JavaScript library -->
+    <script src="webtemplate.js"></script>
+    
+    <script>
+        // Global WebTemplate instance
+        let webTemplate = WebTemplateJS.createDemoTemplate();
+        
+        // Tab management
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        // Get form data as flat format
+        function getFormData() {
+            return {
+                'vitals/temperature|magnitude': document.getElementById('temperature').value,
+                'vitals/temperature|unit': document.getElementById('tempUnit').value,
+                'ctx/setting': document.getElementById('setting').value,
+                'ctx/language': document.getElementById('language').value,
+                'ctx/composer_name': document.getElementById('composerName').value
+            };
+        }
+        
+        // Get conversion context from form
+        function getConversionContext() {
+            return {
+                language: document.getElementById('language').value,
+                territory: 'US',
+                composerName: document.getElementById('composerName').value
+            };
+        }
+        
+        // Validate and convert all formats
+        function validateAndConvert() {
+            const flatData = getFormData();
+            const context = getConversionContext();
+            
+            try {
+                // Validate first
+                const validation = webTemplate.validateFlatData(flatData);
+                displayValidation(validation);
+                
+                if (validation.valid) {
+                    // Convert to all formats
+                    const structured = webTemplate.convertFromFlatToStructured(flatData, context);
+                    const rawOpenEHR = webTemplate.convertToRawOpenEHR(flatData, context);
+                    const flatFormatted = formatFlatData(flatData);
+                    
+                    displayOutput('flat-output', flatFormatted, 'success');
+                    displayOutput('structured-output', structured, 'success');
+                    displayOutput('raw-output', rawOpenEHR, 'success');
+                } else {
+                    displayOutput('flat-output', 'Validation failed - cannot convert', 'error');
+                    displayOutput('structured-output', 'Validation failed - cannot convert', 'error');
+                    displayOutput('raw-output', 'Validation failed - cannot convert', 'error');
+                }
+            } catch (error) {
+                const errorMsg = `Error: ${error.message}`;
+                displayOutput('flat-output', errorMsg, 'error');
+                displayOutput('structured-output', errorMsg, 'error');
+                displayOutput('raw-output', errorMsg, 'error');
+                displayValidation({valid: false, errors: [error.message], warnings: []});
+            }
+        }
+        
+        // Convert form data to structured JSON
+        function convertToStructured() {
+            const flatData = getFormData();
+            const context = getConversionContext();
+            
+            try {
+                const structured = webTemplate.convertFromFlatToStructured(flatData, context);
+                displayOutput('structured-output', structured, 'success');
+            } catch (error) {
+                displayOutput('structured-output', `Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Convert form data to raw openEHR
+        function convertToRawOpenEHR() {
+            const flatData = getFormData();
+            const context = getConversionContext();
+            
+            try {
+                const rawOpenEHR = webTemplate.convertToRawOpenEHR(flatData, context);
+                displayOutput('raw-output', rawOpenEHR, 'success');
+            } catch (error) {
+                displayOutput('raw-output', `Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Convert structured JSON to flat format
+        function convertStructuredToFlat() {
+            const structuredInput = document.getElementById('structuredInput').value;
+            
+            try {
+                const flat = webTemplate.convertFromStructuredToFlat(structuredInput);
+                const formatted = formatFlatData(flat);
+                displayOutput('flat-output', formatted, 'success');
+            } catch (error) {
+                displayOutput('flat-output', `Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Convert structured JSON to raw openEHR
+        function convertStructuredToRaw() {
+            const structuredInput = document.getElementById('structuredInput').value;
+            
+            try {
+                const structured = JSON.parse(structuredInput);
+                // Convert to flat first, then to raw openEHR
+                const flat = webTemplate.convertFromStructuredToFlat(structured);
+                const rawOpenEHR = webTemplate.convertToRawOpenEHR(flat, getConversionContext());
+                displayOutput('raw-output', rawOpenEHR, 'success');
+            } catch (error) {
+                displayOutput('raw-output', `Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Validate structured JSON
+        function validateStructuredJson() {
+            const structuredInput = document.getElementById('structuredInput').value;
+            
+            try {
+                JSON.parse(structuredInput);
+                displayValidation({valid: true, errors: [], warnings: ['JSON is valid']});
+            } catch (error) {
+                displayValidation({valid: false, errors: [`Invalid JSON: ${error.message}`], warnings: []});
+            }
+        }
+        
+        // Load custom template
+        function loadTemplate() {
+            const templateInput = document.getElementById('templateInput').value;
+            
+            try {
+                webTemplate = WebTemplateJS.fromJsonTemplate(templateInput);
+                displayValidation({valid: true, errors: [], warnings: ['Template loaded successfully']});
+            } catch (error) {
+                displayValidation({valid: false, errors: [`Template load failed: ${error.message}`], warnings: []});
+            }
+        }
+        
+        // Use default demo template
+        function useDefaultTemplate() {
+            webTemplate = WebTemplateJS.createDemoTemplate();
+            displayValidation({valid: true, errors: [], warnings: ['Default demo template loaded']});
+        }
+        
+        // Show template information
+        function showTemplateInfo() {
+            const info = `Template ID: ${webTemplate.templateId}
+Default Language: ${webTemplate.defaultLanguage}
+Root Node: ${webTemplate.tree.name} (${webTemplate.tree.rmType})
+Children: ${webTemplate.tree.children.length}`;
+            
+            displayOutput('validation-output', info, 'info');
+        }
+        
+        // Clear all results
+        function clearAllResults() {
+            const outputs = ['validation-output', 'flat-output', 'structured-output', 'raw-output'];
+            outputs.forEach(id => {
+                const element = document.getElementById(id);
+                element.textContent = element.id.replace('-output', '').charAt(0).toUpperCase() + 
+                                   element.id.replace('-output', '').slice(1) + ' results will appear here...';
+                element.className = 'output-content';
+            });
+        }
+        
+        // Helper functions
+        function formatFlatData(flatData) {
+            return Object.entries(flatData)
+                .map(([key, value]) => `${key} = ${value}`)
+                .join('\n');
+        }
+        
+        function displayValidation(validation) {
+            let result = `Validation Result: ${validation.valid ? 'VALID' : 'INVALID'}\n\n`;
+            
+            if (validation.errors.length > 0) {
+                result += `Errors:\n${validation.errors.map(e => `- ${e}`).join('\n')}\n\n`;
+            }
+            
+            if (validation.warnings.length > 0) {
+                result += `Warnings:\n${validation.warnings.map(w => `- ${w}`).join('\n')}`;
+            }
+            
+            if (validation.errors.length === 0 && validation.warnings.length === 0) {
+                result += "No validation issues found!";
+            }
+            
+            const className = validation.valid ? (validation.warnings.length > 0 ? 'warning' : 'success') : 'error';
+            displayOutput('validation-output', result, className);
+        }
+        
+        function displayOutput(elementId, content, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = content;
+            element.className = `output-content ${type}`;
+        }
+        
+        // Initialize with sample data conversion on load
+        window.addEventListener('load', function() {
+            // Auto-convert the default form data to show functionality
+            setTimeout(() => {
+                validateAndConvert();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
