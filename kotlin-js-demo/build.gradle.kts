@@ -1,6 +1,6 @@
 plugins {
-    kotlin("js") version "1.6.10"
-    kotlin("plugin.serialization") version "1.6.10"
+    kotlin("js") version "1.9.0"
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 group = "care.better.platform"
@@ -29,8 +29,8 @@ kotlin {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-js")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     
     testImplementation("org.jetbrains.kotlin:kotlin-test-js")
 }
