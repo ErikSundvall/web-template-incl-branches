@@ -581,8 +581,10 @@ test('form validates and converts data', async () => {
 ### Phase 1: Proof of Concept (2-3 weeks)
 1. Set up Kotlin/JS build configuration
 2. Port core conversion classes
-3. Create basic browser demo
-4. Validate concept with stakeholders
+3. Create basic browser demo that can take any openEHR instance data and a template file and converte to/from all of:
+** Flat
+** Structured
+** Raw (canonical openEHR JSON)  
 
 ### Phase 2: Core Implementation (4-6 weeks)
 1. Implement full conversion functionality
