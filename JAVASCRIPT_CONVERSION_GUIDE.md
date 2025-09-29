@@ -579,9 +579,12 @@ test('form validates and converts data', async () => {
 ## Migration Strategy
 
 ### Phase 1: Proof of Concept (2-3 weeks)
-1. Set up Kotlin/JS build configuration
-2. Port core conversion classes
-3. Create basic browser demo that can take any openEHR instance data and a template file and converte to/from all of:
+1. Set up Kotlin/JS build configuration and add "manual" reimplementation if needed for any parts.
+2. Port or reimplement core conversion classes. Note:
+** Use pure vanilla javascript without any frameworks (so no React or NPM etc) but annontated with jsdoc.
+** It is ok to use well established javascript libraries under permissive open source licenses such as MIT or Apache 2, if they are available and can be imported from CDN and used in web pages (thus not requiring NPM setup etc)
+4. Create usage documentation for the Javascript port in a separate .md page explaining how to call the different functions (inspired by the documentation for the Kotlin version of this project)
+5. Create basic browser demo that can take any openEHR instance data and a template file and converte to/from all of:
 ** Flat
 ** Structured
 ** Raw (canonical openEHR JSON)  
